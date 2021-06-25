@@ -1,0 +1,49 @@
+{
+  "name": "centauri",
+  "version": "0.0.1",
+  "main": "index.js",
+  "repository": "git@github.com:gymc-tech/centauri.git",
+  "author": "Gymc",
+  "license": "MIT",
+  "scripts": {
+    "dev": "nodemon src/server.js",
+    "dev:debug": "nodemon --inspect src/server.js",
+    "queue": "nodemon src/queue.js",
+    "madge": "madge --circular ./",
+    "precommit": "yarn format:staged && yarn madge",
+    "format": "prettier \"./**/*.js\" --write",
+    "format:staged": "pretty-quick --staged"
+  },
+  "dependencies": {
+    "@sentry/node": "6.7.2",
+    "@sentry/tracing": "6.7.2",
+    "aws-sdk": "2.935.0",
+    "bcrypt": "5.0.1",
+    "bee-queue": "1.4.0",
+    "dotenv": "10.0.0",
+    "express": "4.17.1",
+    "express-async-errors": "3.1.1",
+    "ioredis": "4.27.6",
+    "jsonwebtoken": "8.5.1",
+    "lodash": "4.17.21",
+    "mongoose": "5.12.15",
+    "pg": "8.6.0",
+    "pg-hstore": "2.3.4",
+    "sequelize": "6.6.2",
+    "uuid": "8.3.2",
+    "youch": "2.2.2"
+  },
+  "devDependencies": {
+    "eslint": "7.29.0",
+    "eslint-config-airbnb-base": "14.2.1",
+    "eslint-config-prettier": "8.3.0",
+    "eslint-plugin-import": "2.23.4",
+    "eslint-plugin-prettier": "3.4.0",
+    "madge": "5.0.1",
+    "nodemon": "2.0.7",
+    "prettier": "2.3.1",
+    "pretty-quick": "3.1.1",
+    "sequelize-cli": "6.2.0",
+    "sucrase": "3.19.0"
+  }
+}
