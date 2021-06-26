@@ -7,7 +7,7 @@ import authConfig from '../../config/auth'
 class StoreSessionService {
   async execute({ email, password }) {
     const user = await User.findOne({
-      where: { email, verified: true }
+      where: { email, verified: true },
     })
 
     if (!user) {
@@ -27,7 +27,7 @@ class StoreSessionService {
         name,
         email,
       },
-      token: jwt.sign({ sub: id }, authConfig.secret)
+      token: jwt.sign({ sub: id }, authConfig.secret),
     }
   }
 }

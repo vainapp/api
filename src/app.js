@@ -12,13 +12,13 @@ import './database'
 
 class App {
   constructor() {
-    this.server = express();
+    this.server = express()
 
-    Sentry.init(sentryConfig(this.server));
+    Sentry.init(sentryConfig(this.server))
 
-    this.middlewares();
-    this.routes();
-    this.exceptionHandler();
+    this.middlewares()
+    this.routes()
+    this.exceptionHandler()
   }
 
   middlewares() {
@@ -38,9 +38,13 @@ class App {
 
       Sentry.captureException(error)
 
-      return response.status(error.status || 500).json(
-        isProduction() ? pick(errors, ['error.message', 'error.name', 'error.status']) : errors
-      )
+      return response
+        .status(error.status || 500)
+        .json(
+          isProduction()
+            ? pick(errors, ['error.message', 'error.name', 'error.status'])
+            : errors
+        )
     })
   }
 }

@@ -17,13 +17,15 @@ class Database {
 
     models
       .map((model) => model.init(this.relationalConnection))
-      .map((model) => model.associate && model.associate(this.relationalConnection))
+      .map(
+        (model) => model.associate && model.associate(this.relationalConnection)
+      )
   }
 
   initNonRelationalDatabase() {
     this.nonRelationalConnection = mongoose.connect(process.env.MONGO_URI, {
       useNewUrlParser: true,
-      useUnifiedTopology: true
+      useUnifiedTopology: true,
     })
   }
 }

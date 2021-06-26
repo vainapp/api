@@ -1,5 +1,5 @@
-import * as Sentry from '@sentry/node';
-import * as Tracing from '@sentry/tracing';
+import * as Sentry from '@sentry/node'
+import * as Tracing from '@sentry/tracing'
 
 export default function setupSentry(app) {
   return {
@@ -7,7 +7,7 @@ export default function setupSentry(app) {
     environment: process.env.NODE_ENV || 'development',
     integrations: [
       new Sentry.Integrations.Http({ tracing: true }),
-      new Tracing.Integrations.Express({ app })
+      new Tracing.Integrations.Express({ app }),
     ],
   }
 }

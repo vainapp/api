@@ -26,7 +26,7 @@ export default async (request, response, nextCallback) => {
     where: {
       id: request.user.id,
       verified: true,
-    }
+    },
   })
 
   if (!user) {
