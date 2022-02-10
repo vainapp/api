@@ -29,10 +29,7 @@ class User extends Model {
           unique: true,
         },
         password: Sequelize.VIRTUAL,
-        password_hash: {
-          type: Sequelize.STRING,
-          allowNull: false,
-        },
+        password_hash: Sequelize.STRING,
       },
       { sequelize }
     )
