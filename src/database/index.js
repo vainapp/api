@@ -3,8 +3,9 @@ import mongoose from 'mongoose'
 
 import databaseConfig from '../config/database'
 import User from '../app/models/User'
+import AccountVerificationLink from '../app/models/AccountVerificationLink'
 
-const models = [User]
+const models = [User, AccountVerificationLink]
 
 class Database {
   constructor() {
@@ -18,7 +19,8 @@ class Database {
     models
       .map((model) => model.init(this.relationalConnection))
       .map(
-        (model) => model.associate && model.associate(this.relationalConnection)
+        (model) =>
+          model.associate && model.associate(this.relationalConnection.models)
       )
   }
 
