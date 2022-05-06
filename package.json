@@ -6,9 +6,10 @@
   "author": "Gymc",
   "license": "MIT",
   "scripts": {
-    "dev": "nodemon src/server.js",
-    "dev:debug": "nodemon --inspect src/server.js",
-    "queue": "nodemon src/queue.js",
+    "dev": "nodemon --ignore scripts/ src/server.js",
+    "dev:debug": "nodemon --ignore scripts/ --inspect src/server.js",
+    "queue": "nodemon --ignore scripts/ src/queue.js",
+    "queue:debug": "nodemon --ignore scripts/ --inspect src/queue.js",
     "madge": "madge --circular ./",
     "precommit": "yarn format:staged && yarn madge",
     "format": "prettier \"./**/*.js\" --write",

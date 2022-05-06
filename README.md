@@ -19,3 +19,8 @@ To start your app, run:
 ```sh
 yarn dev
 ```
+
+## AWS Simple Email Service
+We have some scripts in `./scripts` responsible for managing our email templates in AWS. To run one of them, please consider running the following command:
+```sh
+node ./scripts/<name of the script>.js```

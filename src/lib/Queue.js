@@ -2,8 +2,11 @@ import * as Sentry from '@sentry/node'
 import Bee from 'bee-queue'
 
 import redisConfig from '../config/redis'
+import sentryConfig from '../config/sentry'
 
-const jobs = []
+import AccountVerificationEmail from '../app/jobs/AccountVerificationEmail'
+
+const jobs = [AccountVerificationEmail]
 
 class Queue {
   constructor() {
@@ -13,6 +16,8 @@ class Queue {
   }
 
   init() {
+    Sentry.init(sentryConfig())
+
     jobs.forEach(({ key, handle }) => {
       this.queues[key] = {
         bee: new Bee(key, {
@@ -30,8 +35,7 @@ class Queue {
   processQueue() {
     jobs.forEach((job) => {
       const { bee, handle } = this.queues[job.key]
-
-      bee.on('fialed', this.handleFailure).process(handle)
+      bee.on('failed', this.handleFailure).process(handle)
     })
   }
 
