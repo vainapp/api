@@ -1,15 +1,20 @@
 // Load the AWS SDK for Node.js
 let AWS = require('aws-sdk')
+let fs = require('fs')
 // Set the region
 AWS.config.update({ region: 'us-east-1' })
 
 // Create updateTemplate parameters
 let params = {
   Template: {
-    TemplateName: 'TEMPLATE_NAME' /* required */,
-    HtmlPart: 'HTML_CONTENT',
-    SubjectPart: 'SUBJECT_LINE',
-    TextPart: 'TEXT_CONTENT',
+    TemplateName: 'VERIFY_ACCOUNT' /* required */,
+    HtmlPart: fs
+      .readFileSync('src/app/views/VERIFY_ACCOUNT/VERIFY_ACCOUNT.html')
+      .toString(),
+    SubjectPart: 'Verifique seu e-mail',
+    TextPart: fs
+      .readFileSync('src/app/views/VERIFY_ACCOUNT/VERIFY_ACCOUNT.txt')
+      .toString(),
   },
 }
 

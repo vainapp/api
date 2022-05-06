@@ -24,6 +24,7 @@ class StoreUserService {
       template: 'VERIFY_ACCOUNT',
       templateData: {
         name: emailInUse.name,
+        link: 'https://google.com',
       },
       replyToAddresses: [process.env.EMAIL_ADDRESS_NO_REPLY],
     }
