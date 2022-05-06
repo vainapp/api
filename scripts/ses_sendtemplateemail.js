@@ -8,7 +8,6 @@ let params = {
   Destination: {
     /* required */
     CcAddresses: [
-      'jopcmelo@gmail.com',
       /* more CC email addresses */
     ],
     ToAddresses: [
@@ -16,10 +15,10 @@ let params = {
       /* more To email addresses */
     ],
   },
-  Source: 'jopcmelo@gmail.com' /* required */,
+  Source: 'me@jopcmelo.dev' /* required */,
   Template: 'VERIFY_ACCOUNT' /* required */,
   TemplateData: '{ "name":"João" }' /* required */,
-  ReplyToAddresses: ['jopcmelo@gmail.com'],
+  ReplyToAddresses: ['me@jopcmelo.dev'],
 }
 
 // Create the promise and SES service object
