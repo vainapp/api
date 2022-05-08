@@ -1,5 +1,5 @@
 import StoreForgotPasswordService from '../services/StoreForgotPasswordService'
-// import ShowForgotPasswordService from '../services/ShowForgotPasswordService'
+import ShowForgotPasswordService from '../services/ShowForgotPasswordService'
 // import UpdateForgotPasswordService from '../services/UpdateForgotPasswordService'
 
 class ForgotPasswordController {
@@ -11,13 +11,13 @@ class ForgotPasswordController {
     return response.json(result)
   }
 
-  // async show(request, response) {
-  //   const { phone, code } = request.body
+  async show(request, response) {
+    const { email, code } = request.body
 
-  //   const result = await ShowForgotPasswordService.execute({ phone, code })
+    const result = await ShowForgotPasswordService.execute({ email, code })
 
-  //   return response.json(result)
-  // }
+    return response.json(result)
+  }
 
   // async update(request, response) {
   //   const { token, password, passwordConfirmation } = request.body
