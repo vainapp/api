@@ -15,5 +15,6 @@ routes.get(
 routes.post('/sessions', SessionController.store)
 routes.post('/forgot-password', ForgotPasswordController.store)
 routes.post('/forgot-password/verify', ForgotPasswordController.show)
+routes.post('/forgot-password/reset-password', ForgotPasswordController.update)
 
 export default routes

@@ -1,6 +1,6 @@
 import StoreForgotPasswordService from '../services/StoreForgotPasswordService'
 import ShowForgotPasswordService from '../services/ShowForgotPasswordService'
-// import UpdateForgotPasswordService from '../services/UpdateForgotPasswordService'
+import UpdateForgotPasswordService from '../services/UpdateForgotPasswordService'
 
 class ForgotPasswordController {
   async store(request, response) {
@@ -19,17 +19,17 @@ class ForgotPasswordController {
     return response.json(result)
   }
 
-  // async update(request, response) {
-  //   const { token, password, passwordConfirmation } = request.body
+  async update(request, response) {
+    const { token, password, passwordConfirmation } = request.body
 
-  //   const result = await UpdateForgotPasswordService.execute({
-  //     recoveryCodeId: token,
-  //     password,
-  //     passwordConfirmation,
-  //   })
+    const result = await UpdateForgotPasswordService.execute({
+      forgotPasswordCodeId: token,
+      password,
+      passwordConfirmation,
+    })
 
-  //   return response.json(result)
-  // }
+    return response.json(result)
+  }
 }
 
 export default new ForgotPasswordController()
