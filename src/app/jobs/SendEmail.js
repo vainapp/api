@@ -1,8 +1,8 @@
 import SendEmailService from '../services/SendEmailService'
 
-class AccountVerificationEmail {
+class SendEmail {
   get key() {
-    return 'AccountVerificationEmail'
+    return 'SendEmail'
   }
 
   async handle({ data }) {
@@ -28,4 +28,4 @@ class AccountVerificationEmail {
   }
 }
 
-export default new AccountVerificationEmail()
+export default new SendEmail()

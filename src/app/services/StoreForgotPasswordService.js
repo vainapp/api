@@ -2,7 +2,9 @@ import ForgotPasswordCode from '../models/ForgotPasswordCode'
 import User from '../models/User'
 import NotFoundError from '../errors/NotFound'
 import Queue from '../../lib/Queue'
-// import RecoveryCodeJob from '../jobs/VerificationCodeSMS'
+import SendEmailJob from '../jobs/SendEmail'
+import buildDirectEmailParams from '../../helpers/buildDirectEmailParams'
+import { help } from '../../constants/emails'
 
 class StoreForgotPasswordService {
   async execute({ email }) {
@@ -34,12 +36,17 @@ class StoreForgotPasswordService {
       user_id: user.id,
     })
 
-    // await Queue.add(RecoveryCodeJob.key, {
-    //   message: {
-    //     email,
-    //     message: `Este é o seu código para recuperar sua senha: ${code}`,
-    //   },
-    // })
+    const forgotPasswordParams = buildDirectEmailParams({
+      toAddress: user.email,
+      template: 'FORGOT_PASSWORD',
+      templateData: {
+        name: user.name,
+        code,
+        helpEmailAddress: help,
+      },
+    })
+
+    await Queue.add(SendEmailJob.key, forgotPasswordParams)
   }
 }
 

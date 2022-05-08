@@ -1,15 +1,20 @@
 // Load the AWS SDK for Node.js
 let AWS = require('aws-sdk')
+let fs = require('fs')
 // Set the region
 AWS.config.update({ region: 'us-east-1' })
 
 // Create createTemplate params
 let params = {
   Template: {
-    TemplateName: 'VERIFY_ACCOUNT' /* required */,
-    HtmlPart: '<h1>Olá, {{name}}!</h1>',
-    SubjectPart: 'Verifique seu e-mail',
-    TextPart: 'Olá, {{name}}!',
+    TemplateName: 'FORGOT_PASSWORD' /* required */,
+    HtmlPart: fs
+      .readFileSync('src/app/views/FORGOT_PASSWORD/FORGOT_PASSWORD.html')
+      .toString(),
+    SubjectPart: 'Recuperação de senha',
+    TextPart: fs
+      .readFileSync('src/app/views/FORGOT_PASSWORD/FORGOT_PASSWORD.txt')
+      .toString(),
   },
 }
 

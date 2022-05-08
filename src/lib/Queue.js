@@ -4,9 +4,9 @@ import Bee from 'bee-queue'
 import redisConfig from '../config/redis'
 import sentryConfig from '../config/sentry'
 
-import AccountVerificationEmail from '../app/jobs/AccountVerificationEmail'
+import SendEmail from '../app/jobs/SendEmail'
 
-const jobs = [AccountVerificationEmail]
+const jobs = [SendEmail]
 
 class Queue {
   constructor() {
