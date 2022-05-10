@@ -6,7 +6,7 @@ import User from '../src/app/models/User'
 factory.define('User', User, {
   name: faker.name.findName(),
   email: faker.internet.email(),
-  verified: faker.datatype.boolean(),
+  verified: false,
   password: faker.internet.password(),
 })
 
