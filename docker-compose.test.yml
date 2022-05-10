@@ -1,0 +1,35 @@
+version: '3'
+
+services:
+  postgresql:
+    image: postgres
+    container_name: postgresql
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgresql:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=gymc
+      - POSTGRES_PASSWORD=postgres
+
+  mongodb:
+    image: mongo:4.0.4
+    container_name: mongodb
+    ports:
+      - '27017:27017'
+    volumes:
+      - mongodb:/var/lib/mongodb/data
+
+  redis:
+    image: redis
+    container_name: redis
+    ports:
+      - '6379:6379'
+    volumes:
+      - redis:/var/lib/redis/data
+    command: 'redis-server --appendonly yes  --requirepass "redis"'
+
+volumes:
+  postgresql:
+  mongodb:
+  redis:
