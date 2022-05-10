@@ -1,6 +1,10 @@
 import BadRequestError from '../errors/BadRequest'
 import ForbiddenError from '../errors/Forbidden'
 import User from '../models/User'
+import AccountVerificationLink from '../models/AccountVerificationLink'
+import Queue from '../../lib/Queue'
+import AccountVerificationEmailJob from '../jobs/AccountVerificationEmail'
+import isProduction from '../../helpers/isProduction'
 
 class StoreUserService {
   async execute({ email, name, password, passwordConfirmation }) {
@@ -16,8 +20,28 @@ class StoreUserService {
       throw new ForbiddenError('Este endereço de e-mail já está cadastrado')
     }
 
+    const [existingLink, newLink] = await AccountVerificationLink.findOrCreate({
+      where: {
+        user_id: emailInUse.id,
+        verified: false,
+      },
+    })
+
+    const verificationEmailParams = {
+      toAddresses: [email],
+      sourceAddress: process.env.EMAIL_ADDRESS_NO_REPLY,
+      template: 'VERIFY_ACCOUNT',
+      templateData: {
+        name: emailInUse.name,
+        link: `${process.env.APP_HOST}${
+          !isProduction() ? `:${process.env.APP_PORT}` : ''
+        }/verify/${(existingLink || newLink).id}`,
+      },
+      replyToAddresses: [process.env.EMAIL_ADDRESS_NO_REPLY],
+    }
+
     if (emailInUse) {
-      // TODO send email verification using queues
+      await Queue.add(AccountVerificationEmailJob.key, verificationEmailParams)
 
       return {
         id: emailInUse.id,
@@ -31,7 +55,7 @@ class StoreUserService {
       password,
     })
 
-    // TODO send email verification using queues
+    await Queue.add(AccountVerificationEmailJob.key, verificationEmailParams)
 
     return {
       id,

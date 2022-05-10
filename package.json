@@ -6,9 +6,10 @@
   "author": "Gymc",
   "license": "MIT",
   "scripts": {
-    "dev": "nodemon src/server.js",
-    "dev:debug": "nodemon --inspect src/server.js",
-    "queue": "nodemon src/queue.js",
+    "dev": "nodemon --ignore scripts/ src/server.js",
+    "dev:debug": "nodemon --ignore scripts/ --inspect src/server.js",
+    "queue": "nodemon --ignore scripts/ src/queue.js",
+    "queue:debug": "nodemon --ignore scripts/ --inspect src/queue.js",
     "madge": "madge --circular ./",
     "precommit": "yarn format:staged && yarn madge",
     "format": "prettier \"./**/*.js\" --write",
@@ -17,7 +18,7 @@
   "dependencies": {
     "@sentry/node": "6.7.2",
     "@sentry/tracing": "6.7.2",
-    "aws-sdk": "2.935.0",
+    "aws-sdk": "2.1129.0",
     "bcrypt": "5.0.1",
     "bee-queue": "1.4.0",
     "dotenv": "10.0.0",
