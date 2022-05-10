@@ -21,9 +21,23 @@ class StoreUserService {
       throw new ForbiddenError('Este endereço de e-mail já está cadastrado')
     }
 
+    let userId
+
+    if (!emailInUse) {
+      const { id } = await User.create({
+        email,
+        name,
+        password,
+      })
+
+      userId = id
+    } else {
+      userId = emailInUse.id
+    }
+
     const [existingLink, newLink] = await AccountVerificationLink.findOrCreate({
       where: {
-        user_id: emailInUse.id,
+        user_id: userId,
         verified: false,
       },
     })
@@ -43,21 +57,15 @@ class StoreUserService {
       await Queue.add(SendEmailJob.key, verificationEmailParams)
 
       return {
-        id: emailInUse.id,
+        id: userId,
         email: emailInUse.email,
       }
     }
 
-    const { id } = await User.create({
-      email,
-      name,
-      password,
-    })
-
     await Queue.add(SendEmailJob.key, verificationEmailParams)
 
     return {
-      id,
+      id: userId,
       email,
     }
   }
