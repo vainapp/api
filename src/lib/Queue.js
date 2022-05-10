@@ -28,8 +28,8 @@ class Queue {
     })
   }
 
-  async add(queue, job) {
-    await this.queues[queue].bee.createJob(job).save()
+  add(queue, job) {
+    return this.queues[queue].bee.createJob(job).save()
   }
 
   processQueue() {
