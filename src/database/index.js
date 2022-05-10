@@ -4,8 +4,9 @@ import mongoose from 'mongoose'
 import databaseConfig from '../config/database'
 import User from '../app/models/User'
 import AccountVerificationLink from '../app/models/AccountVerificationLink'
+import ForgotPasswordCode from '../app/models/ForgotPasswordCode'
 
-const models = [User, AccountVerificationLink]
+const models = [User, AccountVerificationLink, ForgotPasswordCode]
 
 class Database {
   constructor() {

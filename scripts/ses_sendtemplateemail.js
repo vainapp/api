@@ -16,9 +16,10 @@ let params = {
     ],
   },
   Source: 'me@jopcmelo.dev' /* required */,
-  Template: 'VERIFY_ACCOUNT' /* required */,
-  TemplateData: '{ "name":"João" }' /* required */,
-  ReplyToAddresses: ['me@jopcmelo.dev'],
+  Template: 'FORGOT_PASSWORD' /* required */,
+  TemplateData:
+    '{ "name":"João", "code": "1234", "helpEmailAddress": "oi@jopcmelo.dev" }' /* required */,
+  ReplyToAddresses: ['oi@jopcmelo.dev'],
 }
 
 // Create the promise and SES service object

@@ -3,8 +3,9 @@ import ForbiddenError from '../errors/Forbidden'
 import User from '../models/User'
 import AccountVerificationLink from '../models/AccountVerificationLink'
 import Queue from '../../lib/Queue'
-import AccountVerificationEmailJob from '../jobs/AccountVerificationEmail'
+import SendEmailJob from '../jobs/SendEmail'
 import isProduction from '../../helpers/isProduction'
+import buildDirectEmailParams from '../../helpers/buildDirectEmailParams'
 
 class StoreUserService {
   async execute({ email, name, password, passwordConfirmation }) {
@@ -27,9 +28,8 @@ class StoreUserService {
       },
     })
 
-    const verificationEmailParams = {
-      toAddresses: [email],
-      sourceAddress: process.env.EMAIL_ADDRESS_NO_REPLY,
+    const verificationEmailParams = buildDirectEmailParams({
+      toAddress: email,
       template: 'VERIFY_ACCOUNT',
       templateData: {
         name: emailInUse.name,
@@ -37,11 +37,10 @@ class StoreUserService {
           !isProduction() ? `:${process.env.APP_PORT}` : ''
         }/verify/${(existingLink || newLink).id}`,
       },
-      replyToAddresses: [process.env.EMAIL_ADDRESS_NO_REPLY],
-    }
+    })
 
     if (emailInUse) {
-      await Queue.add(AccountVerificationEmailJob.key, verificationEmailParams)
+      await Queue.add(SendEmailJob.key, verificationEmailParams)
 
       return {
         id: emailInUse.id,
@@ -55,7 +54,7 @@ class StoreUserService {
       password,
     })
 
-    await Queue.add(AccountVerificationEmailJob.key, verificationEmailParams)
+    await Queue.add(SendEmailJob.key, verificationEmailParams)
 
     return {
       id,
