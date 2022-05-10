@@ -44,9 +44,9 @@ class Queue {
     Sentry.captureException(error)
   }
 
-  closeConnections() {
-    Object.keys(this.queues).forEach((queue) => {
-      this.queues[queue].bee.close()
+  async closeConnections() {
+    Object.keys(this.queues).forEach(async (queue) => {
+      await this.queues[queue].bee.close()
     })
   }
 }
