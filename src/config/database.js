@@ -1,3 +1,5 @@
+require('../bootstrap')
+
 module.exports = {
   dialect: 'postgres',
   database: process.env.POSTGRES_DATABASE,

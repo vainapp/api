@@ -1,5 +1,4 @@
 import Sequelize from 'sequelize'
-import mongoose from 'mongoose'
 
 import databaseConfig from '../config/database'
 import User from '../app/models/User'
@@ -11,7 +10,6 @@ const models = [User, AccountVerificationLink, ForgotPasswordCode]
 class Database {
   constructor() {
     this.initRelationalDatabase()
-    this.initNonRelationalDatabase()
   }
 
   initRelationalDatabase() {
@@ -23,13 +21,6 @@ class Database {
         (model) =>
           model.associate && model.associate(this.relationalConnection.models)
       )
-  }
-
-  initNonRelationalDatabase() {
-    this.nonRelationalConnection = mongoose.connect(process.env.MONGO_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    })
   }
 }
 

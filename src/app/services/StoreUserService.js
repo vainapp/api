@@ -46,7 +46,7 @@ class StoreUserService {
       toAddress: email,
       template: 'VERIFY_ACCOUNT',
       templateData: {
-        name: emailInUse.name,
+        name,
         link: `${process.env.APP_HOST}${
           !isProduction() ? `:${process.env.APP_PORT}` : ''
         }/verify/${(existingLink || newLink).id}`,

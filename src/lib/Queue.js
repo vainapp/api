@@ -40,8 +40,14 @@ class Queue {
   }
 
   handleFailure(job, error) {
-    console.error(`Queue ${job.queue.name}: FAILED`, error)
+    console.error(`Queue ${job.queue.name} FAILED:`, error)
     Sentry.captureException(error)
+  }
+
+  async closeConnections() {
+    Object.keys(this.queues).forEach(async (queue) => {
+      await this.queues[queue].bee.close()
+    })
   }
 }
 

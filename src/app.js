@@ -1,6 +1,7 @@
+import './bootstrap'
+
 import * as Sentry from '@sentry/node'
 import express from 'express'
-import 'dotenv/config'
 import 'express-async-errors'
 import Youch from 'youch'
 import { pick } from 'lodash'
