@@ -3,7 +3,12 @@ Our back-end service.
 
 ## Setup
 
-First, start all the required databases with the following command:
+First, make sure you're using the right Node.js version with:
+```sh
+nvm use
+```
+
+Then, start all the required databases with the following command:
 ```sh
 docker-compose up -d
 ```

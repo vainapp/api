@@ -12,14 +12,6 @@ services:
       - POSTGRES_DB=gymc
       - POSTGRES_PASSWORD=postgres
 
-  mongodb:
-    image: mongo:4.0.4
-    container_name: mongodb
-    ports:
-      - '27017:27017'
-    volumes:
-      - mongodb:/var/lib/mongodb/data
-
   redis:
     image: redis
     container_name: redis
@@ -31,5 +23,4 @@ services:
 
 volumes:
   postgresql:
-  mongodb:
   redis:

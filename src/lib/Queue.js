@@ -28,8 +28,8 @@ class Queue {
     })
   }
 
-  add(queue, job) {
-    return this.queues[queue].bee.createJob(job).save()
+  async add(queue, job) {
+    await this.queues[queue].bee.createJob(job).save()
   }
 
   processQueue() {
@@ -40,8 +40,14 @@ class Queue {
   }
 
   handleFailure(job, error) {
-    console.error(`Queue ${job.queue.name}: FAILED`, error)
+    console.error(`Queue ${job.queue.name} FAILED:`, error)
     Sentry.captureException(error)
+  }
+
+  closeConnections() {
+    Object.keys(this.queues).forEach((queue) => {
+      this.queues[queue].bee.close()
+    })
   }
 }
 
