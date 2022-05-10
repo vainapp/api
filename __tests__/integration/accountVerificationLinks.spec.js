@@ -8,7 +8,7 @@ import closeRedisConnection from '../util/closeRedisConnection'
 import AccountVerificationLink from '../../src/app/models/AccountVerificationLink'
 import User from '../../src/app/models/User'
 
-describe('POST /users', () => {
+describe('GET /verify/:account_verification_link_id', () => {
   beforeEach(async () => {
     await truncate()
   })
