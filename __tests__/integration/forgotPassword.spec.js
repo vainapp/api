@@ -1,10 +1,13 @@
 import request from 'supertest'
+import faker from '@faker-js/faker'
+import bcrypt from 'bcrypt'
 
 import app from '../../src/app'
 import factory from '../factories'
 import truncate from '../util/truncate'
 import closeRedisConnection from '../util/closeRedisConnection'
 import ForgotPasswordCode from '../../src/app/models/ForgotPasswordCode'
+import User from '../../src/app/models/User'
 
 describe('POST /forgot-password', () => {
   beforeEach(async () => {
@@ -77,5 +80,141 @@ describe('POST /forgot-password', () => {
 
     expect(newFirstForgotPasswordCode.active).toBeFalsy()
     expect(secondForgotPasswordCode.active).toBeTruthy()
+  })
+})
+
+describe('POST /forgot-password/verify', () => {
+  beforeEach(async () => {
+    await truncate()
+  })
+
+  afterAll(async () => {
+    await closeRedisConnection()
+  })
+
+  it('should not allow an unverified user to recover password', async () => {
+    const user = await factory.create('User')
+
+    await request(app)
+      .post('/forgot-password/verify')
+      .send({
+        email: user.email,
+      })
+      .expect(404)
+  })
+
+  it('should not allow to recover an account with an expired code', async () => {
+    const user = await factory.create('User', { verified: true })
+    const code = await factory.create('ForgotPasswordCode', {
+      active: false,
+      user_id: user.id,
+    })
+
+    await request(app)
+      .post('/forgot-password/verify')
+      .send({
+        email: user.email,
+        code: code.code,
+      })
+      .expect(404)
+  })
+
+  it('should return the token if everything is as expected', async () => {
+    const user = await factory.create('User', { verified: true })
+    const code = await factory.create('ForgotPasswordCode', {
+      user_id: user.id,
+    })
+
+    const response = await request(app).post('/forgot-password/verify').send({
+      email: user.email,
+      code: code.code,
+    })
+
+    expect(response.body).toHaveProperty('token')
+  })
+})
+
+describe('POST /forgot-password/reset-password', () => {
+  beforeEach(async () => {
+    await truncate()
+  })
+
+  afterAll(async () => {
+    await closeRedisConnection()
+  })
+
+  it('should not allow an expired code to change password', async () => {
+    const user = await factory.create('User', { verified: true })
+    const code = await factory.create('ForgotPasswordCode', {
+      user_id: user.id,
+      active: false,
+    })
+    const password = faker.internet.password()
+
+    await request(app)
+      .post('/forgot-password/reset-password')
+      .send({
+        token: code.id,
+        password,
+        passwordConfirmation: password,
+      })
+      .expect(404)
+  })
+
+  it('should not allow to update a password when passwords do not match', async () => {
+    const user = await factory.create('User', { verified: true })
+    const code = await factory.create('ForgotPasswordCode', {
+      user_id: user.id,
+    })
+
+    await request(app)
+      .post('/forgot-password/reset-password')
+      .send({
+        token: code.id,
+        password: faker.internet.password(),
+        passwordConfirmation: faker.internet.password(),
+      })
+      .expect(400)
+  })
+
+  it('should not allow an unverified user to update their password', async () => {
+    const user = await factory.create('User')
+    const code = await factory.create('ForgotPasswordCode', {
+      user_id: user.id,
+    })
+    const password = faker.internet.password()
+
+    await request(app)
+      .post('/forgot-password/reset-password')
+      .send({
+        token: code.id,
+        password,
+        passwordConfirmation: password,
+      })
+      .expect(404)
+  })
+
+  it("should change the user's password and invalidate a code", async () => {
+    const user = await factory.create('User', { verified: true })
+    const code = await factory.create('ForgotPasswordCode', {
+      user_id: user.id,
+    })
+    const password = faker.internet.password()
+
+    await request(app).post('/forgot-password/reset-password').send({
+      token: code.id,
+      password,
+      passwordConfirmation: password,
+    })
+
+    const forgotPasswordCode = await ForgotPasswordCode.findByPk(code.id)
+    const userFromDb = await User.findByPk(user.id)
+    const passwordsMatch = await bcrypt.compare(
+      password,
+      userFromDb.password_hash
+    )
+
+    expect(forgotPasswordCode.active).toBeFalsy()
+    expect(passwordsMatch).toBeTruthy()
   })
 })
