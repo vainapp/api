@@ -9,7 +9,7 @@ services:
     volumes:
       - postgresql:/var/lib/postgresql/data
     environment:
-      - POSTGRES_DB=gymc
+      - POSTGRES_DB=grupoc
       - POSTGRES_PASSWORD=postgres
 
   redis:
