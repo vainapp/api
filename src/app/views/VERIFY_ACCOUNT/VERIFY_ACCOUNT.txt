@@ -1,9 +1,9 @@
 Olá, {{name}}!
 
-Você acaba de criar uma conta na Gymc! Esse é um ótimo passo para cuidar melhor da sua saúde!
+Você acaba de criar uma conta na Grupo C! Esse é um ótimo passo para cuidar melhor da sua saúde!
 
-Para começar a usar a Gymc, você só precisa validar o seu endereço de e-mail clicando no link a seguir:
+Para começar a usar a Grupo C, você só precisa validar o seu endereço de e-mail clicando no link a seguir:
 {{link}}
 
 Atenciosamente,
-Equipe Gymc.
+Equipe Grupo C.

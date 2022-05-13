@@ -2,8 +2,8 @@
   "name": "centauri",
   "version": "0.0.1",
   "main": "index.js",
-  "repository": "git@github.com:gymc-tech/centauri.git",
-  "author": "Gymc",
+  "repository": "git@github.com:grupo-c-tech/centauri.git",
+  "author": "Grupo C",
   "license": "MIT",
   "scripts": {
     "dev": "nodemon --ignore scripts/ src/index.js",

@@ -15,7 +15,7 @@ docker-compose up -d
 
 If this is the very first time you're running this app, consider running all the migrations in your local database with:
 ```sh
-yarn sequelize-cli db:migrate --url postgresql://postgres:postgres@localhost:5432/gymc
+yarn sequelize-cli db:migrate --url postgresql://postgres:postgres@localhost:5432/grupoc
 ```
 
 Copy the content inside `.env.example` and paste it inside a new file called `.env` in the root.
