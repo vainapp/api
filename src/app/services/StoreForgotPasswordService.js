@@ -36,7 +36,7 @@ class StoreForgotPasswordService {
       user_id: user.id,
     })
 
-    const forgotPasswordParams = buildDirectEmailParams({
+    const forgotPasswordParams = await buildDirectEmailParams({
       toAddress: user.email,
       template: 'FORGOT_PASSWORD',
       templateData: {
