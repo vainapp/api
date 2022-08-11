@@ -42,7 +42,7 @@ class StoreUserService {
       },
     })
 
-    const verificationEmailParams = buildDirectEmailParams({
+    const verificationEmailParams = await buildDirectEmailParams({
       toAddress: email,
       template: 'VERIFY_ACCOUNT',
       templateData: {

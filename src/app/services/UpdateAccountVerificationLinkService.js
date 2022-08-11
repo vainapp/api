@@ -12,6 +12,7 @@ class UpdateAccountVerificationLinkService {
     }
 
     if (existingLink.verified) {
+      // TODO redirect to a page saying that this link is already expired instead of throwing an error
       throw new ForbiddenError('Este link está expirado')
     }
 
