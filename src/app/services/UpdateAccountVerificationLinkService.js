@@ -1,10 +1,10 @@
 import AccountVerificationLink from '../models/AccountVerificationLink'
 import User from '../models/User'
 import NotFoundError from '../errors/NotFound'
-import ForbiddenError from '../errors/Forbidden'
+import { websiteHost } from '../../constants/website'
 
 class UpdateAccountVerificationLinkService {
-  async execute({ id }) {
+  async execute({ id, response }) {
     const existingLink = await AccountVerificationLink.findByPk(id)
 
     if (!existingLink) {
@@ -12,8 +12,8 @@ class UpdateAccountVerificationLinkService {
     }
 
     if (existingLink.verified) {
-      // TODO redirect to a page saying that this link is already expired instead of throwing an error
-      throw new ForbiddenError('Este link está expirado')
+      response.redirect(`${websiteHost}/expired-link`)
+      return
     }
 
     await existingLink.update({

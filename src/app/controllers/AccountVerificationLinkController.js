@@ -1,4 +1,5 @@
 import UpdateAccountVerificationLinkService from '../services/UpdateAccountVerificationLinkService'
+import { websiteHost } from '../../constants/website'
 
 class AccountVerificationLinkController {
   async update(request, response) {
@@ -6,10 +7,10 @@ class AccountVerificationLinkController {
 
     await UpdateAccountVerificationLinkService.execute({
       id: account_verification_link_id,
+      response,
     })
 
-    // TODO redirect to a web page saying that's everything ok with your account
-    return response.redirect('https://jopcmelo.dev')
+    return response.redirect(`${websiteHost}/account-verified`)
   }
 }
 
