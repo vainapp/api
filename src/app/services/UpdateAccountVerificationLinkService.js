@@ -1,10 +1,9 @@
 import AccountVerificationLink from '../models/AccountVerificationLink'
 import User from '../models/User'
 import NotFoundError from '../errors/NotFound'
-import { websiteHost } from '../../constants/website'
 
 class UpdateAccountVerificationLinkService {
-  async execute({ id, response }) {
+  async execute({ id }) {
     const existingLink = await AccountVerificationLink.findByPk(id)
 
     if (!existingLink) {
@@ -12,7 +11,6 @@ class UpdateAccountVerificationLinkService {
     }
 
     if (existingLink.verified) {
-      response.redirect(`${websiteHost}/expired-link`)
       return
     }
 

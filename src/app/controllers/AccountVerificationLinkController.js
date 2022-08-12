@@ -7,7 +7,6 @@ class AccountVerificationLinkController {
 
     await UpdateAccountVerificationLinkService.execute({
       id: account_verification_link_id,
-      response,
     })
 
     return response.redirect(`${websiteHost}/account-verified`)
