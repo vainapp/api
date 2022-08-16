@@ -37,11 +37,11 @@ describe('GET /verify/:account_verification_link_id', () => {
     expect(user.verified).toBeTruthy()
   })
 
-  it('should not allow verify links twice', async () => {
+  it('should allow verify links twice', async () => {
     const link = await factory.create('AccountVerificationLink', {
       verified: true,
     })
 
-    await request(app).get(`/verify/${link.id}`).expect(403)
+    await request(app).get(`/verify/${link.id}`).expect(302)
   })
 })
