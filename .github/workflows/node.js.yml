@@ -26,6 +26,14 @@ jobs:
           --health-timeout 5s
           --health-retries 5
 
+      redis:
+        image: redis
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     steps:
     - name: Check out repository code
       uses: actions/checkout@v3
@@ -37,5 +45,3 @@ jobs:
       run: yarn test
       env:
         NODE_ENV: test
-        # POSTGRES_WRITE_HOST: postgres
-        # POSTGRES_READ_1_HOST: postgres
