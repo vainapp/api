@@ -1,7 +1,4 @@
-# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
-# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
-
-name: Node.js CI
+name: CI
 
 on:
   push:
@@ -10,15 +7,54 @@ on:
     branches: [ "main" ]
 
 jobs:
-  # TODO try to use "test" name
-  build:
+  test:
+    name: Test
     runs-on: ubuntu-latest
 
+    container:
+      image: node:16-alpine
+
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: grupoc
+        # ports:
+        #   - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     steps:
-    - uses: actions/checkout@v3
-    - name: Use Node.js
-    - uses: actions/setup-node@v3
-      with:
-        node-version: '16.15.0'
-    # - run: yarn install --frozen-lockfile
-    # - run: yarn test
+    # Downloads a copy of the code in your repository before running CI tests
+    - name: Check out repository code
+      uses: actions/checkout@v3
+
+    # - name: Use Node.js
+    #   uses: actions/setup-node@v3
+    #   with:
+    #     node-version: '16.15.0'
+    #     cache: 'yarn'
+
+    - name: Install dependencies
+      run: yarn --frozen-lockfile
+
+    - name: Run tests
+      run: yarn test
+      env:
+        POSTGRES_WRITE_HOST: postgres
+        POSTGRES_READ_1_HOST: postgres
+
+    # - uses: borales/actions-yarn@v3.0.0
+    #   with:
+    #     cmd: install --frozen-lockfile
+
+    # - uses: borales/actions-yarn@v3.0.0
+    #   with:
+    #     cmd: test
+      # env:
+      #   POSTGRES_WRITE_HOST: postgres
+      #   POSTGRES_READ_1_HOST: postgres
