@@ -1,8 +1,8 @@
 {
-  "name": "centauri",
+  "name": "back-end",
   "version": "0.0.1",
   "main": "index.js",
-  "repository": "git@github.com:grupo-c-tech/centauri.git",
+  "repository": "git@github.com:grupo-c-tech/back-end.git",
   "author": "Grupo C",
   "license": "MIT",
   "scripts": {
@@ -16,10 +16,16 @@
     "pretest": "sequelize db:migrate",
     "test": "jest --detectOpenHandles",
     "posttest": "sequelize db:migrate:undo:all",
-    "madge": "madge --circular ./",
-    "precommit": "yarn format:staged && yarn madge",
-    "format": "prettier \"./**/*.js\" --write",
-    "format:staged": "pretty-quick --staged"
+    "madge": "madge --circular ./src",
+    "lint": "eslint . --ext .js",
+    "lint:fix": "eslint . --ext .js --fix",
+    "pre-commit": "lint-staged"
+  },
+  "lint-staged": {
+    "*.js": [
+      "yarn madge",
+      "yarn lint:fix"
+    ]
   },
   "dependencies": {
     "@sentry/node": "6.7.2",
@@ -50,11 +56,12 @@
     "eslint-plugin-import": "2.23.4",
     "eslint-plugin-prettier": "3.4.0",
     "factory-girl": "5.0.4",
+    "husky": "8.0.1",
     "jest": "28.1.0",
+    "lint-staged": "13.0.3",
     "madge": "5.0.1",
     "nodemon": "2.0.7",
     "prettier": "2.3.1",
-    "pretty-quick": "3.1.1",
     "sequelize-cli": "6.2.0",
     "sucrase": "3.19.0",
     "supertest": "6.2.3"
