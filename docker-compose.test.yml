@@ -19,7 +19,7 @@ services:
       - '6379:6379'
     volumes:
       - redis:/var/lib/redis/data
-    command: 'redis-server --appendonly yes --requirepass "redis"'
+    command: 'redis-server --appendonly yes'
 
 volumes:
   postgresql:

@@ -99,6 +99,7 @@ describe('POST /forgot-password/verify', () => {
       .post('/forgot-password/verify')
       .send({
         email: user.email,
+        code: String(faker.datatype.number({ min: 1000, max: 9999 })),
       })
       .expect(404)
   })
