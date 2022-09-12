@@ -1,4 +1,4 @@
-require('../bootstrap')
+require('../shared/infra/http/bootstrap')
 
 module.exports = {
   dialect: 'postgres',

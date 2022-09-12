@@ -1,14 +1,14 @@
 import request from 'supertest'
 import { v4 as uuidV4 } from 'uuid'
 
-import app from '../../src/app'
+import app from '../../src/shared/infra/http/app'
 import factory from '../factories'
 import truncate from '../util/truncate'
 import closeRedisConnection from '../util/closeRedisConnection'
-import AccountVerificationLink from '../../src/app/models/AccountVerificationLink'
-import User from '../../src/app/models/User'
+import AccountVerificationLink from '../../src/modules/users/infra/sequelize/models/AccountVerificationLink'
+import User from '../../src/modules/users/infra/sequelize/models/User'
 
-describe('GET /verify/:account_verification_link_id', () => {
+describe('GET /users/verify/:account_verification_link_id', () => {
   beforeEach(async () => {
     await truncate()
   })
@@ -18,7 +18,7 @@ describe('GET /verify/:account_verification_link_id', () => {
   })
 
   it('should not allow verify an invalid link', async () => {
-    await request(app).get(`/verify/${uuidV4()}`).expect(404)
+    await request(app).get(`/users/verify/${uuidV4()}`).expect(404)
   })
 
   it('should set a link and a user as verified after verification', async () => {
@@ -26,7 +26,7 @@ describe('GET /verify/:account_verification_link_id', () => {
       'AccountVerificationLink'
     )
 
-    await request(app).get(`/verify/${accountVerificationLink.id}`)
+    await request(app).get(`/users/verify/${accountVerificationLink.id}`)
 
     const linkFromDb = await AccountVerificationLink.findByPk(
       accountVerificationLink.id
@@ -42,6 +42,6 @@ describe('GET /verify/:account_verification_link_id', () => {
       verified: true,
     })
 
-    await request(app).get(`/verify/${link.id}`).expect(302)
+    await request(app).get(`/users/verify/${link.id}`).expect(302)
   })
 })

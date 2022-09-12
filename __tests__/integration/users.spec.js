@@ -2,11 +2,11 @@ import request from 'supertest'
 import bcrypt from 'bcrypt'
 import faker from '@faker-js/faker'
 
-import app from '../../src/app'
+import app from '../../src/shared/infra/http/app'
 import factory from '../factories'
 import truncate from '../util/truncate'
 import closeRedisConnection from '../util/closeRedisConnection'
-import AccountVerificationLink from '../../src/app/models/AccountVerificationLink'
+import AccountVerificationLink from '../../src/modules/users/infra/sequelize/models/AccountVerificationLink'
 
 describe('POST /users', () => {
   beforeEach(async () => {

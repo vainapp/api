@@ -1,10 +1,10 @@
 import faker from '@faker-js/faker'
 import { factory } from 'factory-girl'
 
-import generateRandomCode from '../src/helpers/generateRandomCode'
-import AccountVerificationLink from '../src/app/models/AccountVerificationLink'
-import ForgotPasswordCode from '../src/app/models/ForgotPasswordCode'
-import User from '../src/app/models/User'
+import generateRandomCode from '../src/shared/helpers/generateRandomCode'
+import AccountVerificationLink from '../src/modules/users/infra/sequelize/models/AccountVerificationLink'
+import ForgotPasswordCode from '../src/modules/users/infra/sequelize/models/ForgotPasswordCode'
+import User from '../src/modules/users/infra/sequelize/models/User'
 
 factory.define('User', User, {
   name: faker.name.findName(),
