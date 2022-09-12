@@ -2,12 +2,12 @@ import request from 'supertest'
 import faker from '@faker-js/faker'
 import bcrypt from 'bcrypt'
 
-import app from '../../src/app'
+import app from '../../src/shared/infra/http/app'
 import factory from '../factories'
 import truncate from '../util/truncate'
 import closeRedisConnection from '../util/closeRedisConnection'
-import ForgotPasswordCode from '../../src/app/models/ForgotPasswordCode'
-import User from '../../src/app/models/User'
+import ForgotPasswordCode from '../../src/modules/users/infra/sequelize/models/ForgotPasswordCode'
+import User from '../../src/modules/users/infra/sequelize/models/User'
 
 describe('POST /forgot-password', () => {
   beforeEach(async () => {
@@ -135,7 +135,7 @@ describe('POST /forgot-password/verify', () => {
   })
 })
 
-describe('POST /forgot-password/reset-password', () => {
+describe('POST /forgot-password/reset', () => {
   beforeEach(async () => {
     await truncate()
   })
@@ -153,7 +153,7 @@ describe('POST /forgot-password/reset-password', () => {
     const password = faker.internet.password()
 
     await request(app)
-      .post('/forgot-password/reset-password')
+      .post('/forgot-password/reset')
       .send({
         token: code.id,
         password,
@@ -169,7 +169,7 @@ describe('POST /forgot-password/reset-password', () => {
     })
 
     await request(app)
-      .post('/forgot-password/reset-password')
+      .post('/forgot-password/reset')
       .send({
         token: code.id,
         password: faker.internet.password(),
@@ -186,7 +186,7 @@ describe('POST /forgot-password/reset-password', () => {
     const password = faker.internet.password()
 
     await request(app)
-      .post('/forgot-password/reset-password')
+      .post('/forgot-password/reset')
       .send({
         token: code.id,
         password,
@@ -202,7 +202,7 @@ describe('POST /forgot-password/reset-password', () => {
     })
     const password = faker.internet.password()
 
-    await request(app).post('/forgot-password/reset-password').send({
+    await request(app).post('/forgot-password/reset').send({
       token: code.id,
       password,
       passwordConfirmation: password,

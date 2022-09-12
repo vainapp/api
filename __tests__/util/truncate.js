@@ -1,4 +1,4 @@
-import database from '../../src/database'
+import database from '../../src/shared/infra/sequelize'
 
 export default function truncate() {
   return Promise.all(

@@ -1,7 +1,7 @@
 import request from 'supertest'
 import faker from '@faker-js/faker'
 
-import app from '../../src/app'
+import app from '../../src/shared/infra/http/app'
 import factory from '../factories'
 import truncate from '../util/truncate'
 import closeRedisConnection from '../util/closeRedisConnection'
