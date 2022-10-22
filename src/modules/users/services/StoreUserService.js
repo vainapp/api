@@ -1,6 +1,7 @@
 import BadRequestError from '../../../shared/errors/BadRequest'
 import ForbiddenError from '../../../shared/errors/Forbidden'
 import User from '../infra/sequelize/models/User'
+import Address from '../infra/sequelize/models/Address'
 import AccountVerificationLink from '../infra/sequelize/models/AccountVerificationLink'
 import Queue from '../../../shared/lib/Queue'
 import SendEmailJob from '../../../shared/jobs/SendEmail'
@@ -8,7 +9,14 @@ import isProduction from '../../../shared/helpers/isProduction'
 import buildDirectEmailParams from '../../../shared/helpers/buildDirectEmailParams'
 
 class StoreUserService {
-  async execute({ email, name, password, passwordConfirmation }) {
+  async execute({
+    email,
+    name,
+    password,
+    passwordConfirmation,
+    address,
+    genre,
+  }) {
     if (password !== passwordConfirmation) {
       throw new BadRequestError('As senhas precisam ser iguais')
     }
@@ -28,6 +36,7 @@ class StoreUserService {
         email,
         name,
         password,
+        genre,
       })
 
       userId = id
@@ -63,6 +72,11 @@ class StoreUserService {
     }
 
     await Queue.add(SendEmailJob.key, verificationEmailParams)
+
+    await Address.create({
+      ...address,
+      user_id: userId,
+    })
 
     return {
       id: userId,

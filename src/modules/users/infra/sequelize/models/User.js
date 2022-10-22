@@ -1,8 +1,6 @@
 import Sequelize, { Model } from 'sequelize'
 import bcrypt from 'bcrypt'
 
-import BadRequestError from '../../../../../shared/errors/BadRequest'
-
 class User extends Model {
   static init(sequelize) {
     super.init(
@@ -44,13 +42,6 @@ class User extends Model {
 
     this.addHook('beforeSave', async (user) => {
       if (user.password) {
-        // TODO move this check to validator
-        if (user.password.length < 6) {
-          throw new BadRequestError(
-            'A senha precisa ter no mínimo 6 caracteres'
-          )
-        }
-
         user.password_hash = await bcrypt.hash(user.password, 8)
       }
     })
