@@ -28,6 +28,10 @@ class User extends Model {
           allowNull: false,
           unique: true,
         },
+        genre: {
+          type: Sequelize.ENUM('female', 'male', 'other'),
+          allowNull: false,
+        },
         password: Sequelize.VIRTUAL,
         password_hash: Sequelize.STRING,
       },
