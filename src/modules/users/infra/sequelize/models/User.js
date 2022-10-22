@@ -32,6 +32,10 @@ class User extends Model {
           type: Sequelize.ENUM('female', 'male', 'other'),
           allowNull: false,
         },
+        phone_number: {
+          type: Sequelize.STRING,
+          allowNull: true,
+        },
         password: Sequelize.VIRTUAL,
         password_hash: Sequelize.STRING,
       },
