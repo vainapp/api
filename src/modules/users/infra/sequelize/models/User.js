@@ -32,7 +32,7 @@ class User extends Model {
         },
         phone_number: {
           type: Sequelize.STRING,
-          allowNull: true,
+          allowNull: false,
         },
         password: Sequelize.VIRTUAL,
         password_hash: Sequelize.STRING,

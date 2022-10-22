@@ -24,6 +24,7 @@ const userStoreSchema = Joi.object({
     .valid('female', 'male', 'other')
     .required()
     .label('Gênero'),
+  phone_number: Joi.string().required().label('Telefone'),
 })
 
 export default userStoreSchema

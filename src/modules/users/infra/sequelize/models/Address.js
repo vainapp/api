@@ -14,6 +14,7 @@ class Address extends Model {
         user_id: {
           type: Sequelize.UUID,
           allowNull: false,
+          unique: true,
         },
         street: {
           type: Sequelize.STRING,

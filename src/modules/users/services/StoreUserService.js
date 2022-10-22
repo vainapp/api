@@ -11,6 +11,7 @@ import buildDirectEmailParams from '../../../shared/helpers/buildDirectEmailPara
 class StoreUserService {
   async execute({
     email,
+    phone_number,
     name,
     password,
     passwordConfirmation,
@@ -34,6 +35,7 @@ class StoreUserService {
     if (!emailInUse) {
       const { id } = await User.create({
         email,
+        phone_number,
         name,
         password,
         genre,
