@@ -5,6 +5,7 @@ import Address from '../infra/sequelize/models/Address'
 import AccountVerificationLink from '../infra/sequelize/models/AccountVerificationLink'
 import Queue from '../../../shared/lib/Queue'
 import SendEmailJob from '../../../shared/jobs/SendEmail'
+import SendSMSJob from '../../../shared/jobs/SendSMS'
 import isProduction from '../../../shared/helpers/isProduction'
 import buildDirectEmailParams from '../../../shared/helpers/buildDirectEmailParams'
 
@@ -22,17 +23,19 @@ class StoreUserService {
       throw new BadRequestError('As senhas precisam ser iguais')
     }
 
-    const emailInUse = await User.findOne({
+    const userWithSameEmail = await User.findOne({
       where: { email },
     })
 
-    if (emailInUse?.verified) {
+    // TODO verified should be a virtual field that returns true if email_verified and phone_number_verified are true
+    // TODO this if statement should check the email_verified field
+    if (userWithSameEmail?.verified) {
       throw new ForbiddenError('Este endereço de e-mail já está cadastrado')
     }
 
     let userId
 
-    if (!emailInUse) {
+    if (!userWithSameEmail) {
       const { id } = await User.create({
         email,
         phone_number,
@@ -43,15 +46,18 @@ class StoreUserService {
 
       userId = id
     } else {
-      userId = emailInUse.id
+      userId = userWithSameEmail.id
     }
 
+    // TODO rename AccountVerificationLink model to EmailVerificationLink
     const [existingLink, newLink] = await AccountVerificationLink.findOrCreate({
       where: {
         user_id: userId,
         verified: false,
       },
     })
+
+    // TODO generate a PhoneNumberVerificationCode
 
     const verificationEmailParams = await buildDirectEmailParams({
       toAddress: email,
@@ -64,16 +70,19 @@ class StoreUserService {
       },
     })
 
-    if (emailInUse) {
-      await Queue.add(SendEmailJob.key, verificationEmailParams)
+    await Queue.add(SendEmailJob.key, verificationEmailParams)
+    await Queue.add(SendSMSJob.key, {
+      phone: phone_number,
+      message: `Olá ${name}, seu cadastro foi realizado com sucesso!`,
+    })
 
+    // if user existis
+    if (userWithSameEmail) {
       return {
         id: userId,
-        email: emailInUse.email,
+        email: userWithSameEmail.email,
       }
     }
-
-    await Queue.add(SendEmailJob.key, verificationEmailParams)
 
     await Address.create({
       ...address,

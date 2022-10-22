@@ -5,8 +5,9 @@ import redisConfig from '../../config/redis'
 import sentryConfig from '../../config/sentry'
 
 import SendEmail from '../jobs/SendEmail'
+import SendSMS from '../jobs/SendSMS'
 
-const jobs = [SendEmail]
+const jobs = [SendEmail, SendSMS]
 
 class Queue {
   constructor() {
