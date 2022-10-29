@@ -1,6 +1,6 @@
 import Sequelize, { Model } from 'sequelize'
 
-class AccountVerificationLink extends Model {
+class EmailVerificationLink extends Model {
   static init(sequelize) {
     super.init(
       {
@@ -28,4 +28,4 @@ class AccountVerificationLink extends Model {
   }
 }
 
-export default AccountVerificationLink
+export default EmailVerificationLink

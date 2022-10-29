@@ -2,7 +2,7 @@ import BadRequestError from '../../../shared/errors/BadRequest'
 import ForbiddenError from '../../../shared/errors/Forbidden'
 import User from '../infra/sequelize/models/User'
 import Address from '../infra/sequelize/models/Address'
-import AccountVerificationLink from '../infra/sequelize/models/AccountVerificationLink'
+import EmailVerificationLink from '../infra/sequelize/models/EmailVerificationLink'
 import Queue from '../../../shared/lib/Queue'
 import SendEmailJob from '../../../shared/jobs/SendEmail'
 import SendSMSJob from '../../../shared/jobs/SendSMS'
@@ -27,9 +27,7 @@ class StoreUserService {
       where: { email },
     })
 
-    // TODO verified should be a virtual field that returns true if email_verified and phone_number_verified are true
-    // TODO this if statement should check the email_verified field
-    if (userWithSameEmail?.verified) {
+    if (userWithSameEmail?.email_verified) {
       throw new ForbiddenError('Este endereço de e-mail já está cadastrado')
     }
 
@@ -49,8 +47,7 @@ class StoreUserService {
       userId = userWithSameEmail.id
     }
 
-    // TODO rename AccountVerificationLink model to EmailVerificationLink
-    const [existingLink, newLink] = await AccountVerificationLink.findOrCreate({
+    const [existingLink, newLink] = await EmailVerificationLink.findOrCreate({
       where: {
         user_id: userId,
         verified: false,

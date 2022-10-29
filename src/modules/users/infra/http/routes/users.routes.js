@@ -1,7 +1,7 @@
 import { Router } from 'express'
 
 import UserController from '../controllers/UserController'
-import AccountVerificationLinkController from '../controllers/AccountVerificationLinkController'
+import EmailVerificationLinkController from '../controllers/EmailVerificationLinkController'
 import validatorMiddleware from '../../../../../shared/infra/http/middlewares/validator'
 import userStoreValidator from '../validators/userStoreValidator'
 
@@ -14,8 +14,8 @@ usersRouter.post(
 )
 
 usersRouter.get(
-  '/verify/:account_verification_link_id',
-  AccountVerificationLinkController.update
+  '/verify-email/:email_verification_link_id',
+  EmailVerificationLinkController.update
 )
 
 export default usersRouter

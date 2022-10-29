@@ -12,11 +12,6 @@ class User extends Model {
           primaryKey: true,
           unique: true,
         },
-        verified: {
-          type: Sequelize.BOOLEAN,
-          defaultValue: false,
-          allowNull: false,
-        },
         name: {
           type: Sequelize.STRING,
           allowNull: false,
@@ -33,6 +28,22 @@ class User extends Model {
         phone_number: {
           type: Sequelize.STRING,
           allowNull: false,
+        },
+        email_verified: {
+          type: Sequelize.BOOLEAN,
+          defaultValue: false,
+          allowNull: false,
+        },
+        phone_number_verified: {
+          type: Sequelize.BOOLEAN,
+          defaultValue: false,
+          allowNull: false,
+        },
+        verified: {
+          type: Sequelize.VIRTUAL,
+          get() {
+            return this.email_verified && this.phone_number_verified
+          },
         },
         password: Sequelize.VIRTUAL,
         password_hash: Sequelize.STRING,

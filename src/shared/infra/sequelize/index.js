@@ -2,11 +2,11 @@ import Sequelize from 'sequelize'
 
 import databaseConfig from '../../../config/database'
 import User from '../../../modules/users/infra/sequelize/models/User'
-import AccountVerificationLink from '../../../modules/users/infra/sequelize/models/AccountVerificationLink'
+import EmailVerificationLink from '../../../modules/users/infra/sequelize/models/EmailVerificationLink'
 import ForgotPasswordCode from '../../../modules/users/infra/sequelize/models/ForgotPasswordCode'
 import Address from '../../../modules/users/infra/sequelize/models/Address'
 
-const models = [User, AccountVerificationLink, ForgotPasswordCode, Address]
+const models = [User, EmailVerificationLink, ForgotPasswordCode, Address]
 
 class Database {
   constructor() {

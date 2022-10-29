@@ -6,7 +6,7 @@ import app from '../../src/shared/infra/http/app'
 import factory from '../factories'
 import truncate from '../util/truncate'
 import closeRedisConnection from '../util/closeRedisConnection'
-import AccountVerificationLink from '../../src/modules/users/infra/sequelize/models/AccountVerificationLink'
+import EmailVerificationLink from '../../src/modules/users/infra/sequelize/models/EmailVerificationLink'
 
 describe('POST /users', () => {
   beforeEach(async () => {
@@ -75,13 +75,13 @@ describe('POST /users', () => {
 
     const response = await request(app).post('/users').send(body)
 
-    const newAccountVerificationLink = await AccountVerificationLink.findOne({
+    const newEmailVerificationLink = await EmailVerificationLink.findOne({
       where: {
         user_id: response.body.id,
       },
     })
 
-    expect(newAccountVerificationLink.verified).toBe(false)
+    expect(newEmailVerificationLink.verified).toBe(false)
   })
 
   it('should not allow sign ups with different passwords', async () => {

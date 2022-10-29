@@ -5,10 +5,10 @@ import app from '../../src/shared/infra/http/app'
 import factory from '../factories'
 import truncate from '../util/truncate'
 import closeRedisConnection from '../util/closeRedisConnection'
-import AccountVerificationLink from '../../src/modules/users/infra/sequelize/models/AccountVerificationLink'
+import EmailVerificationLink from '../../src/modules/users/infra/sequelize/models/EmailVerificationLink'
 import User from '../../src/modules/users/infra/sequelize/models/User'
 
-describe('GET /users/verify/:account_verification_link_id', () => {
+describe('GET /users/verify-email/:email_verification_link_id', () => {
   beforeEach(async () => {
     await truncate()
   })
@@ -18,18 +18,16 @@ describe('GET /users/verify/:account_verification_link_id', () => {
   })
 
   it('should not allow verify an invalid link', async () => {
-    await request(app).get(`/users/verify/${uuidV4()}`).expect(404)
+    await request(app).get(`/users/verify-email/${uuidV4()}`).expect(404)
   })
 
   it('should set a link and a user as verified after verification', async () => {
-    const accountVerificationLink = await factory.create(
-      'AccountVerificationLink'
-    )
+    const emailVerificationLink = await factory.create('EmailVerificationLink')
 
-    await request(app).get(`/users/verify/${accountVerificationLink.id}`)
+    await request(app).get(`/users/verify/${emailVerificationLink.id}`)
 
-    const linkFromDb = await AccountVerificationLink.findByPk(
-      accountVerificationLink.id
+    const linkFromDb = await EmailVerificationLink.findByPk(
+      emailVerificationLink.id
     )
     const user = await User.findByPk(linkFromDb.user_id)
 
@@ -38,10 +36,10 @@ describe('GET /users/verify/:account_verification_link_id', () => {
   })
 
   it('should allow verify links twice', async () => {
-    const link = await factory.create('AccountVerificationLink', {
+    const link = await factory.create('EmailVerificationLink', {
       verified: true,
     })
 
-    await request(app).get(`/users/verify/${link.id}`).expect(302)
+    await request(app).get(`/users/verify-email/${link.id}`).expect(302)
   })
 })
