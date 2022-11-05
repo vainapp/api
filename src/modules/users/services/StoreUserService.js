@@ -3,6 +3,7 @@ import ForbiddenError from '../../../shared/errors/Forbidden'
 import User from '../infra/sequelize/models/User'
 import Address from '../infra/sequelize/models/Address'
 import EmailVerificationLink from '../infra/sequelize/models/EmailVerificationLink'
+import PhoneNumberVerificationCode from '../infra/sequelize/models/PhoneNumberVerificationCode'
 import Queue from '../../../shared/lib/Queue'
 import SendEmailJob from '../../../shared/jobs/SendEmail'
 import SendSMSJob from '../../../shared/jobs/SendSMS'
@@ -54,7 +55,13 @@ class StoreUserService {
       },
     })
 
-    // TODO generate a PhoneNumberVerificationCode
+    const [
+      existingPhoneNumberVerificationCode,
+      newPhoneNumberVerificationCode,
+    ] = await PhoneNumberVerificationCode.findOrCreate({
+      user_id: userId,
+      verified: false,
+    })
 
     const verificationEmailParams = await buildDirectEmailParams({
       toAddress: email,
@@ -70,10 +77,13 @@ class StoreUserService {
     await Queue.add(SendEmailJob.key, verificationEmailParams)
     await Queue.add(SendSMSJob.key, {
       phone: phone_number,
-      message: `Olá ${name}, seu cadastro foi realizado com sucesso!`,
+      message: `Olá ${name}, seu código de confirmação é: ${
+        !existingPhoneNumberVerificationCode
+          ? newPhoneNumberVerificationCode.code
+          : existingPhoneNumberVerificationCode.code
+      }`,
     })
 
-    // if user existis
     if (userWithSameEmail) {
       return {
         id: userId,

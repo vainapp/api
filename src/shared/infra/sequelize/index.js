@@ -5,8 +5,15 @@ import User from '../../../modules/users/infra/sequelize/models/User'
 import EmailVerificationLink from '../../../modules/users/infra/sequelize/models/EmailVerificationLink'
 import ForgotPasswordCode from '../../../modules/users/infra/sequelize/models/ForgotPasswordCode'
 import Address from '../../../modules/users/infra/sequelize/models/Address'
+import PhoneNumberVerificationCode from '../../../modules/users/infra/sequelize/models/PhoneNumberVerificationCode'
 
-const models = [User, EmailVerificationLink, ForgotPasswordCode, Address]
+const models = [
+  User,
+  EmailVerificationLink,
+  ForgotPasswordCode,
+  Address,
+  PhoneNumberVerificationCode,
+]
 
 class Database {
   constructor() {
