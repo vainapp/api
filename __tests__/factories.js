@@ -6,17 +6,27 @@ import EmailVerificationLink from '../src/modules/users/infra/sequelize/models/E
 import ForgotPasswordCode from '../src/modules/users/infra/sequelize/models/ForgotPasswordCode'
 import User from '../src/modules/users/infra/sequelize/models/User'
 import Address from '../src/modules/users/infra/sequelize/models/Address'
+import PhoneNumberVerificationCode from '../src/modules/users/infra/sequelize/models/PhoneNumberVerificationCode'
 
 factory.define('User', User, {
   name: faker.name.findName(),
   email: faker.internet.email(),
-  verified: false,
   password: faker.internet.password(),
+  genre: 'other',
+  phone_number: faker.phone.phoneNumber(),
+  email_verified: false,
+  phone_number_verified: false,
 })
 
 factory.define('EmailVerificationLink', EmailVerificationLink, {
-  verified: false,
   user_id: factory.assoc('User', 'id'),
+  verified: false,
+})
+
+factory.define('PhoneNumberVerificationCode', PhoneNumberVerificationCode, {
+  user_id: factory.assoc('User', 'id'),
+  code: generateRandomCode(),
+  verified: false,
 })
 
 factory.define('ForgotPasswordCode', ForgotPasswordCode, {
@@ -30,7 +40,7 @@ factory.define('Address', Address, {
   street: faker.address.streetName(),
   number: faker.datatype.number(),
   complement: faker.address.secondaryAddress(),
-  district: faker.address.cityPrefix(),
+  district: faker.address.county(),
   city: faker.address.city(),
   state: faker.address.state(),
   zip_code: faker.address.zipCode(),
