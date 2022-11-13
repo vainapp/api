@@ -5,10 +5,9 @@ module.exports = {
       'email_verification_links'
     ),
 
-  down: (queryInterface) => {
+  down: (queryInterface) =>
     queryInterface.renameTable(
       'email_verification_links',
       'account_verification_links'
-    )
-  },
+    ),
 }

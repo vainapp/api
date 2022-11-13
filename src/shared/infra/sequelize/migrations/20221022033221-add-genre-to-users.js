@@ -5,5 +5,8 @@ module.exports = {
       allowNull: false,
     }),
 
-  down: (queryInterface) => queryInterface.removeColumn('users', 'genre'),
+  down: async (queryInterface) => {
+    await queryInterface.removeColumn('users', 'genre')
+    await queryInterface.sequelize.query('DROP TYPE "enum_users_genre";')
+  },
 }
