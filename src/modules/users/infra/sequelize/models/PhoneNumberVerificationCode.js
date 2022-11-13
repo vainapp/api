@@ -1,7 +1,5 @@
 import Sequelize, { Model } from 'sequelize'
 
-import generateRandomCode from '../../../../../shared/helpers/generateRandomCode'
-
 class PhoneNumberVerificationCode extends Model {
   static init(sequelize) {
     super.init(
@@ -29,10 +27,6 @@ class PhoneNumberVerificationCode extends Model {
       },
       { sequelize }
     )
-
-    this.addHook('beforeCreate', async (phoneNumberVerificationCode) => {
-      phoneNumberVerificationCode.code = generateRandomCode()
-    })
 
     return this
   }

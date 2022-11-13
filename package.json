@@ -12,7 +12,7 @@
     "queue:debug": "nodemon --ignore scripts/ --inspect src/shared/infra/http/queue.js",
     "build": "sucrase ./src -d ./dist --transforms imports",
     "start": "node dist/index.js",
-    "test:autocannon": "npx autocannon -c 500 -d 30 --workers 10 --renderStatusCodes --latency --warmup [ -c 1 -d 2 ] localhost:3333/verify/8d520557-b22c-486d-874f-7094cf35fb0f",
+    "test:autocannon": "npx autocannon -c 500 -d 30 --workers 10 --renderStatusCodes --latency --warmup [ -c 1 -d 2 ] localhost:3333/verify-email/8d520557-b22c-486d-874f-7094cf35fb0f",
     "pretest": "sequelize db:migrate",
     "test": "jest --detectOpenHandles",
     "posttest": "sequelize db:migrate:undo:all",

@@ -20,7 +20,7 @@ class UpdateEmailVerificationLinkService {
 
     const user = await User.findByPk(existingLink.user_id)
 
-    await user.update({ verified: true })
+    await user.update({ email_verified: true })
   }
 }
 

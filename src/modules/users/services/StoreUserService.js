@@ -9,6 +9,7 @@ import SendEmailJob from '../../../shared/jobs/SendEmail'
 import SendSMSJob from '../../../shared/jobs/SendSMS'
 import isProduction from '../../../shared/helpers/isProduction'
 import buildDirectEmailParams from '../../../shared/helpers/buildDirectEmailParams'
+import generateRandomCode from '../../../shared/helpers/generateRandomCode'
 
 class StoreUserService {
   async execute({
@@ -59,8 +60,13 @@ class StoreUserService {
       existingPhoneNumberVerificationCode,
       newPhoneNumberVerificationCode,
     ] = await PhoneNumberVerificationCode.findOrCreate({
-      user_id: userId,
-      verified: false,
+      where: {
+        user_id: userId,
+        verified: false,
+      },
+      defaults: {
+        code: generateRandomCode(),
+      },
     })
 
     const verificationEmailParams = await buildDirectEmailParams({
@@ -70,7 +76,7 @@ class StoreUserService {
         name,
         link: `${process.env.APP_HOST}${
           !isProduction() ? `:${process.env.APP_PORT}` : ''
-        }/users/verify/${(existingLink || newLink).id}`,
+        }/users/verify-email/${(existingLink || newLink).id}`,
       },
     })
 

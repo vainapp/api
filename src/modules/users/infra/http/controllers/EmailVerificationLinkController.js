@@ -9,7 +9,7 @@ class EmailVerificationLinkController {
       id: email_verification_link_id,
     })
 
-    return response.redirect(`${websiteHost}/account-verified`)
+    return response.redirect(`${websiteHost}/email-verificado`)
   }
 }
 

@@ -24,7 +24,7 @@ describe('GET /users/verify-email/:email_verification_link_id', () => {
   it('should set a link and a user as verified after verification', async () => {
     const emailVerificationLink = await factory.create('EmailVerificationLink')
 
-    await request(app).get(`/users/verify/${emailVerificationLink.id}`)
+    await request(app).get(`/users/verify-email/${emailVerificationLink.id}`)
 
     const linkFromDb = await EmailVerificationLink.findByPk(
       emailVerificationLink.id
