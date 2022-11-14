@@ -1,23 +1,24 @@
 import ForgotPasswordCode from '../infra/sequelize/models/ForgotPasswordCode'
 import User from '../infra/sequelize/models/User'
 import NotFoundError from '../../../shared/errors/NotFound'
-import Queue from '../../../shared/lib/Queue'
-import SendEmailJob from '../../../shared/jobs/SendEmail'
+import TransactionService from '../../../shared/services/TransactionService'
 import buildDirectEmailParams from '../../../shared/helpers/buildDirectEmailParams'
 import { help } from '../../../shared/constants/emails'
-import TransactionService from '../../../shared/services/TransactionService'
+import Queue from '../../../shared/lib/Queue'
+import SendEmailJob from '../../../shared/jobs/SendEmail'
 
 class StoreForgotPasswordService extends TransactionService {
   async execute({ email }) {
+    const transaction = await this.createTransaction()
+
     try {
       const user = await User.findOne({
         where: {
           email,
-          verified: true,
         },
       })
 
-      if (!user) {
+      if (!user || !user.verified) {
         throw new NotFoundError(
           'Este endereço de e-mail não está vinculado à uma conta verificada'
         )
@@ -31,17 +32,14 @@ class StoreForgotPasswordService extends TransactionService {
       })
 
       if (forgotPasswordCode) {
-        await forgotPasswordCode.update(
-          { active: false },
-          { transaction: this.transaction }
-        )
+        await forgotPasswordCode.update({ active: false }, { transaction })
       }
 
       const { code } = await ForgotPasswordCode.create(
         {
           user_id: user.id,
         },
-        { transaction: this.transaction }
+        { transaction }
       )
 
       const forgotPasswordParams = await buildDirectEmailParams({
@@ -54,12 +52,11 @@ class StoreForgotPasswordService extends TransactionService {
         },
       })
 
-      await this.transaction.commit()
+      await transaction.commit()
 
       await Queue.add(SendEmailJob.key, forgotPasswordParams)
     } catch (error) {
-      await this.transaction.rollback()
-
+      await transaction.rollback()
       throw error
     }
   }

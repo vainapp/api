@@ -5,6 +5,8 @@ import TransactionService from '../../../shared/services/TransactionService'
 
 class UpdatePhoneNumberVerificationCodeService extends TransactionService {
   async execute({ userId, code }) {
+    const transaction = await this.createTransaction()
+
     try {
       const user = await User.findByPk(userId)
 
@@ -31,13 +33,12 @@ class UpdatePhoneNumberVerificationCodeService extends TransactionService {
         {
           verified: true,
         },
-        { transaction: this.transaction }
+        { transaction }
       )
 
-      await user.update(
-        { phone_number_verified: true },
-        { transaction: this.transaction }
-      )
+      await user.update({ phone_number_verified: true }, { transaction })
+
+      await transaction.commit()
     } catch (error) {
       await this.transaction.rollback()
 

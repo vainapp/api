@@ -2,11 +2,11 @@ import request from 'supertest'
 import bcrypt from 'bcrypt'
 import faker from '@faker-js/faker'
 
-import app from '../../src/shared/infra/http/app'
 import factory from '../factories'
 import truncate from '../util/truncate'
 import closeRedisConnection from '../util/closeRedisConnection'
 import EmailVerificationLink from '../../src/modules/users/infra/sequelize/models/EmailVerificationLink'
+import app from '../../src/shared/infra/http/app'
 
 describe('POST /users', () => {
   beforeEach(async () => {
@@ -35,8 +35,20 @@ describe('POST /users', () => {
     const body = {
       name: faker.name.findName(),
       email: faker.internet.email(),
+      phone_number: faker.phone.phoneNumber(),
+      genre: 'other',
       password,
       passwordConfirmation: password,
+      address: {
+        street: faker.address.streetName(),
+        number: String(faker.datatype.number()),
+        complement: faker.address.secondaryAddress(),
+        district: faker.address.county(),
+        city: faker.address.city(),
+        state: faker.address.state(),
+        zip_code: faker.address.zipCode(),
+        country: faker.address.country(),
+      },
     }
 
     const response = await request(app).post('/users').send(body)
@@ -49,28 +61,53 @@ describe('POST /users', () => {
     const password = faker.internet.password()
 
     await factory.create('User', {
-      verified: true,
+      email_verified: true,
+      phone_number_verified: true,
       email,
     })
 
     const body = {
       name: faker.name.findName(),
       email,
+      phone_number: faker.phone.phoneNumber(),
+      genre: 'other',
       password,
       passwordConfirmation: password,
+      address: {
+        street: faker.address.streetName(),
+        number: String(faker.datatype.number()),
+        complement: faker.address.secondaryAddress(),
+        district: faker.address.county(),
+        city: faker.address.city(),
+        state: faker.address.state(),
+        zip_code: faker.address.zipCode(),
+        country: faker.address.country(),
+      },
     }
 
     await request(app).post('/users').send(body).expect(403)
   })
 
-  it('should generate an unverified AccountVerificationLink for the new user', async () => {
+  it('should generate an unverified EmailVerificationLink for the new user', async () => {
     const password = faker.internet.password()
 
     const body = {
       name: faker.name.findName(),
       email: faker.internet.email(),
+      phone_number: faker.phone.phoneNumber(),
+      genre: 'other',
       password,
       passwordConfirmation: password,
+      address: {
+        street: faker.address.streetName(),
+        number: String(faker.datatype.number()),
+        complement: faker.address.secondaryAddress(),
+        district: faker.address.county(),
+        city: faker.address.city(),
+        state: faker.address.state(),
+        zip_code: faker.address.zipCode(),
+        country: faker.address.country(),
+      },
     }
 
     const response = await request(app).post('/users').send(body)
@@ -90,8 +127,20 @@ describe('POST /users', () => {
       .send({
         name: faker.name.findName(),
         email: faker.internet.email(),
+        phone_number: faker.phone.phoneNumber(),
+        genre: 'other',
         password: faker.internet.password(),
         passwordConfirmation: faker.internet.password(),
+        address: {
+          street: faker.address.streetName(),
+          number: String(faker.datatype.number()),
+          complement: faker.address.secondaryAddress(),
+          district: faker.address.county(),
+          city: faker.address.city(),
+          state: faker.address.state(),
+          zip_code: faker.address.zipCode(),
+          country: faker.address.country(),
+        },
       })
       .expect(400)
   })
@@ -100,12 +149,26 @@ describe('POST /users', () => {
     const user = await factory.create('User')
     const password = faker.internet.password()
 
-    const response = await request(app).post('/users').send({
-      name: user.name,
-      email: user.email,
-      password,
-      passwordConfirmation: password,
-    })
+    const response = await request(app)
+      .post('/users')
+      .send({
+        name: user.name,
+        email: user.email,
+        phone_number: faker.phone.phoneNumber(),
+        genre: 'other',
+        password,
+        passwordConfirmation: password,
+        address: {
+          street: faker.address.streetName(),
+          number: String(faker.datatype.number()),
+          complement: faker.address.secondaryAddress(),
+          district: faker.address.county(),
+          city: faker.address.city(),
+          state: faker.address.state(),
+          zip_code: faker.address.zipCode(),
+          country: faker.address.country(),
+        },
+      })
 
     expect(response.body).toHaveProperty('id')
   })

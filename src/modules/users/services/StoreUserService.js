@@ -22,6 +22,8 @@ class StoreUserService extends TransactionService {
     address,
     genre,
   }) {
+    const transaction = await this.createTransaction()
+
     try {
       if (password !== passwordConfirmation) {
         throw new BadRequestError('As senhas precisam ser iguais')
@@ -46,7 +48,7 @@ class StoreUserService extends TransactionService {
             password,
             genre,
           },
-          { transaction: this.transaction }
+          { transaction }
         )
 
         userId = id
@@ -59,7 +61,7 @@ class StoreUserService extends TransactionService {
           user_id: userId,
           verified: false,
         },
-        transaction: this.transaction,
+        transaction,
       })
 
       const [
@@ -73,7 +75,7 @@ class StoreUserService extends TransactionService {
         defaults: {
           code: generateRandomCode(),
         },
-        transaction: this.transaction,
+        transaction,
       })
 
       const verificationEmailParams = await buildDirectEmailParams({
@@ -108,19 +110,19 @@ class StoreUserService extends TransactionService {
         {
           ...address,
           user_id: userId,
-          transaction: this.transaction,
+          transaction,
         },
-        { transaction: this.transaction }
+        { transaction }
       )
 
-      await this.transaction.commit()
+      await transaction.commit()
 
       return {
         id: userId,
         email,
       }
     } catch (error) {
-      await this.transaction.rollback()
+      await transaction.rollback()
 
       throw error
     }

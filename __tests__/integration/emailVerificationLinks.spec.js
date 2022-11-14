@@ -22,17 +22,23 @@ describe('GET /users/verify-email/:email_verification_link_id', () => {
   })
 
   it('should set a link and a user as verified after verification', async () => {
-    const emailVerificationLink = await factory.create('EmailVerificationLink')
+    const user = await factory.create('User', {
+      phone_number_verified: true,
+    })
+    const emailVerificationLink = await factory.create(
+      'EmailVerificationLink',
+      { user_id: user.id }
+    )
 
     await request(app).get(`/users/verify-email/${emailVerificationLink.id}`)
 
     const linkFromDb = await EmailVerificationLink.findByPk(
       emailVerificationLink.id
     )
-    const user = await User.findByPk(linkFromDb.user_id)
+    const userFromDb = await User.findByPk(linkFromDb.user_id)
 
     expect(linkFromDb.verified).toBeTruthy()
-    expect(user.verified).toBeTruthy()
+    expect(userFromDb.verified).toBeTruthy()
   })
 
   it('should allow verify links twice', async () => {

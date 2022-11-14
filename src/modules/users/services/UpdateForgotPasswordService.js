@@ -6,6 +6,8 @@ import TransactionService from '../../../shared/services/TransactionService'
 
 class UpdateForgotPasswordService extends TransactionService {
   async execute({ forgotPasswordCodeId, password, passwordConfirmation }) {
+    const transaction = await this.createTransaction()
+
     try {
       const forgotPasswordCode = await ForgotPasswordCode.findOne({
         where: {
@@ -27,21 +29,19 @@ class UpdateForgotPasswordService extends TransactionService {
       const user = await User.findOne({
         where: {
           id: user_id,
-          verified: true,
         },
       })
 
-      if (!user) {
+      if (!user || !user.verified) {
         throw new NotFoundError('Conta não encontrada')
       }
 
-      await forgotPasswordCode.update(
-        { active: false },
-        { transaction: this.transaction }
-      )
-      await user.update({ password }, { transaction: this.transaction })
+      await forgotPasswordCode.update({ active: false }, { transaction })
+      await user.update({ password }, { transaction })
+
+      await transaction.commit()
     } catch (error) {
-      await this.transaction.rollback()
+      await transaction.rollback()
 
       throw error
     }

@@ -31,7 +31,8 @@ describe('POST /forgot-password', () => {
 
   it('should generate an ForgotPasswordCode for an user', async () => {
     const user = await factory.create('User', {
-      verified: true,
+      email_verified: true,
+      phone_number_verified: true,
     })
 
     await request(app).post('/forgot-password').send({
@@ -49,7 +50,8 @@ describe('POST /forgot-password', () => {
 
   it('should invalidate a previous ForgotPasswordCode and generate a new active one for an user', async () => {
     const user = await factory.create('User', {
-      verified: true,
+      email_verified: true,
+      phone_number_verified: true,
     })
 
     await request(app).post('/forgot-password').send({
@@ -105,7 +107,10 @@ describe('POST /forgot-password/verify', () => {
   })
 
   it('should not allow to recover an account with an expired code', async () => {
-    const user = await factory.create('User', { verified: true })
+    const user = await factory.create('User', {
+      email_verified: true,
+      phone_number_verified: true,
+    })
     const code = await factory.create('ForgotPasswordCode', {
       active: false,
       user_id: user.id,
@@ -121,7 +126,10 @@ describe('POST /forgot-password/verify', () => {
   })
 
   it('should return the token if everything is as expected', async () => {
-    const user = await factory.create('User', { verified: true })
+    const user = await factory.create('User', {
+      email_verified: true,
+      phone_number_verified: true,
+    })
     const code = await factory.create('ForgotPasswordCode', {
       user_id: user.id,
     })
@@ -196,7 +204,10 @@ describe('POST /forgot-password/reset', () => {
   })
 
   it("should change the user's password and invalidate a code", async () => {
-    const user = await factory.create('User', { verified: true })
+    const user = await factory.create('User', {
+      email_verified: true,
+      phone_number_verified: true,
+    })
     const code = await factory.create('ForgotPasswordCode', {
       user_id: user.id,
     })

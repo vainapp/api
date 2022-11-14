@@ -5,6 +5,8 @@ import TransactionService from '../../../shared/services/TransactionService'
 
 class UpdateEmailVerificationLinkService extends TransactionService {
   async execute({ id }) {
+    const transaction = await this.createTransaction()
+
     try {
       const existingLink = await EmailVerificationLink.findByPk(id)
 
@@ -20,17 +22,16 @@ class UpdateEmailVerificationLinkService extends TransactionService {
         {
           verified: true,
         },
-        { transaction: this.transaction }
+        { transaction }
       )
 
       const user = await User.findByPk(existingLink.user_id)
 
-      await user.update(
-        { email_verified: true },
-        { transaction: this.transaction }
-      )
+      await user.update({ email_verified: true }, { transaction })
+
+      await transaction.commit()
     } catch (error) {
-      await this.transaction.rollback()
+      await transaction.rollback()
 
       throw error
     }
