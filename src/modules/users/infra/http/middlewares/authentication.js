@@ -5,7 +5,7 @@ import ForbiddenError from '../../../../../shared/errors/Forbidden'
 import UnauthorizedError from '../../../../../shared/errors/Unauthorized'
 import User from '../../sequelize/models/User'
 
-export default async (request, response, nextCallback) => {
+export default async (request, _, nextCallback) => {
   const { authorization: authHeader } = request.headers
 
   if (!authHeader) {
@@ -22,16 +22,10 @@ export default async (request, response, nextCallback) => {
     throw new ForbiddenError('Não autorizado')
   }
 
-  // TODO search for PK and check if it's verified using JS
-  const user = await User.findOne({
-    where: {
-      id: request.user.id,
-      verified: true,
-    },
-  })
+  const user = await User.findByPk(request.user.id)
 
-  if (!user) {
-    throw new ForbiddenError('Você precisa verificar seu e-mail para continuar')
+  if (!user || !user.verified) {
+    throw new ForbiddenError('Não autorizado')
   }
 
   return nextCallback()

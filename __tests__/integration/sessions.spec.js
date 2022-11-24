@@ -29,7 +29,8 @@ describe('POST /sessions', () => {
 
   it('should not allow a verified user to sign-in with invalid credentials', async () => {
     const user = await factory.create('User', {
-      verified: true,
+      email_verified: true,
+      phone_number_verified: true,
     })
 
     await request(app)
@@ -43,7 +44,8 @@ describe('POST /sessions', () => {
 
   it('should allow a verified user to sign-in with correct credentials', async () => {
     const user = await factory.create('User', {
-      verified: true,
+      email_verified: true,
+      phone_number_verified: true,
     })
 
     const response = await request(app).post('/sessions').send({

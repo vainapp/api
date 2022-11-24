@@ -25,11 +25,10 @@ class UpdateForgotPasswordService {
     const user = await User.findOne({
       where: {
         id: user_id,
-        verified: true,
       },
     })
 
-    if (!user) {
+    if (!user || !user.verified) {
       throw new NotFoundError('Conta não encontrada')
     }
 

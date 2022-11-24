@@ -1,10 +1,10 @@
-import AccountVerificationLink from '../infra/sequelize/models/AccountVerificationLink'
+import EmailVerificationLink from '../infra/sequelize/models/EmailVerificationLink'
 import User from '../infra/sequelize/models/User'
 import NotFoundError from '../../../shared/errors/NotFound'
 
-class UpdateAccountVerificationLinkService {
+class UpdateEmailVerificationLinkService {
   async execute({ id }) {
-    const existingLink = await AccountVerificationLink.findByPk(id)
+    const existingLink = await EmailVerificationLink.findByPk(id)
 
     if (!existingLink) {
       throw new NotFoundError('Este link é inválido')
@@ -20,8 +20,8 @@ class UpdateAccountVerificationLinkService {
 
     const user = await User.findByPk(existingLink.user_id)
 
-    await user.update({ verified: true })
+    await user.update({ email_verified: true })
   }
 }
 
-export default new UpdateAccountVerificationLinkService()
+export default new UpdateEmailVerificationLinkService()

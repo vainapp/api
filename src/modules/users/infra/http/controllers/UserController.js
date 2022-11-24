@@ -2,13 +2,24 @@ import StoreUserService from '../../../services/StoreUserService'
 
 class UserController {
   async store(request, response) {
-    const { email, name, password, passwordConfirmation } = request.body
-
-    const result = await StoreUserService.execute({
+    const {
       email,
+      phone_number,
       name,
       password,
       passwordConfirmation,
+      address,
+      genre,
+    } = request.body
+
+    const result = await StoreUserService.execute({
+      email,
+      phone_number,
+      name,
+      password,
+      passwordConfirmation,
+      address,
+      genre,
     })
 
     return response.json(result)

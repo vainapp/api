@@ -7,11 +7,10 @@ class ShowForgotPasswordService {
     const user = await User.findOne({
       where: {
         email,
-        verified: true,
       },
     })
 
-    if (!user) {
+    if (!user || !user.verified) {
       throw new NotFoundError('Código de recuperação de senha inválido')
     }
 

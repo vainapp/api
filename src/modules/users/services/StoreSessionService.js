@@ -7,10 +7,10 @@ import authConfig from '../../../config/auth'
 class StoreSessionService {
   async execute({ email, password }) {
     const user = await User.findOne({
-      where: { email, verified: true },
+      where: { email },
     })
 
-    if (!user) {
+    if (!user || !user.verified) {
       throw new ForbiddenError('Dados de acesso inválidos')
     }
 
