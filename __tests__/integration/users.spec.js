@@ -17,6 +17,29 @@ describe('POST /users', () => {
     await closeRedisConnection()
   })
 
+  it('should not allow a sign-up with different passwords', async () => {
+    const body = {
+      name: faker.name.findName(),
+      email: faker.internet.email(),
+      phone_number: faker.phone.phoneNumber(),
+      genre: 'other',
+      password: faker.internet.password(),
+      passwordConfirmation: faker.internet.password(),
+      address: {
+        street: faker.address.streetName(),
+        number: String(faker.datatype.number()),
+        complement: faker.address.secondaryAddress(),
+        district: faker.address.county(),
+        city: faker.address.city(),
+        state: faker.address.state(),
+        zip_code: faker.address.zipCode(),
+        country: faker.address.country(),
+      },
+    }
+
+    await request(app).post('/users').send(body).expect(400)
+  })
+
   it('should encrypt user password when new user created', async () => {
     const password = 'mytest'
 

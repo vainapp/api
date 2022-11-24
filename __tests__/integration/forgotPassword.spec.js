@@ -153,7 +153,10 @@ describe('POST /forgot-password/reset', () => {
   })
 
   it('should not allow an expired code to change password', async () => {
-    const user = await factory.create('User', { verified: true })
+    const user = await factory.create('User', {
+      email_verified: true,
+      phone_number_verified: true,
+    })
     const code = await factory.create('ForgotPasswordCode', {
       user_id: user.id,
       active: false,
@@ -171,7 +174,10 @@ describe('POST /forgot-password/reset', () => {
   })
 
   it('should not allow to update a password when passwords do not match', async () => {
-    const user = await factory.create('User', { verified: true })
+    const user = await factory.create('User', {
+      email_verified: true,
+      phone_number_verified: true,
+    })
     const code = await factory.create('ForgotPasswordCode', {
       user_id: user.id,
     })
@@ -201,6 +207,25 @@ describe('POST /forgot-password/reset', () => {
         passwordConfirmation: password,
       })
       .expect(404)
+  })
+
+  it('should not allow an user to update their password providing different password', async () => {
+    const user = await factory.create('User', {
+      email_verified: true,
+      phone_number_verified: true,
+    })
+    const code = await factory.create('ForgotPasswordCode', {
+      user_id: user.id,
+    })
+
+    await request(app)
+      .post('/forgot-password/reset')
+      .send({
+        token: code.id,
+        password: faker.internet.password(),
+        passwordConfirmation: faker.internet.password(),
+      })
+      .expect(400)
   })
 
   it("should change the user's password and invalidate a code", async () => {
