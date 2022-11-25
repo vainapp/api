@@ -56,11 +56,12 @@ class ProfilePhoto extends Model {
         return new AWS.S3()
           .deleteObject({
             Bucket: process.env.BUCKET_NAME,
-            Key: this.key,
+            Key: profilePhoto.key,
           })
           .promise()
           .catch((response) => {
             Sentry.captureException(response)
+            console.error(response)
           })
       }
       return promisify(fs.unlink)(

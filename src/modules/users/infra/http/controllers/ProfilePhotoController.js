@@ -1,3 +1,4 @@
+import DeleteProfilePhotoService from '../../../services/DeleteProfilePhotoService'
 import StoreProfilePhotoService from '../../../services/StoreProfilePhotoService'
 
 class ProfilePhotoController {
@@ -16,7 +17,14 @@ class ProfilePhotoController {
   }
 
   async delete(request, response) {
-    return response.sendStatus(200) // TODO choose the best http code status
+    const { profile_photo_id } = request.params
+
+    await DeleteProfilePhotoService.execute({
+      profilePhotoId: profile_photo_id,
+      userId: request.user.id,
+    })
+
+    return response.sendStatus(200)
   }
 }
 

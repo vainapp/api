@@ -4,20 +4,24 @@ import multer from 'multer'
 import multerS3 from 'multer-s3'
 
 import AWS from './aws'
-import { MAX_SIZE_IN_MEGA_BYTES } from '../shared/constants/files'
+import {
+  ALLOWED_MIMES,
+  MAX_SIZE_IN_MEGA_BYTES,
+} from '../shared/constants/files'
 import { UnsupportedMediaTypeError } from '../shared/errors'
 
 const storageTypes = {
   local: multer.diskStorage({
-    destination: (req, file, cb) => {
+    destination: (_, file, cb) => {
       cb(null, path.resolve(__dirname, '..', 'shared', 'tmp', 'uploads'))
     },
-    filename: (req, file, cb) => {
-      crypto.randomBytes(16, (err, hash) => {
-        if (err) cb(err)
+    filename: (_, file, cb) => {
+      crypto.randomBytes(16, (error, hash) => {
+        if (error) {
+          cb(error)
+        }
 
         file.key = `${hash.toString('hex')}-${file.originalname}`
-
         cb(null, file.key)
       })
     },
@@ -27,12 +31,13 @@ const storageTypes = {
     bucket: process.env.BUCKET_NAME,
     contentType: multerS3.AUTO_CONTENT_TYPE,
     acl: 'public-read',
-    key: (req, file, cb) => {
+    key: (_, file, cb) => {
       crypto.randomBytes(16, (err, hash) => {
-        if (err) cb(err)
+        if (err) {
+          cb(err)
+        }
 
         const fileName = `${hash.toString('hex')}-${file.originalname}`
-
         cb(null, fileName)
       })
     },
@@ -46,9 +51,7 @@ export default {
     fileSize: MAX_SIZE_IN_MEGA_BYTES,
   },
   fileFilter: (req, file, cb) => {
-    const allowedMimes = ['image/jpeg', 'image/pjpeg', 'image/png', 'image/gif']
-
-    if (allowedMimes.includes(file.mimetype)) {
+    if (ALLOWED_MIMES.includes(file.mimetype)) {
       cb(null, true)
     } else {
       cb(new UnsupportedMediaTypeError())

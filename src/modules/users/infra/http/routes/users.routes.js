@@ -37,6 +37,10 @@ usersRouter.post(
   ProfilePhotoController.store
 )
 
-usersRouter.delete('/profile-photo', ProfilePhotoController.delete)
+usersRouter.delete(
+  '/profile-photo/:profile_photo_id',
+  authenticationMiddleware,
+  ProfilePhotoController.delete
+)
 
 export default usersRouter
