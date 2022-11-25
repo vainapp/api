@@ -5,6 +5,8 @@ import express from 'express'
 import 'express-async-errors'
 import Youch from 'youch'
 import { pick } from 'lodash'
+import cors from 'cors'
+import morgan from 'morgan'
 
 import routes from './routes'
 import sentryConfig from '../../../config/sentry'
@@ -25,8 +27,10 @@ class App {
   middlewares() {
     this.server.use(Sentry.Handlers.requestHandler())
     this.server.use(Sentry.Handlers.tracingHandler())
+    this.server.use(cors())
     this.server.use(express.json())
     this.server.use(express.urlencoded({ extended: true }))
+    this.server.use(morgan('dev'))
   }
 
   routes() {

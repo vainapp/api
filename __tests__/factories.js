@@ -7,6 +7,7 @@ import ForgotPasswordCode from '../src/modules/users/infra/sequelize/models/Forg
 import User from '../src/modules/users/infra/sequelize/models/User'
 import Address from '../src/modules/users/infra/sequelize/models/Address'
 import PhoneNumberVerificationCode from '../src/modules/users/infra/sequelize/models/PhoneNumberVerificationCode'
+import ProfilePhoto from '../src/modules/users/infra/sequelize/models/ProfilePhoto'
 
 factory.define('User', User, {
   name: faker.name.findName(),
@@ -45,6 +46,14 @@ factory.define('Address', Address, {
   state: faker.address.state(),
   zip_code: faker.address.zipCode(),
   country: faker.address.country(),
+})
+
+factory.define('ProfilePhoto', ProfilePhoto, {
+  user_id: factory.assoc('User', 'id'),
+  name: faker.system.fileName(),
+  size: faker.datatype.number(),
+  key: faker.system.fileName(),
+  url: faker.internet.url(),
 })
 
 export default factory

@@ -6,6 +6,7 @@ import EmailVerificationLink from '../../../modules/users/infra/sequelize/models
 import ForgotPasswordCode from '../../../modules/users/infra/sequelize/models/ForgotPasswordCode'
 import Address from '../../../modules/users/infra/sequelize/models/Address'
 import PhoneNumberVerificationCode from '../../../modules/users/infra/sequelize/models/PhoneNumberVerificationCode'
+import ProfilePhoto from '../../../modules/users/infra/sequelize/models/ProfilePhoto'
 
 const models = [
   User,
@@ -13,6 +14,7 @@ const models = [
   ForgotPasswordCode,
   Address,
   PhoneNumberVerificationCode,
+  ProfilePhoto,
 ]
 
 class Database {
