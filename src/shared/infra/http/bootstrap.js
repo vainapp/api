@@ -1,5 +1,12 @@
 const dotenv = require('dotenv')
 
+const envs = {
+  test: '.test.env',
+  development: '.development.env',
+  staging: '.staging.env',
+  production: '.production.env',
+}
+
 dotenv.config({
-  path: process.env.NODE_ENV === 'test' ? '.env.test' : '.env',
+  path: envs[process.env.NODE_ENV || 'development'],
 })
