@@ -1,4 +1,4 @@
-import { ForbiddenError } from '../../../shared/errors'
+import { BadRequestError, ForbiddenError } from '../../../shared/errors'
 import User from '../infra/sequelize/models/User'
 
 class UpdatePasswordService {
@@ -16,7 +16,7 @@ class UpdatePasswordService {
     }
 
     if (newPassword !== newPasswordConfirmation) {
-      throw new ForbiddenError('As senhas não conferem')
+      throw new BadRequestError('As senhas não conferem')
     }
 
     user.password = newPassword

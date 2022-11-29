@@ -469,3 +469,106 @@ describe('GET /users/me', () => {
     expect(response.body).toHaveProperty('created_at')
   })
 })
+
+describe('PUT /users/change-password', () => {
+  beforeEach(async () => {
+    await truncate()
+  })
+
+  afterAll(async () => {
+    await closeRedisConnection()
+  })
+
+  it('should not allow a request if the user is not authenticated', async () => {
+    const password = faker.internet.password()
+
+    await request(app)
+      .put('/users/change-password')
+      .send({
+        currentPassword: password,
+        newPassword: password,
+        newPasswordConfirmation: password,
+      })
+      .expect(401)
+  })
+
+  it('should not be able to change password with different new passwords', async () => {
+    const user = await factory.create('User', {
+      email_verified: true,
+      phone_number_verified: true,
+    })
+
+    const sessionResponse = await request(app).post('/sessions').send({
+      email: user.email,
+      password: user.password,
+    })
+
+    const response = await request(app)
+      .put('/users/change-password')
+      .set('Authorization', `Bearer ${sessionResponse.body.token}`)
+      .send({
+        currentPassword: user.password,
+        newPassword: faker.internet.password(),
+        newPasswordConfirmation: faker.internet.password(),
+      })
+      .expect(400)
+
+    expect(response.body.error.message).toBe('As senhas não conferem')
+  })
+
+  it('should not be able to change password with an invalid current password', async () => {
+    const user = await factory.create('User', {
+      email_verified: true,
+      phone_number_verified: true,
+    })
+
+    const sessionResponse = await request(app).post('/sessions').send({
+      email: user.email,
+      password: user.password,
+    })
+
+    const response = await request(app)
+      .put('/users/change-password')
+      .set('Authorization', `Bearer ${sessionResponse.body.token}`)
+      .send({
+        currentPassword: faker.internet.password(),
+        newPassword: faker.internet.password(),
+        newPasswordConfirmation: faker.internet.password(),
+      })
+      .expect(403)
+
+    expect(response.body.error.message).toBe('Senha atual incorreta')
+  })
+
+  it('should be able to change password', async () => {
+    const user = await factory.create('User', {
+      email_verified: true,
+      phone_number_verified: true,
+    })
+
+    const sessionResponse = await request(app).post('/sessions').send({
+      email: user.email,
+      password: user.password,
+    })
+
+    const newPassword = faker.internet.password()
+
+    await request(app)
+      .put('/users/change-password')
+      .set('Authorization', `Bearer ${sessionResponse.body.token}`)
+      .send({
+        currentPassword: user.password,
+        newPassword,
+        newPasswordConfirmation: newPassword,
+      })
+      .expect(200)
+
+    await request(app)
+      .post('/sessions')
+      .send({
+        email: user.email,
+        password: newPassword,
+      })
+      .expect(200)
+  })
+})

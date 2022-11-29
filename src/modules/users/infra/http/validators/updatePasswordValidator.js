@@ -5,7 +5,6 @@ const updatePasswordSchema = Joi.object({
   newPassword: Joi.string().required().label('Nova senha'),
   newPasswordConfirmation: Joi.string()
     .required()
-    .valid(Joi.ref('newPassword'))
     .label('Confirmação da nova senha'),
 })
 
