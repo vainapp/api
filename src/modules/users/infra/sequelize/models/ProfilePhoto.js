@@ -46,7 +46,7 @@ class ProfilePhoto extends Model {
     this.addHook('beforeSave', async (profilePhoto) => {
       if (!profilePhoto.url) {
         profilePhoto.url = `${process.env.APP_HOST}${
-          !isProduction() ? `:${process.env.APP_PORT}` : ''
+          !isProduction() ? `:${process.env.PORT}` : ''
         }/files/${profilePhoto.key}`
       }
     })

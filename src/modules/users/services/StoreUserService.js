@@ -75,7 +75,7 @@ class StoreUserService {
       templateData: {
         name,
         link: `${process.env.APP_HOST}${
-          !isProduction() ? `:${process.env.APP_PORT}` : ''
+          !isProduction() ? `:${process.env.PORT}` : ''
         }/users/verify-email/${(existingLink || newLink).id}`,
       },
     })

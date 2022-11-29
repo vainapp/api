@@ -2,7 +2,7 @@ import app from './app'
 
 const { pid, env } = process
 
-const server = app.listen(env.APP_PORT, () => {
+const server = app.listen(env.PORT, () => {
   console.info(
     `Server running in process ${pid} | environment: ${env.NODE_ENV}`
   )
