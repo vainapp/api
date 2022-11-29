@@ -25,4 +25,10 @@ module.exports = {
     underscoredAll: true,
   },
   logging: false,
+  dialectOptions: {
+    ssl: {
+      require: true,
+      rejectUnauthorized: false,
+    },
+  },
 }
