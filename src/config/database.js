@@ -25,14 +25,14 @@ module.exports = {
     underscoredAll: true,
   },
   logging: false,
-  ...(process.env.NODE_ENV === 'test'
-    ? {}
-    : {
+  ...(!['test', 'development'].includes(process.env.NODE_ENV)
+    ? {
         dialectOptions: {
           ssl: {
             require: true,
             rejectUnauthorized: false,
           },
         },
-      }),
+      }
+    : {}),
 }
