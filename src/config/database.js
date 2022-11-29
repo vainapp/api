@@ -25,10 +25,14 @@ module.exports = {
     underscoredAll: true,
   },
   logging: false,
-  dialectOptions: {
-    ssl: {
-      require: true,
-      rejectUnauthorized: false,
-    },
-  },
+  ...(process.env.NODE_ENV === 'test'
+    ? {}
+    : {
+        dialectOptions: {
+          ssl: {
+            require: true,
+            rejectUnauthorized: false,
+          },
+        },
+      }),
 }
