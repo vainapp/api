@@ -9,7 +9,4 @@ export default {
   expirations: {
     staticData: 1 * 60 * 60 * 12, // 12 hours
   },
-  ...(!['test', 'development'].includes(process.env.NODE_ENV)
-    ? { tls: {} }
-    : {}),
 }
