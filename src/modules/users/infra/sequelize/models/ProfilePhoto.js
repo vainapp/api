@@ -21,7 +21,6 @@ class ProfilePhoto extends Model {
         user_id: {
           type: Sequelize.UUID,
           allowNull: false,
-          unique: true,
         },
         name: {
           type: Sequelize.STRING,

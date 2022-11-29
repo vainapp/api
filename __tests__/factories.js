@@ -17,6 +17,7 @@ factory.define('User', User, {
   phone_number: faker.phone.phoneNumber(),
   email_verified: false,
   phone_number_verified: false,
+  profile_photo_id: null,
 })
 
 factory.define('EmailVerificationLink', EmailVerificationLink, {

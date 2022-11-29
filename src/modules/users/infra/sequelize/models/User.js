@@ -39,6 +39,11 @@ class User extends Model {
           defaultValue: false,
           allowNull: false,
         },
+        profile_photo_id: {
+          type: Sequelize.UUID,
+          allowNull: true,
+          unique: true,
+        },
         verified: {
           type: Sequelize.VIRTUAL,
           get() {
