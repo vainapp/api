@@ -7,8 +7,8 @@
   "license": "MIT",
   "scripts": {
     "server:dev": "cross-env NODE_ENV=development nodemon --ignore scripts/ --inspect src/shared/infra/http/index.js",
-    "server:staging": "cross-env NODE_ENV=staging node src/shared/infra/http/index.js",
-    "server:production": "cross-env NODE_ENV=production node src/shared/infra/http/index.js",
+    "server:staging": "cross-env NODE_ENV=staging nodemon --ignore scripts/ src/shared/infra/http/index.js",
+    "server:production": "cross-env NODE_ENV=production nodemon --ignore scripts/ src/shared/infra/http/index.js",
     "server:start": "node src/shared/infra/http/index.js",
     "queue:dev": "cross-env NODE_ENV=development nodemon --ignore scripts/ --inspect src/shared/infra/http/queue.js",
     "queue:staging": "cross-env NODE_ENV=staging nodemon --ignore scripts/ --inspect src/shared/infra/http/queue.js",
