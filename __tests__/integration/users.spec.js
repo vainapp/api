@@ -427,3 +427,45 @@ describe('POST /users/profile-photo', () => {
     expect(profilePhotoFromDb).toBeNull()
   })
 })
+
+describe('GET /users/me', () => {
+  beforeEach(async () => {
+    await truncate()
+  })
+
+  afterAll(async () => {
+    await closeRedisConnection()
+  })
+
+  it('should not allow a request if the user is not authenticated', async () => {
+    await request(app).get('/users/me').expect(401)
+  })
+
+  it('should be able to get the user data', async () => {
+    const user = await factory.create('User', {
+      email_verified: true,
+      phone_number_verified: true,
+    })
+
+    const sessionResponse = await request(app).post('/sessions').send({
+      email: user.email,
+      password: user.password,
+    })
+
+    const response = await request(app)
+      .get('/users/me')
+      .set('Authorization', `Bearer ${sessionResponse.body.token}`)
+      .expect(200)
+
+    expect(response.body).toHaveProperty('id')
+    expect(response.body).toHaveProperty('email')
+    expect(response.body).toHaveProperty('email_verified')
+    expect(response.body).toHaveProperty('phone_number')
+    expect(response.body).toHaveProperty('phone_number_verified')
+    expect(response.body).toHaveProperty('name')
+    expect(response.body).toHaveProperty('genre')
+    expect(response.body).toHaveProperty('addresses')
+    expect(response.body).toHaveProperty('profile_photo')
+    expect(response.body).toHaveProperty('created_at')
+  })
+})

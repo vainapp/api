@@ -1,3 +1,4 @@
+import ShowUserService from '../../../services/ShowUserService'
 import StoreUserService from '../../../services/StoreUserService'
 
 class UserController {
@@ -20,6 +21,14 @@ class UserController {
       passwordConfirmation,
       address,
       genre,
+    })
+
+    return response.json(result)
+  }
+
+  async show(request, response) {
+    const result = await ShowUserService.execute({
+      user_id: request.user.id,
     })
 
     return response.json(result)

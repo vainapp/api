@@ -19,6 +19,8 @@ usersRouter.post(
   UserController.store
 )
 
+usersRouter.get('/me', authenticationMiddleware, UserController.show)
+
 usersRouter.get(
   '/verify-email/:email_verification_link_id',
   EmailVerificationLinkController.update
