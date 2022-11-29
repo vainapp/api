@@ -9,7 +9,9 @@ import ProfilePhotoController from '../controllers/ProfilePhotoController'
 import validatorMiddleware from '../../../../../shared/infra/http/middlewares/validator'
 import authenticationMiddleware from '../middlewares/authentication'
 import userStoreValidator from '../validators/userStoreValidator'
+import updatePasswordValidator from '../validators/updatePasswordValidator'
 import phoneNumberVerificationCodeUpdateValidator from '../validators/phoneNumberVerificationCodeUpdateValidator'
+import UpdatePasswordController from '../controllers/UpdatePasswordController'
 
 const usersRouter = Router()
 
@@ -43,6 +45,13 @@ usersRouter.delete(
   '/profile-photo/:profile_photo_id',
   authenticationMiddleware,
   ProfilePhotoController.delete
+)
+
+usersRouter.put(
+  '/change-password',
+  validatorMiddleware(updatePasswordValidator),
+  authenticationMiddleware,
+  UpdatePasswordController.update
 )
 
 export default usersRouter
