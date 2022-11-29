@@ -6,11 +6,11 @@ class ShowUserService {
   async execute({ user_id }) {
     const user = await User.findByPk(user_id)
 
-    const lastUpdatedProfilePhoto = await ProfilePhoto.findOne({
-      where: { user_id },
-      attributes: ['id', 'url'],
-      order: [['updated_at', 'DESC']],
-    })
+    const profilePhoto = user.profile_photo_id
+      ? await ProfilePhoto.findByPk(user.profile_photo_id, {
+          attributes: ['id', 'url'],
+        })
+      : null
 
     const addresses = await Address.findAll({
       where: { user_id },
@@ -37,7 +37,7 @@ class ShowUserService {
       name: user.name,
       genre: user.genre,
       addresses,
-      profile_photo: lastUpdatedProfilePhoto,
+      profile_photo: profilePhoto,
       created_at: user.createdAt,
     }
   }
