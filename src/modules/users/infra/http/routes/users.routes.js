@@ -36,6 +36,12 @@ usersRouter.post(
 )
 
 usersRouter.post(
+  '/verify-phone-number/resend',
+  validatorMiddleware(resendVerificationStepStoreValidator),
+  PhoneNumberVerificationCodeController.store
+)
+
+usersRouter.post(
   '/verify-phone-number',
   validatorMiddleware(phoneNumberVerificationCodeUpdateValidator),
   PhoneNumberVerificationCodeController.update
