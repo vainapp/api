@@ -3,23 +3,23 @@ import User from '../infra/sequelize/models/User'
 
 class UpdatePasswordService {
   async execute({
-    userId,
-    currentPassword,
-    newPassword,
-    newPasswordConfirmation,
+    user_id,
+    current_password,
+    new_password,
+    new_password_confirmation,
   }) {
-    const user = await User.findByPk(userId)
+    const user = await User.findByPk(user_id)
 
-    const passwordMatch = await user.checkPassword(currentPassword)
+    const passwordMatch = await user.checkPassword(current_password)
     if (!passwordMatch) {
       throw new ForbiddenError('Senha atual incorreta')
     }
 
-    if (newPassword !== newPasswordConfirmation) {
+    if (new_password !== new_password_confirmation) {
       throw new BadRequestError('As senhas não conferem')
     }
 
-    user.password = newPassword
+    user.password = new_password
     await user.save()
   }
 }

@@ -6,12 +6,19 @@ import { v4 as uuidV4 } from 'uuid'
 
 import factory from '../factories'
 import truncate from '../util/truncate'
-import closeRedisConnection from '../util/closeRedisConnection'
+import {
+  closeQueueRedisConnection,
+  closeRedisConnection,
+} from '../util/closeRedisConnections'
 import EmailVerificationLink from '../../src/modules/users/infra/sequelize/models/EmailVerificationLink'
 import PhoneNumberVerificationCode from '../../src/modules/users/infra/sequelize/models/PhoneNumberVerificationCode'
 import User from '../../src/modules/users/infra/sequelize/models/User'
 import app from '../../src/shared/infra/http/app'
 import ProfilePhoto from '../../src/modules/users/infra/sequelize/models/ProfilePhoto'
+
+afterAll(async () => {
+  await closeRedisConnection()
+})
 
 describe('POST /users', () => {
   beforeEach(async () => {
@@ -19,7 +26,7 @@ describe('POST /users', () => {
   })
 
   afterAll(async () => {
-    await closeRedisConnection()
+    await closeQueueRedisConnection()
   })
 
   it('should not allow a sign-up with different passwords', async () => {
@@ -29,7 +36,7 @@ describe('POST /users', () => {
       phone_number: faker.phone.phoneNumber(),
       genre: 'other',
       password: faker.internet.password(),
-      passwordConfirmation: faker.internet.password(),
+      password_confirmation: faker.internet.password(),
       address: {
         street: faker.address.streetName(),
         number: String(faker.datatype.number()),
@@ -66,7 +73,7 @@ describe('POST /users', () => {
       phone_number: faker.phone.phoneNumber(),
       genre: 'other',
       password,
-      passwordConfirmation: password,
+      password_confirmation: password,
       address: {
         street: faker.address.streetName(),
         number: String(faker.datatype.number()),
@@ -100,7 +107,7 @@ describe('POST /users', () => {
       phone_number: faker.phone.phoneNumber(),
       genre: 'other',
       password,
-      passwordConfirmation: password,
+      password_confirmation: password,
       address: {
         street: faker.address.streetName(),
         number: String(faker.datatype.number()),
@@ -125,7 +132,7 @@ describe('POST /users', () => {
       phone_number: faker.phone.phoneNumber(),
       genre: 'other',
       password,
-      passwordConfirmation: password,
+      password_confirmation: password,
       address: {
         street: faker.address.streetName(),
         number: String(faker.datatype.number()),
@@ -158,7 +165,7 @@ describe('POST /users', () => {
         phone_number: faker.phone.phoneNumber(),
         genre: 'other',
         password: faker.internet.password(),
-        passwordConfirmation: faker.internet.password(),
+        password_confirmation: faker.internet.password(),
         address: {
           street: faker.address.streetName(),
           number: String(faker.datatype.number()),
@@ -185,7 +192,7 @@ describe('POST /users', () => {
         phone_number: faker.phone.phoneNumber(),
         genre: 'other',
         password,
-        passwordConfirmation: password,
+        password_confirmation: password,
         address: {
           street: faker.address.streetName(),
           number: String(faker.datatype.number()),
@@ -208,7 +215,7 @@ describe('GET /users/verify-email/:email_verification_link_id', () => {
   })
 
   afterAll(async () => {
-    await closeRedisConnection()
+    await closeQueueRedisConnection()
   })
 
   it('should not allow verify an invalid link', async () => {
@@ -250,7 +257,7 @@ describe('POST /users/verify-phone-number', () => {
   })
 
   afterAll(async () => {
-    await closeRedisConnection()
+    await closeQueueRedisConnection()
   })
 
   it('should not allow request with invalid user ids', async () => {
@@ -320,7 +327,7 @@ describe('POST /users/profile-photo', () => {
   })
 
   afterAll(async () => {
-    await closeRedisConnection()
+    await closeQueueRedisConnection()
   })
 
   it('should not be able to send a request if the user is not authenticated', async () => {
@@ -340,7 +347,7 @@ describe('POST /users/profile-photo', () => {
 
     const response = await request(app)
       .post('/users/profile-photo')
-      .set('Authorization', `Bearer ${sessionResponse.body.token}`)
+      .set('Authorization', `Bearer ${sessionResponse.body.access_token}`)
       .attach('file', path.resolve(__dirname, '..', 'util', 'test.jpg'))
       .expect(200)
 
@@ -360,7 +367,7 @@ describe('POST /users/profile-photo', () => {
 
     const response = await request(app)
       .delete(`/users/profile-photo/${uuidV4()}`)
-      .set('Authorization', `Bearer ${sessionResponse.body.token}`)
+      .set('Authorization', `Bearer ${sessionResponse.body.access_token}`)
       .expect(404)
 
     expect(response.body.error.message).toBe('Imagem de perfil não encontrada')
@@ -388,12 +395,12 @@ describe('POST /users/profile-photo', () => {
 
     const uploadResponse = await request(app)
       .post('/users/profile-photo')
-      .set('Authorization', `Bearer ${session1Response.body.token}`)
+      .set('Authorization', `Bearer ${session1Response.body.access_token}`)
       .attach('file', path.resolve(__dirname, '..', 'util', 'test.jpg'))
 
     const response = await request(app)
       .delete(`/users/profile-photo/${uploadResponse.body.id}`)
-      .set('Authorization', `Bearer ${session2Response.body.token}`)
+      .set('Authorization', `Bearer ${session2Response.body.access_token}`)
       .expect(404)
 
     expect(response.body.error.message).toBe('Imagem de perfil não encontrada')
@@ -412,12 +419,12 @@ describe('POST /users/profile-photo', () => {
 
     const uploadResponse = await request(app)
       .post('/users/profile-photo')
-      .set('Authorization', `Bearer ${sessionResponse.body.token}`)
+      .set('Authorization', `Bearer ${sessionResponse.body.access_token}`)
       .attach('file', path.resolve(__dirname, '..', 'util', 'test.jpg'))
 
     await request(app)
       .delete(`/users/profile-photo/${uploadResponse.body.id}`)
-      .set('Authorization', `Bearer ${sessionResponse.body.token}`)
+      .set('Authorization', `Bearer ${sessionResponse.body.access_token}`)
       .expect(200)
 
     const profilePhotoFromDb = await ProfilePhoto.findByPk(
@@ -434,7 +441,7 @@ describe('GET /users/me', () => {
   })
 
   afterAll(async () => {
-    await closeRedisConnection()
+    await closeQueueRedisConnection()
   })
 
   it('should not allow a request if the user is not authenticated', async () => {
@@ -454,7 +461,7 @@ describe('GET /users/me', () => {
 
     const response = await request(app)
       .get('/users/me')
-      .set('Authorization', `Bearer ${sessionResponse.body.token}`)
+      .set('Authorization', `Bearer ${sessionResponse.body.access_token}`)
       .expect(200)
 
     expect(response.body).toHaveProperty('id')
@@ -476,7 +483,7 @@ describe('PUT /users/change-password', () => {
   })
 
   afterAll(async () => {
-    await closeRedisConnection()
+    await closeQueueRedisConnection()
   })
 
   it('should not allow a request if the user is not authenticated', async () => {
@@ -485,9 +492,9 @@ describe('PUT /users/change-password', () => {
     await request(app)
       .put('/users/change-password')
       .send({
-        currentPassword: password,
-        newPassword: password,
-        newPasswordConfirmation: password,
+        current_password: password,
+        new_password: password,
+        new_password_confirmation: password,
       })
       .expect(401)
   })
@@ -505,11 +512,11 @@ describe('PUT /users/change-password', () => {
 
     const response = await request(app)
       .put('/users/change-password')
-      .set('Authorization', `Bearer ${sessionResponse.body.token}`)
+      .set('Authorization', `Bearer ${sessionResponse.body.access_token}`)
       .send({
-        currentPassword: user.password,
-        newPassword: faker.internet.password(),
-        newPasswordConfirmation: faker.internet.password(),
+        current_password: user.password,
+        new_password: faker.internet.password(),
+        new_password_confirmation: faker.internet.password(),
       })
       .expect(400)
 
@@ -529,11 +536,11 @@ describe('PUT /users/change-password', () => {
 
     const response = await request(app)
       .put('/users/change-password')
-      .set('Authorization', `Bearer ${sessionResponse.body.token}`)
+      .set('Authorization', `Bearer ${sessionResponse.body.access_token}`)
       .send({
-        currentPassword: faker.internet.password(),
-        newPassword: faker.internet.password(),
-        newPasswordConfirmation: faker.internet.password(),
+        current_password: faker.internet.password(),
+        new_password: faker.internet.password(),
+        new_password_confirmation: faker.internet.password(),
       })
       .expect(403)
 
@@ -551,15 +558,15 @@ describe('PUT /users/change-password', () => {
       password: user.password,
     })
 
-    const newPassword = faker.internet.password()
+    const new_password = faker.internet.password()
 
     await request(app)
       .put('/users/change-password')
-      .set('Authorization', `Bearer ${sessionResponse.body.token}`)
+      .set('Authorization', `Bearer ${sessionResponse.body.access_token}`)
       .send({
-        currentPassword: user.password,
-        newPassword,
-        newPasswordConfirmation: newPassword,
+        current_password: user.password,
+        new_password,
+        new_password_confirmation: new_password,
       })
       .expect(200)
 
@@ -567,7 +574,7 @@ describe('PUT /users/change-password', () => {
       .post('/sessions')
       .send({
         email: user.email,
-        password: newPassword,
+        password: new_password,
       })
       .expect(200)
   })

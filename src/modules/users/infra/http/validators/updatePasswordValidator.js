@@ -1,9 +1,9 @@
 import Joi from 'joi'
 
 const updatePasswordSchema = Joi.object({
-  currentPassword: Joi.string().required().label('Senha atual'),
-  newPassword: Joi.string().required().label('Nova senha'),
-  newPasswordConfirmation: Joi.string()
+  current_password: Joi.string().required().label('Senha atual'),
+  new_password: Joi.string().required().label('Nova senha'),
+  new_password_confirmation: Joi.string()
     .required()
     .label('Confirmação da nova senha'),
 })
