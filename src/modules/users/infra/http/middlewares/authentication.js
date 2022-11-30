@@ -15,7 +15,11 @@ export default async (request, _, nextCallback) => {
   const [, token] = authHeader.split(' ')
 
   try {
-    const { sub } = verify(token, authConfig.secret)
+    const { sub, aud } = verify(token, authConfig.secret)
+
+    if (aud !== authConfig.accessToken.audience) {
+      throw new ForbiddenError('Não autorizado')
+    }
 
     request.user = { id: sub }
   } catch (error) {

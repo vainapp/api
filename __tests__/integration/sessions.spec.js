@@ -54,6 +54,7 @@ describe('POST /sessions', () => {
     })
 
     expect(response.body).toHaveProperty('user')
-    expect(response.body).toHaveProperty('token')
+    expect(response.body).toHaveProperty('accessToken')
+    expect(response.body).toHaveProperty('refreshToken')
   })
 })
