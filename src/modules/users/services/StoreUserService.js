@@ -25,17 +25,17 @@ class StoreUserService {
       throw new BadRequestError('As senhas precisam ser iguais')
     }
 
-    const userWithSameEmail = await User.findOne({
+    const existingUser = await User.findOne({
       where: { email },
     })
 
-    if (userWithSameEmail?.email_verified) {
+    if (existingUser?.email_verified) {
       throw new ForbiddenError('Este endereço de e-mail já está cadastrado')
     }
 
     let userId
 
-    if (!userWithSameEmail) {
+    if (!existingUser) {
       const { id } = await User.create({
         email,
         phone_number,
@@ -46,7 +46,14 @@ class StoreUserService {
 
       userId = id
     } else {
-      userId = userWithSameEmail.id
+      userId = existingUser.id
+
+      existingUser.phone_number = phone_number
+      existingUser.name = name
+      existingUser.password = password
+      existingUser.genre = genre
+
+      await existingUser.save()
     }
 
     const [existingLink, newLink] = await EmailVerificationLink.findOrCreate({
@@ -90,11 +97,12 @@ class StoreUserService {
       }`,
     })
 
-    if (userWithSameEmail) {
-      return {
-        id: userId,
-        email: userWithSameEmail.email,
-      }
+    if (existingUser) {
+      await Address.destroy({
+        where: {
+          user_id: userId,
+        },
+      })
     }
 
     await Address.create({
