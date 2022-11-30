@@ -8,6 +8,16 @@ import { LONG_TERM_DATA_DURATION } from '../../../config/redis'
 
 class UpdateSessionService {
   async execute({ refresh_token }) {
+    try {
+      const { aud } = jwt.verify(refresh_token, authConfig.secret)
+
+      if (aud !== authConfig.refreshToken.audience) {
+        throw new ForbiddenError('Não autorizado')
+      }
+    } catch (error) {
+      throw new ForbiddenError('Não autorizado')
+    }
+
     const userId = await CacheService.recover(`refresh-token:${refresh_token}`)
 
     if (!userId) {
