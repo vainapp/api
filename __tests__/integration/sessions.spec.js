@@ -4,7 +4,14 @@ import faker from '@faker-js/faker'
 import app from '../../src/shared/infra/http/app'
 import factory from '../factories'
 import truncate from '../util/truncate'
-import closeRedisConnection from '../util/closeRedisConnection'
+import {
+  closeQueueRedisConnection,
+  closeRedisConnection,
+} from '../util/closeRedisConnections'
+
+afterAll(async () => {
+  await closeRedisConnection()
+})
 
 describe('POST /sessions', () => {
   beforeEach(async () => {
@@ -12,7 +19,7 @@ describe('POST /sessions', () => {
   })
 
   afterAll(async () => {
-    await closeRedisConnection()
+    await closeQueueRedisConnection()
   })
 
   it('should not allow an unverified user to sign-in', async () => {
@@ -54,7 +61,7 @@ describe('POST /sessions', () => {
     })
 
     expect(response.body).toHaveProperty('user')
-    expect(response.body).toHaveProperty('accessToken')
-    expect(response.body).toHaveProperty('refreshToken')
+    expect(response.body).toHaveProperty('access_token')
+    expect(response.body).toHaveProperty('refresh_token')
   })
 })

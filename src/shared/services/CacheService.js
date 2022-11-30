@@ -3,7 +3,6 @@ import redisConfig from '../../config/redis'
 
 class CacheService {
   constructor() {
-    console.log('CacheService creating a new Redis connection...')
     this.client = new Redis(redisConfig)
   }
 
@@ -37,6 +36,11 @@ class CacheService {
     })
 
     await pipeline.exec()
+  }
+
+  async closeConnection() {
+    await new Promise((resolve) => this.client.quit(resolve))
+    await new Promise((resolve) => setImmediate(resolve))
   }
 }
 

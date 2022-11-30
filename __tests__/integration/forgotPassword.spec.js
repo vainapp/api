@@ -5,9 +5,16 @@ import bcrypt from 'bcrypt'
 import app from '../../src/shared/infra/http/app'
 import factory from '../factories'
 import truncate from '../util/truncate'
-import closeRedisConnection from '../util/closeRedisConnection'
+import {
+  closeQueueRedisConnection,
+  closeRedisConnection,
+} from '../util/closeRedisConnections'
 import ForgotPasswordCode from '../../src/modules/users/infra/sequelize/models/ForgotPasswordCode'
 import User from '../../src/modules/users/infra/sequelize/models/User'
+
+afterAll(async () => {
+  await closeRedisConnection()
+})
 
 describe('POST /forgot-password', () => {
   beforeEach(async () => {
@@ -15,7 +22,7 @@ describe('POST /forgot-password', () => {
   })
 
   afterAll(async () => {
-    await closeRedisConnection()
+    await closeQueueRedisConnection()
   })
 
   it('should not allow an unverified user to recover password', async () => {
@@ -91,7 +98,7 @@ describe('POST /forgot-password/verify', () => {
   })
 
   afterAll(async () => {
-    await closeRedisConnection()
+    await closeQueueRedisConnection()
   })
 
   it('should not allow an unverified user to recover password', async () => {
@@ -149,7 +156,7 @@ describe('POST /forgot-password/reset', () => {
   })
 
   afterAll(async () => {
-    await closeRedisConnection()
+    await closeQueueRedisConnection()
   })
 
   it('should not allow an expired code to change password', async () => {
@@ -168,7 +175,7 @@ describe('POST /forgot-password/reset', () => {
       .send({
         token: code.id,
         password,
-        passwordConfirmation: password,
+        password_confirmation: password,
       })
       .expect(404)
   })
@@ -187,7 +194,7 @@ describe('POST /forgot-password/reset', () => {
       .send({
         token: code.id,
         password: faker.internet.password(),
-        passwordConfirmation: faker.internet.password(),
+        password_confirmation: faker.internet.password(),
       })
       .expect(400)
   })
@@ -204,7 +211,7 @@ describe('POST /forgot-password/reset', () => {
       .send({
         token: code.id,
         password,
-        passwordConfirmation: password,
+        password_confirmation: password,
       })
       .expect(404)
   })
@@ -223,7 +230,7 @@ describe('POST /forgot-password/reset', () => {
       .send({
         token: code.id,
         password: faker.internet.password(),
-        passwordConfirmation: faker.internet.password(),
+        password_confirmation: faker.internet.password(),
       })
       .expect(400)
   })
@@ -241,7 +248,7 @@ describe('POST /forgot-password/reset', () => {
     await request(app).post('/forgot-password/reset').send({
       token: code.id,
       password,
-      passwordConfirmation: password,
+      password_confirmation: password,
     })
 
     const forgotPasswordCode = await ForgotPasswordCode.findByPk(code.id)

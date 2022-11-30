@@ -4,10 +4,10 @@ import NotFoundError from '../../../shared/errors/NotFound'
 import BadRequestError from '../../../shared/errors/BadRequest'
 
 class UpdateForgotPasswordService {
-  async execute({ forgotPasswordCodeId, password, passwordConfirmation }) {
+  async execute({ forgot_password_code_id, password, password_confirmation }) {
     const forgotPasswordCode = await ForgotPasswordCode.findOne({
       where: {
-        id: forgotPasswordCodeId,
+        id: forgot_password_code_id,
         active: true,
       },
     })
@@ -16,7 +16,7 @@ class UpdateForgotPasswordService {
       throw new NotFoundError('Código de recuperação de senha inválido')
     }
 
-    if (password !== passwordConfirmation) {
+    if (password !== password_confirmation) {
       throw new BadRequestError('As senhas precisam ser iguais')
     }
 

@@ -20,12 +20,12 @@ class ForgotPasswordController {
   }
 
   async update(request, response) {
-    const { token, password, passwordConfirmation } = request.body
+    const { token, password, password_confirmation } = request.body
 
     const result = await UpdateForgotPasswordService.execute({
-      forgotPasswordCodeId: token,
+      forgot_password_code_id: token,
       password,
-      passwordConfirmation,
+      password_confirmation,
     })
 
     return response.json(result)

@@ -17,11 +17,11 @@ class StoreUserService {
     phone_number,
     name,
     password,
-    passwordConfirmation,
+    password_confirmation,
     address,
     genre,
   }) {
-    if (password !== passwordConfirmation) {
+    if (password !== password_confirmation) {
       throw new BadRequestError('As senhas precisam ser iguais')
     }
 

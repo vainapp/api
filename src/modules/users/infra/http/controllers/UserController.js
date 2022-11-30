@@ -8,7 +8,7 @@ class UserController {
       phone_number,
       name,
       password,
-      passwordConfirmation,
+      password_confirmation,
       address,
       genre,
     } = request.body
@@ -18,7 +18,7 @@ class UserController {
       phone_number,
       name,
       password,
-      passwordConfirmation,
+      password_confirmation,
       address,
       genre,
     })
