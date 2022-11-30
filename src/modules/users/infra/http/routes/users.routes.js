@@ -1,17 +1,18 @@
 import { Router } from 'express'
 import multer from 'multer'
-import multerConfig from '../../../../../config/multer'
 
+import multerConfig from '../../../../../config/multer'
+import validatorMiddleware from '../../../../../shared/infra/http/middlewares/validator'
+import authenticationMiddleware from '../middlewares/authentication'
+import userStoreValidator from '../validators/userStoreValidator'
+import resendVerificationStepStoreValidator from '../validators/resendVerificationStepStoreValidator'
+import updatePasswordValidator from '../validators/updatePasswordValidator'
+import phoneNumberVerificationCodeUpdateValidator from '../validators/phoneNumberVerificationCodeUpdateValidator'
+import UpdatePasswordController from '../controllers/UpdatePasswordController'
 import UserController from '../controllers/UserController'
 import EmailVerificationLinkController from '../controllers/EmailVerificationLinkController'
 import PhoneNumberVerificationCodeController from '../controllers/PhoneNumberVerificationCodeController'
 import ProfilePhotoController from '../controllers/ProfilePhotoController'
-import validatorMiddleware from '../../../../../shared/infra/http/middlewares/validator'
-import authenticationMiddleware from '../middlewares/authentication'
-import userStoreValidator from '../validators/userStoreValidator'
-import updatePasswordValidator from '../validators/updatePasswordValidator'
-import phoneNumberVerificationCodeUpdateValidator from '../validators/phoneNumberVerificationCodeUpdateValidator'
-import UpdatePasswordController from '../controllers/UpdatePasswordController'
 
 const usersRouter = Router()
 
@@ -26,6 +27,12 @@ usersRouter.get('/me', authenticationMiddleware, UserController.show)
 usersRouter.get(
   '/verify-email/:email_verification_link_id',
   EmailVerificationLinkController.update
+)
+
+usersRouter.post(
+  '/verify-email/resend',
+  validatorMiddleware(resendVerificationStepStoreValidator),
+  EmailVerificationLinkController.store
 )
 
 usersRouter.post(
