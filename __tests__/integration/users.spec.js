@@ -18,15 +18,12 @@ import ProfilePhoto from '../../src/modules/users/infra/sequelize/models/Profile
 
 afterAll(async () => {
   await closeRedisConnection()
+  await closeQueueRedisConnection()
 })
 
 describe('POST /users', () => {
   beforeEach(async () => {
     await truncate()
-  })
-
-  afterAll(async () => {
-    await closeQueueRedisConnection()
   })
 
   it('should not allow a sign-up with different passwords', async () => {
@@ -214,10 +211,6 @@ describe('GET /users/verify-email/:email_verification_link_id', () => {
     await truncate()
   })
 
-  afterAll(async () => {
-    await closeQueueRedisConnection()
-  })
-
   it('should not allow verify an invalid link', async () => {
     await request(app).get(`/users/verify-email/${uuidV4()}`).expect(404)
   })
@@ -251,13 +244,63 @@ describe('GET /users/verify-email/:email_verification_link_id', () => {
   })
 })
 
-describe('POST /users/verify-phone-number', () => {
+describe('POST /users/verify-email/resend', () => {
   beforeEach(async () => {
     await truncate()
   })
 
-  afterAll(async () => {
-    await closeQueueRedisConnection()
+  it('should not allow resend verification link for an invalid email', async () => {
+    await request(app)
+      .post('/users/verify-email/resend')
+      .send({ email: faker.internet.email() })
+      .expect(404)
+  })
+
+  it('should not allow resend verification link for a verified email', async () => {
+    const user = await factory.create('User', {
+      email_verified: true,
+      phone_number_verified: false,
+    })
+
+    await request(app)
+      .post('/users/verify-email/resend')
+      .send({ email: user.email })
+      .expect(403)
+  })
+
+  it('should not allow resend verification link when there is no unverified link', async () => {
+    const user = await factory.create('User', {
+      email_verified: false,
+      phone_number_verified: false,
+    })
+
+    await request(app)
+      .post('/users/verify-email/resend')
+      .send({ email: user.email })
+      .expect(404)
+  })
+
+  it('should allow resend verification link when there is an unverified link', async () => {
+    const user = await factory.create('User', {
+      email_verified: false,
+      phone_number_verified: false,
+    })
+
+    await factory.create('EmailVerificationLink', {
+      user_id: user.id,
+      verified: false,
+    })
+
+    await request(app)
+      .post('/users/verify-email/resend')
+      .send({ email: user.email })
+      .expect(200)
+  })
+})
+
+describe('POST /users/verify-phone-number', () => {
+  beforeEach(async () => {
+    await truncate()
   })
 
   it('should not allow request with invalid user ids', async () => {
@@ -321,13 +364,63 @@ describe('POST /users/verify-phone-number', () => {
   })
 })
 
-describe('POST /users/profile-photo', () => {
+describe('POST /users/verify-phone-number/resend', () => {
   beforeEach(async () => {
     await truncate()
   })
 
-  afterAll(async () => {
-    await closeQueueRedisConnection()
+  it('should not allow resend verification sms for an invalid email', async () => {
+    await request(app)
+      .post('/users/verify-phone-number/resend')
+      .send({ email: faker.internet.email() })
+      .expect(404)
+  })
+
+  it('should not allow resend verification sms for a verified phone number', async () => {
+    const user = await factory.create('User', {
+      email_verified: false,
+      phone_number_verified: true,
+    })
+
+    await request(app)
+      .post('/users/verify-phone-number/resend')
+      .send({ email: user.email })
+      .expect(403)
+  })
+
+  it('should not allow resend verification sms when there is no unverified code', async () => {
+    const user = await factory.create('User', {
+      email_verified: false,
+      phone_number_verified: false,
+    })
+
+    await request(app)
+      .post('/users/verify-phone-number/resend')
+      .send({ email: user.email })
+      .expect(404)
+  })
+
+  it('should allow resend verification sms when there is an unverified code', async () => {
+    const user = await factory.create('User', {
+      email_verified: false,
+      phone_number_verified: false,
+    })
+
+    await factory.create('PhoneNumberVerificationCode', {
+      user_id: user.id,
+      verified: false,
+    })
+
+    await request(app)
+      .post('/users/verify-phone-number/resend')
+      .send({ email: user.email })
+      .expect(200)
+  })
+})
+
+describe('POST /users/profile-photo', () => {
+  beforeEach(async () => {
+    await truncate()
   })
 
   it('should not be able to send a request if the user is not authenticated', async () => {
@@ -440,10 +533,6 @@ describe('GET /users/me', () => {
     await truncate()
   })
 
-  afterAll(async () => {
-    await closeQueueRedisConnection()
-  })
-
   it('should not allow a request if the user is not authenticated', async () => {
     await request(app).get('/users/me').expect(401)
   })
@@ -480,10 +569,6 @@ describe('GET /users/me', () => {
 describe('PUT /users/change-password', () => {
   beforeEach(async () => {
     await truncate()
-  })
-
-  afterAll(async () => {
-    await closeQueueRedisConnection()
   })
 
   it('should not allow a request if the user is not authenticated', async () => {
