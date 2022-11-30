@@ -4,10 +4,7 @@ const userStoreSchema = Joi.object({
   name: Joi.string().required().label('Nome'),
   email: Joi.string().email().required().label('E-mail'),
   password: Joi.string().min(6).required().label('Senha'),
-  password_confirmation: Joi.string()
-    .required()
-    .valid(Joi.ref('password'))
-    .label('Confirmação de senha'),
+  password_confirmation: Joi.string().required().label('Confirmação de senha'),
   address: Joi.object({
     street: Joi.string().required().label('Rua'),
     number: Joi.string().required().label('Número'),
