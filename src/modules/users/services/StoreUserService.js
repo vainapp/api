@@ -29,7 +29,7 @@ class StoreUserService {
       where: { email },
     })
 
-    if (existingUser?.email_verified) {
+    if (existingUser?.verified) {
       throw new ForbiddenError('Este endereço de e-mail já está cadastrado')
     }
 
