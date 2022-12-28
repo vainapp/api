@@ -1,10 +1,10 @@
-import ForgotPasswordCode from '../infra/sequelize/models/ForgotPasswordCode'
-import User from '../infra/sequelize/models/User'
+import { help } from '../../../shared/constants/emails'
 import NotFoundError from '../../../shared/errors/NotFound'
 import buildDirectEmailParams from '../../../shared/helpers/buildDirectEmailParams'
-import { help } from '../../../shared/constants/emails'
-import Queue from '../../../shared/lib/Queue'
 import SendEmailJob from '../../../shared/jobs/SendEmail'
+import Queue from '../../../shared/lib/Queue'
+import ForgotPasswordCode from '../infra/sequelize/models/ForgotPasswordCode'
+import User from '../infra/sequelize/models/User'
 
 class StoreForgotPasswordService {
   async execute({ email }) {

@@ -1,5 +1,5 @@
-import { BadRequestError } from '../../../errors'
 import validationMessages from '../../../constants/validationMessages'
+import { BadRequestError } from '../../../errors'
 
 export default (validator) => async (request, _, nextCallback) => {
   try {

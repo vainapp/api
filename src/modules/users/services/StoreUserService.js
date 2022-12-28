@@ -1,15 +1,15 @@
 import BadRequestError from '../../../shared/errors/BadRequest'
 import ForbiddenError from '../../../shared/errors/Forbidden'
-import User from '../infra/sequelize/models/User'
+import buildDirectEmailParams from '../../../shared/helpers/buildDirectEmailParams'
+import generateRandomCode from '../../../shared/helpers/generateRandomCode'
+import isProduction from '../../../shared/helpers/isProduction'
+import SendEmailJob from '../../../shared/jobs/SendEmail'
+import SendSMSJob from '../../../shared/jobs/SendSMS'
+import Queue from '../../../shared/lib/Queue'
 import Address from '../infra/sequelize/models/Address'
 import EmailVerificationLink from '../infra/sequelize/models/EmailVerificationLink'
 import PhoneNumberVerificationCode from '../infra/sequelize/models/PhoneNumberVerificationCode'
-import Queue from '../../../shared/lib/Queue'
-import SendEmailJob from '../../../shared/jobs/SendEmail'
-import SendSMSJob from '../../../shared/jobs/SendSMS'
-import isProduction from '../../../shared/helpers/isProduction'
-import buildDirectEmailParams from '../../../shared/helpers/buildDirectEmailParams'
-import generateRandomCode from '../../../shared/helpers/generateRandomCode'
+import User from '../infra/sequelize/models/User'
 
 class StoreUserService {
   async execute({

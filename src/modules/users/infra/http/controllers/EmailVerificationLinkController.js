@@ -1,6 +1,6 @@
-import UpdateEmailVerificationLinkService from '../../../services/UpdateEmailVerificationLinkService'
-import StoreEmailVerificationLinkService from '../../../services/StoreEmailVerificationLinkService'
 import { websiteHost } from '../../../../../shared/constants/website'
+import StoreEmailVerificationLinkService from '../../../services/StoreEmailVerificationLinkService'
+import UpdateEmailVerificationLinkService from '../../../services/UpdateEmailVerificationLinkService'
 
 class EmailVerificationLinkController {
   async store(request, response) {

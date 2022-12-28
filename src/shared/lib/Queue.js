@@ -3,7 +3,6 @@ import Bee from 'bee-queue'
 
 import redisConfig from '../../config/redis'
 import sentryConfig from '../../config/sentry'
-
 import SendEmail from '../jobs/SendEmail'
 import SendSMS from '../jobs/SendSMS'
 

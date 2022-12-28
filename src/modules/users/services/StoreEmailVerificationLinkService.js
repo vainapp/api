@@ -1,11 +1,11 @@
-import User from '../infra/sequelize/models/User'
-import NotFoundError from '../../../shared/errors/NotFound'
 import { ForbiddenError } from '../../../shared/errors'
-import EmailVerificationLink from '../infra/sequelize/models/EmailVerificationLink'
+import NotFoundError from '../../../shared/errors/NotFound'
 import buildDirectEmailParams from '../../../shared/helpers/buildDirectEmailParams'
 import isProduction from '../../../shared/helpers/isProduction'
-import Queue from '../../../shared/lib/Queue'
 import SendEmailJob from '../../../shared/jobs/SendEmail'
+import Queue from '../../../shared/lib/Queue'
+import EmailVerificationLink from '../infra/sequelize/models/EmailVerificationLink'
+import User from '../infra/sequelize/models/User'
 
 class StoreEmailVerificationLinkService {
   async execute({ email }) {

@@ -1,20 +1,21 @@
 import path from 'node:path'
-import request from 'supertest'
-import bcrypt from 'bcrypt'
+
 import faker from '@faker-js/faker'
+import bcrypt from 'bcrypt'
+import request from 'supertest'
 import { v4 as uuidV4 } from 'uuid'
 
+import EmailVerificationLink from '../../src/modules/users/infra/sequelize/models/EmailVerificationLink'
+import PhoneNumberVerificationCode from '../../src/modules/users/infra/sequelize/models/PhoneNumberVerificationCode'
+import ProfilePhoto from '../../src/modules/users/infra/sequelize/models/ProfilePhoto'
+import User from '../../src/modules/users/infra/sequelize/models/User'
+import app from '../../src/shared/infra/http/app'
 import factory from '../factories'
-import truncate from '../util/truncate'
 import {
   closeQueueRedisConnection,
   closeRedisConnection,
 } from '../util/closeRedisConnections'
-import EmailVerificationLink from '../../src/modules/users/infra/sequelize/models/EmailVerificationLink'
-import PhoneNumberVerificationCode from '../../src/modules/users/infra/sequelize/models/PhoneNumberVerificationCode'
-import User from '../../src/modules/users/infra/sequelize/models/User'
-import app from '../../src/shared/infra/http/app'
-import ProfilePhoto from '../../src/modules/users/infra/sequelize/models/ProfilePhoto'
+import truncate from '../util/truncate'
 
 afterAll(async () => {
   await closeRedisConnection()

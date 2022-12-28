@@ -1,5 +1,6 @@
 import { readFile } from 'fs/promises'
 import path from 'path'
+
 import { noReply, help } from '../constants/emails'
 
 function getContent(filePath) {

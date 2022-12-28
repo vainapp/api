@@ -1,7 +1,7 @@
+import BadRequestError from '../../../shared/errors/BadRequest'
+import NotFoundError from '../../../shared/errors/NotFound'
 import ForgotPasswordCode from '../infra/sequelize/models/ForgotPasswordCode'
 import User from '../infra/sequelize/models/User'
-import NotFoundError from '../../../shared/errors/NotFound'
-import BadRequestError from '../../../shared/errors/BadRequest'
 
 class UpdateForgotPasswordService {
   async execute({ forgot_password_code_id, password, password_confirmation }) {

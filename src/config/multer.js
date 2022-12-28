@@ -1,14 +1,16 @@
-import path from 'node:path'
 import crypto from 'node:crypto'
+import path from 'node:path'
+
 import multer from 'multer'
 import multerS3 from 'multer-s3'
 
-import AWS from './aws'
 import {
   ALLOWED_MIMES,
   MAX_SIZE_IN_MEGA_BYTES,
 } from '../shared/constants/files'
 import { UnsupportedMediaTypeError } from '../shared/errors'
+
+import AWS from './aws'
 
 const storageTypes = {
   local: multer.diskStorage({

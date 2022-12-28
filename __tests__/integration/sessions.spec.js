@@ -1,13 +1,13 @@
-import request from 'supertest'
 import faker from '@faker-js/faker'
+import request from 'supertest'
 
 import app from '../../src/shared/infra/http/app'
 import factory from '../factories'
-import truncate from '../util/truncate'
 import {
   closeQueueRedisConnection,
   closeRedisConnection,
 } from '../util/closeRedisConnections'
+import truncate from '../util/truncate'
 
 afterAll(async () => {
   await closeRedisConnection()

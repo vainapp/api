@@ -1,10 +1,10 @@
 import { Router } from 'express'
 
-import ForgotPasswordController from '../controllers/ForgotPasswordController'
 import validatorMiddleware from '../../../../../shared/infra/http/middlewares/validator'
+import ForgotPasswordController from '../controllers/ForgotPasswordController'
 import forgotPasswordShowValidator from '../validators/forgotPasswordShowValidator'
-import forgotPasswordUpdateValidator from '../validators/forgotPasswordUpdateValidator'
 import forgotPasswordStoreValidator from '../validators/forgotPasswordStoreValidator'
+import forgotPasswordUpdateValidator from '../validators/forgotPasswordUpdateValidator'
 
 const passwordsRouter = Router()
 

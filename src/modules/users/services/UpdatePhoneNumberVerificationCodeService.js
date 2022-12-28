@@ -1,6 +1,6 @@
-import User from '../infra/sequelize/models/User'
 import NotFoundError from '../../../shared/errors/NotFound'
 import PhoneNumberVerificationCode from '../infra/sequelize/models/PhoneNumberVerificationCode'
+import User from '../infra/sequelize/models/User'
 
 class UpdatePhoneNumberVerificationCodeService {
   async execute({ userId, code }) {

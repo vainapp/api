@@ -1,4 +1,5 @@
 import Redis from 'ioredis'
+
 import redisConfig from '../../config/redis'
 
 class CacheService {

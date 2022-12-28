@@ -1,16 +1,17 @@
 import './bootstrap'
 
 import * as Sentry from '@sentry/node'
+import cors from 'cors'
 import express from 'express'
 import 'express-async-errors'
-import Youch from 'youch'
 import { pick } from 'lodash'
-import cors from 'cors'
 import morgan from 'morgan'
+import Youch from 'youch'
 
-import routes from './routes'
 import sentryConfig from '../../../config/sentry'
 import isProduction from '../../helpers/isProduction'
+
+import routes from './routes'
 import '../sequelize'
 
 class App {

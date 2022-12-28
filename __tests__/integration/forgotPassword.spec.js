@@ -1,16 +1,16 @@
-import request from 'supertest'
 import faker from '@faker-js/faker'
 import bcrypt from 'bcrypt'
+import request from 'supertest'
 
+import ForgotPasswordCode from '../../src/modules/users/infra/sequelize/models/ForgotPasswordCode'
+import User from '../../src/modules/users/infra/sequelize/models/User'
 import app from '../../src/shared/infra/http/app'
 import factory from '../factories'
-import truncate from '../util/truncate'
 import {
   closeQueueRedisConnection,
   closeRedisConnection,
 } from '../util/closeRedisConnections'
-import ForgotPasswordCode from '../../src/modules/users/infra/sequelize/models/ForgotPasswordCode'
-import User from '../../src/modules/users/infra/sequelize/models/User'
+import truncate from '../util/truncate'
 
 afterAll(async () => {
   await closeRedisConnection()

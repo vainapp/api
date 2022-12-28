@@ -3,16 +3,16 @@ import multer from 'multer'
 
 import multerConfig from '../../../../../config/multer'
 import validatorMiddleware from '../../../../../shared/infra/http/middlewares/validator'
-import authenticationMiddleware from '../middlewares/authentication'
-import userStoreValidator from '../validators/userStoreValidator'
-import resendVerificationStepStoreValidator from '../validators/resendVerificationStepStoreValidator'
-import updatePasswordValidator from '../validators/updatePasswordValidator'
-import phoneNumberVerificationCodeUpdateValidator from '../validators/phoneNumberVerificationCodeUpdateValidator'
-import UpdatePasswordController from '../controllers/UpdatePasswordController'
-import UserController from '../controllers/UserController'
 import EmailVerificationLinkController from '../controllers/EmailVerificationLinkController'
 import PhoneNumberVerificationCodeController from '../controllers/PhoneNumberVerificationCodeController'
 import ProfilePhotoController from '../controllers/ProfilePhotoController'
+import UpdatePasswordController from '../controllers/UpdatePasswordController'
+import UserController from '../controllers/UserController'
+import authenticationMiddleware from '../middlewares/authentication'
+import phoneNumberVerificationCodeUpdateValidator from '../validators/phoneNumberVerificationCodeUpdateValidator'
+import resendVerificationStepStoreValidator from '../validators/resendVerificationStepStoreValidator'
+import updatePasswordValidator from '../validators/updatePasswordValidator'
+import userStoreValidator from '../validators/userStoreValidator'
 
 const usersRouter = Router()
 

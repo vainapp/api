@@ -1,9 +1,9 @@
-import User from '../infra/sequelize/models/User'
-import NotFoundError from '../../../shared/errors/NotFound'
 import { ForbiddenError } from '../../../shared/errors'
-import Queue from '../../../shared/lib/Queue'
+import NotFoundError from '../../../shared/errors/NotFound'
 import SendSMSJob from '../../../shared/jobs/SendSMS'
+import Queue from '../../../shared/lib/Queue'
 import PhoneNumberVerificationCode from '../infra/sequelize/models/PhoneNumberVerificationCode'
+import User from '../infra/sequelize/models/User'
 
 class StorePhoneNumberVerificationCodeService {
   async execute({ email }) {

@@ -1,8 +1,9 @@
-import path from 'node:path'
 import fs from 'node:fs'
+import path from 'node:path'
 import { promisify } from 'node:util'
-import Sequelize, { Model } from 'sequelize'
+
 import * as Sentry from '@sentry/node'
+import Sequelize, { Model } from 'sequelize'
 
 import AWS from '../../../../../config/aws'
 import isProduction from '../../../../../shared/helpers/isProduction'
@@ -60,7 +61,6 @@ class ProfilePhoto extends Model {
           .promise()
           .catch((response) => {
             Sentry.captureException(response)
-            console.error(response)
           })
       }
       return promisify(fs.unlink)(

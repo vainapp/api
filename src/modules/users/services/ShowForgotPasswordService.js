@@ -1,6 +1,6 @@
+import NotFoundError from '../../../shared/errors/NotFound'
 import ForgotPasswordCode from '../infra/sequelize/models/ForgotPasswordCode'
 import User from '../infra/sequelize/models/User'
-import NotFoundError from '../../../shared/errors/NotFound'
 
 class ShowForgotPasswordService {
   async execute({ email, code }) {

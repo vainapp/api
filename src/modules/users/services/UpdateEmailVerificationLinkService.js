@@ -1,6 +1,6 @@
+import NotFoundError from '../../../shared/errors/NotFound'
 import EmailVerificationLink from '../infra/sequelize/models/EmailVerificationLink'
 import User from '../infra/sequelize/models/User'
-import NotFoundError from '../../../shared/errors/NotFound'
 
 class UpdateEmailVerificationLinkService {
   async execute({ id }) {

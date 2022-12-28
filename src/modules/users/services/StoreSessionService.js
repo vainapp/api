@@ -1,10 +1,10 @@
 import jwt from 'jsonwebtoken'
 
-import User from '../infra/sequelize/models/User'
-import ForbiddenError from '../../../shared/errors/Forbidden'
 import authConfig from '../../../config/auth'
-import CacheService from '../../../shared/services/CacheService'
 import { LONG_TERM_DATA_DURATION } from '../../../config/redis'
+import ForbiddenError from '../../../shared/errors/Forbidden'
+import CacheService from '../../../shared/services/CacheService'
+import User from '../infra/sequelize/models/User'
 
 class StoreSessionService {
   async execute({ email, password }) {

@@ -1,5 +1,5 @@
-import StoreForgotPasswordService from '../../../services/StoreForgotPasswordService'
 import ShowForgotPasswordService from '../../../services/ShowForgotPasswordService'
+import StoreForgotPasswordService from '../../../services/StoreForgotPasswordService'
 import UpdateForgotPasswordService from '../../../services/UpdateForgotPasswordService'
 
 class ForgotPasswordController {
