@@ -2,7 +2,7 @@ import Sequelize from 'sequelize'
 
 import AuthenticableEntity from '../../../../../shared/infra/sequelize/models/AuthenticableEntity'
 
-class User extends AuthenticableEntity {
+class Employee extends AuthenticableEntity {
   static init(sequelize) {
     super.init(
       {
@@ -22,10 +22,6 @@ class User extends AuthenticableEntity {
           allowNull: false,
           unique: true,
         },
-        genre: {
-          type: Sequelize.ENUM('female', 'male', 'other'),
-          allowNull: false,
-        },
         phone_number: {
           type: Sequelize.STRING,
           allowNull: false,
@@ -40,11 +36,6 @@ class User extends AuthenticableEntity {
           defaultValue: false,
           allowNull: false,
         },
-        profile_photo_id: {
-          type: Sequelize.UUID,
-          allowNull: true,
-          unique: true,
-        },
         verified: {
           type: Sequelize.VIRTUAL,
           get() {
@@ -57,12 +48,12 @@ class User extends AuthenticableEntity {
       { sequelize }
     )
 
-    this.addHook('beforeSave', async (user) => {
-      await this.beforeSaveLogic(user)
+    this.addHook('beforeSave', async (employee) => {
+      await this.beforeSaveLogic(employee)
     })
 
     return this
   }
 }
 
-export default User
+export default Employee
