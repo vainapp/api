@@ -19,6 +19,18 @@ class Company extends Model {
           type: Sequelize.UUID,
           allowNull: false,
         },
+        product_id: {
+          type: Sequelize.STRING,
+          allowNull: true,
+        },
+        price_id: {
+          type: Sequelize.STRING,
+          allowNull: true,
+        },
+        customer_id: {
+          type: Sequelize.STRING,
+          allowNull: true,
+        },
       },
       { sequelize }
     )

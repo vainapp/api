@@ -20,10 +20,17 @@ class EmployeeRole extends Model {
           allowNull: false,
         },
       },
-      { sequelize }
+      { sequelize, tableName: 'employees_roles' }
     )
 
     return this
+  }
+
+  static associate(models) {
+    this.belongsTo(models.Employee, {
+      foreignKey: 'employee_id',
+      as: 'employee',
+    })
   }
 }
 

@@ -2,12 +2,12 @@ import faker from '@faker-js/faker'
 import { factory } from 'factory-girl'
 
 import Address from '../src/modules/users/infra/sequelize/models/Address'
-import EmailVerificationLink from '../src/modules/users/infra/sequelize/models/EmailVerificationLink'
 import ForgotPasswordCode from '../src/modules/users/infra/sequelize/models/ForgotPasswordCode'
 import PhoneNumberVerificationCode from '../src/modules/users/infra/sequelize/models/PhoneNumberVerificationCode'
 import ProfilePhoto from '../src/modules/users/infra/sequelize/models/ProfilePhoto'
 import User from '../src/modules/users/infra/sequelize/models/User'
 import generateRandomCode from '../src/shared/helpers/generateRandomCode'
+import EmailVerificationLink from '../src/shared/infra/sequelize/models/EmailVerificationLink'
 
 factory.define('User', User, {
   name: faker.name.findName(),

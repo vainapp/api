@@ -54,6 +54,10 @@ class Employee extends AuthenticableEntity {
 
     return this
   }
+
+  static associate(models) {
+    this.hasMany(models.EmployeeRole)
+  }
 }
 
 export default Employee

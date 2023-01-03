@@ -18,11 +18,26 @@ class EmailVerificationLink extends Model {
         },
         user_id: {
           type: Sequelize.UUID,
-          allowNull: false,
+          allowNull: true,
+        },
+        employee_id: {
+          type: Sequelize.UUID,
+          allowNull: true,
         },
       },
       { sequelize }
     )
+
+    this.addHook('beforeSave', async (emailVerificationLink) => {
+      if (
+        !emailVerificationLink.user_id &&
+        !emailVerificationLink.employee_id
+      ) {
+        throw new Error(
+          'provide either user_id or employee_id to create a new email verification link'
+        )
+      }
+    })
 
     return this
   }

@@ -1,4 +1,3 @@
-import { websiteHost } from '../../../../../shared/constants/website'
 import StoreEmailVerificationLinkService from '../../../services/StoreEmailVerificationLinkService'
 import UpdateEmailVerificationLinkService from '../../../services/UpdateEmailVerificationLinkService'
 
@@ -20,7 +19,7 @@ class EmailVerificationLinkController {
       id: email_verification_link_id,
     })
 
-    return response.redirect(`${websiteHost}/email-verificado`)
+    return response.redirect(`${process.env.APP_WEB_URL}/user-email-verified`)
   }
 }
 

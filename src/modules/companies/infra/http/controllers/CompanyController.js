@@ -1,28 +1,15 @@
-import StoreCompanyService from '../../../services/StoreCompanyService'
+import PreSignupCompanyService from '../../../services/PreSignupCompanyService'
 
 class CompanyController {
-  async store(request, response) {
-    const {
-      email,
-      phone_number,
-      name,
-      password,
-      password_confirmation,
-      address,
-      genre,
-    } = request.body
+  async show(request, response) {
+    const { email, price_id } = request.body
 
-    const result = await StoreCompanyService.execute({
+    const { statusCode, responseBody } = await PreSignupCompanyService.execute({
       email,
-      phone_number,
-      name,
-      password,
-      password_confirmation,
-      address,
-      genre,
+      price_id,
     })
 
-    return response.json(result)
+    return response.status(statusCode).json(responseBody)
   }
 }
 
