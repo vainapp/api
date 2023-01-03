@@ -1,16 +1,5 @@
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.changeColumn('email_verification_links', 'user_id', {
-      type: Sequelize.UUID,
-      allowNull: true,
-      references: {
-        model: 'users',
-        key: 'id',
-      },
-      onUpdate: 'CASCADE',
-      onDelete: 'CASCADE',
-    })
-
     await queryInterface.addColumn('email_verification_links', 'employee_id', {
       type: Sequelize.UUID,
       allowNull: true,
@@ -23,18 +12,7 @@ module.exports = {
     })
   },
 
-  down: async (queryInterface, Sequelize) => {
-    await queryInterface.changeColumn('email_verification_links', 'user_id', {
-      type: Sequelize.UUID,
-      allowNull: false,
-      references: {
-        model: 'users',
-        key: 'id',
-      },
-      onUpdate: 'CASCADE',
-      onDelete: 'CASCADE',
-    })
-
+  down: async (queryInterface) => {
     await queryInterface.removeColumn('email_verification_links', 'employee_id')
   },
 }

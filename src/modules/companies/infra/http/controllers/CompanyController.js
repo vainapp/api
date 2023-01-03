@@ -1,4 +1,5 @@
 import PreSignupCompanyService from '../../../services/PreSignupCompanyService'
+import SignupCompanyService from '../../../services/SignupCompanyService'
 
 class CompanyController {
   async show(request, response) {
@@ -10,6 +11,30 @@ class CompanyController {
     })
 
     return response.status(statusCode).json(responseBody)
+  }
+
+  async store(request, response) {
+    const {
+      email,
+      password,
+      password_confirmation,
+      company_name,
+      phone_number,
+      name,
+      price_id,
+    } = request.body
+
+    const result = await SignupCompanyService.execute({
+      email,
+      password,
+      password_confirmation,
+      company_name,
+      phone_number,
+      name,
+      price_id,
+    })
+
+    return response.json(result)
   }
 }
 

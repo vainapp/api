@@ -1,3 +1,5 @@
+import querystring from 'node:querystring'
+
 import { ForbiddenError } from '../../../shared/errors'
 import buildDirectEmailParams from '../../../shared/helpers/buildDirectEmailParams'
 import EmailVerificationLink from '../../../shared/infra/sequelize/models/EmailVerificationLink'
@@ -47,9 +49,9 @@ class PreSignupCompanyService {
         template: 'COMPANY_VERIFY_EMAIL',
         templateData: {
           name: existingEmployee.name,
-          link: `${process.env.APP_WEB_URL}/companies/verify-email/${
+          link: `${process.env.API_URL}/companies/verify-email/${
             (existingLink || newLink).id
-          }`,
+          }?${querystring.stringify({ price_id })}`,
         },
       })
 
