@@ -10,7 +10,7 @@ const companySignupSchema = Joi.object({
   company_name: Joi.string().required().label('Nome da empresa'),
   phone_number: Joi.string().required().label('Telefone'),
   name: Joi.string().required().label('Nome pessoal'),
-  price_id: Joi.string().required().label('ID do preço'),
+  price_id: Joi.string().required().label('ID do plano'),
 })
 
 export default companySignupSchema

@@ -5,7 +5,7 @@ import buildDirectEmailParams from '../../../shared/helpers/buildDirectEmailPara
 import EmailVerificationLink from '../../../shared/infra/sequelize/models/EmailVerificationLink'
 import SendEmailJob from '../../../shared/jobs/SendEmail'
 import Queue from '../../../shared/lib/Queue'
-import stripe from '../../../shared/lib/Stripe'
+import { generateCheckoutSession } from '../../../shared/lib/Stripe'
 import Company from '../infra/sequelize/models/Company'
 import Employee from '../infra/sequelize/models/Employee'
 import EmployeeRole from '../infra/sequelize/models/EmployeeRole'
@@ -76,40 +76,17 @@ class PreSignupCompanyService {
       existingEmployee.verified === true &&
       hasActiveSubscription === false
     ) {
-      const sessions = await stripe.checkout.sessions.list({
-        customer_details: {
-          email: existingEmployee.email,
-        },
-      })
-
-      await Promise.all(
-        sessions.data.map(async (session) => {
-          if (session.status === 'open') {
-            await stripe.checkout.sessions.expire(session.id)
-          }
-        })
-      )
-
-      const checkoutSession = await stripe.checkout.sessions.create({
-        success_url: `${process.env.APP_WEB_URL}/checkout/success`,
-        cancel_url: `${process.env.APP_WEB_URL}/checkout/cancel`,
-        client_reference_id: company.id,
-        customer_email: existingEmployee.email,
-        mode: 'subscription',
-        line_items: [
-          {
-            price: price_id,
-            quantity: 1,
-          },
-        ],
-        allow_promotion_codes: true,
+      const { url: checkout_url } = await generateCheckoutSession({
+        price_id,
+        company_id: company.id,
+        employee_email: existingEmployee.email,
       })
 
       return {
         statusCode: 200,
         responseBody: {
           verified: true,
-          checkout_url: checkoutSession.url,
+          checkout_url,
         },
       }
     }
