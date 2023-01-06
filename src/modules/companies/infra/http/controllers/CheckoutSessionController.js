@@ -1,4 +1,5 @@
 import CreateCheckoutSessionService from '../../../services/CreateCheckoutSessionService'
+import ProcessStripeWebhookService from '../../../services/ProcessStripeWebhookService'
 
 class CheckoutSessionController {
   async store(request, response) {
@@ -11,6 +12,14 @@ class CheckoutSessionController {
     })
 
     return response.json(result)
+  }
+
+  async update(request, response) {
+    const payload = request.body
+
+    await ProcessStripeWebhookService.execute(payload)
+
+    return response.sendStatus(200)
   }
 }
 

@@ -5,6 +5,7 @@ import CheckoutSessionController from '../controllers/CheckoutSessionController'
 import CompanyController from '../controllers/CompanyController'
 import EmailVerificationLinkController from '../controllers/EmailVerificationLinkController'
 import PhoneNumberVerificationCodeController from '../controllers/PhoneNumberVerificationCodeController'
+import stripeAuthenticationMiddleware from '../middlewares/stripeAuthentication'
 import companyPreSignupSchema from '../validators/companyPreSignupValidator'
 import companySignupSchema from '../validators/companySignupValidator'
 import createCheckoutSessionSchema from '../validators/createCheckoutSessionValidator'
@@ -53,6 +54,12 @@ companiesRouter.post(
   '/checkout-session',
   validatorMiddleware(createCheckoutSessionSchema),
   CheckoutSessionController.store
+)
+
+companiesRouter.post(
+  '/stripe-webhook',
+  stripeAuthenticationMiddleware,
+  CheckoutSessionController.update
 )
 
 export default companiesRouter

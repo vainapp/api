@@ -11,6 +11,7 @@ import Youch from 'youch'
 import sentryConfig from '../../../config/sentry'
 import isProduction from '../../helpers/isProduction'
 
+import maybeMiddleware from './middlewares/maybe'
 import routes from './routes'
 import '../sequelize'
 
@@ -29,7 +30,7 @@ class App {
     this.server.use(Sentry.Handlers.requestHandler())
     this.server.use(Sentry.Handlers.tracingHandler())
     this.server.use(cors())
-    this.server.use(express.json())
+    this.server.use(maybeMiddleware(express.json()))
     this.server.use(express.urlencoded({ extended: true }))
     this.server.use(morgan('dev'))
   }
