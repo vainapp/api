@@ -42,6 +42,7 @@ class CreateCheckoutSessionService {
       price_id,
       company_id,
       employee_email,
+      customer_id: company.customer_id || undefined,
     })
 
     return { checkout_url }

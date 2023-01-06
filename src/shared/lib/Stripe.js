@@ -11,6 +11,7 @@ export const generateCheckoutSession = async ({
   price_id,
   company_id,
   employee_email,
+  customer_id = undefined,
 }) => {
   const existingPendingCheckoutSessions = await stripe.checkout.sessions.list({
     customer_details: {
@@ -30,7 +31,8 @@ export const generateCheckoutSession = async ({
     success_url: `${process.env.APP_WEB_URL}/checkout/success`,
     cancel_url: `${process.env.APP_WEB_URL}/checkout/cancel`,
     client_reference_id: company_id,
-    customer_email: employee_email,
+    customer_email: customer_id ? undefined : employee_email,
+    customer: customer_id,
     mode: 'subscription',
     line_items: [
       {
