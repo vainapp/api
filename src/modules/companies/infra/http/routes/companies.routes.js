@@ -10,6 +10,7 @@ import companySignupSchema from '../validators/companySignupValidator'
 import createCheckoutSessionSchema from '../validators/createCheckoutSessionValidator'
 import phoneNumberVerificationCodeUpdateSchema from '../validators/phoneNumberVerificationCodeUpdateValidator'
 import resendEmailVerificationSchema from '../validators/resendEmailVerificationValidator'
+import resendPhoneNumberVerificationCodeSchema from '../validators/resendPhoneNumberVerificationCodeValidator'
 
 const companiesRouter = Router()
 
@@ -40,6 +41,12 @@ companiesRouter.post(
   '/verify-email/resend',
   validatorMiddleware(resendEmailVerificationSchema),
   EmailVerificationLinkController.store
+)
+
+companiesRouter.post(
+  '/verify-phone-number/resend',
+  validatorMiddleware(resendPhoneNumberVerificationCodeSchema),
+  PhoneNumberVerificationCodeController.store
 )
 
 companiesRouter.post(
