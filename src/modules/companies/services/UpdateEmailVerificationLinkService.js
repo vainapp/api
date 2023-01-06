@@ -1,4 +1,5 @@
 import NotFoundError from '../../../shared/errors/NotFound'
+import BadRequestError from '../../../shared/errors/UnsupportedMediaType'
 import generateRandomCode from '../../../shared/helpers/generateRandomCode'
 import EmailVerificationLink from '../../../shared/infra/sequelize/models/EmailVerificationLink'
 import PhoneNumberVerificationCode from '../../../shared/infra/sequelize/models/PhoneNumberVerificationCode'
@@ -7,7 +8,11 @@ import Queue from '../../../shared/lib/Queue'
 import Employee from '../infra/sequelize/models/Employee'
 
 class UpdateEmailVerificationLinkService {
-  async execute({ id }) {
+  async execute({ id, price_id }) {
+    if (!price_id) {
+      throw new BadRequestError('Informe o ID da assinatura')
+    }
+
     const existingLink = await EmailVerificationLink.findByPk(id)
 
     if (!existingLink || !existingLink.employee_id) {

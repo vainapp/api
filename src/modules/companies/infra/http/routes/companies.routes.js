@@ -7,6 +7,7 @@ import PhoneNumberVerificationCodeController from '../controllers/PhoneNumberVer
 import companyPreSignupSchema from '../validators/companyPreSignupValidator'
 import companySignupSchema from '../validators/companySignupValidator'
 import phoneNumberVerificationCodeUpdateSchema from '../validators/phoneNumberVerificationCodeUpdateValidator'
+import resendEmailVerificationSchema from '../validators/resendEmailVerificationValidator'
 
 const companiesRouter = Router()
 
@@ -31,6 +32,12 @@ companiesRouter.post(
   '/verify-phone-number',
   validatorMiddleware(phoneNumberVerificationCodeUpdateSchema),
   PhoneNumberVerificationCodeController.update
+)
+
+companiesRouter.post(
+  '/verify-email/resend',
+  validatorMiddleware(resendEmailVerificationSchema),
+  EmailVerificationLinkController.store
 )
 
 export default companiesRouter
