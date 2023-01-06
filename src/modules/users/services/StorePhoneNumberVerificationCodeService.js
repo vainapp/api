@@ -1,8 +1,8 @@
 import { ForbiddenError } from '../../../shared/errors'
 import NotFoundError from '../../../shared/errors/NotFound'
+import PhoneNumberVerificationCode from '../../../shared/infra/sequelize/models/PhoneNumberVerificationCode'
 import SendSMSJob from '../../../shared/jobs/SendSMS'
 import Queue from '../../../shared/lib/Queue'
-import PhoneNumberVerificationCode from '../infra/sequelize/models/PhoneNumberVerificationCode'
 import User from '../infra/sequelize/models/User'
 
 class StorePhoneNumberVerificationCodeService {

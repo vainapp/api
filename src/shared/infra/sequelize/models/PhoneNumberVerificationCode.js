@@ -22,7 +22,11 @@ class PhoneNumberVerificationCode extends Model {
         },
         user_id: {
           type: Sequelize.UUID,
-          allowNull: false,
+          allowNull: true,
+        },
+        employee_id: {
+          type: Sequelize.UUID,
+          allowNull: true,
         },
       },
       { sequelize }

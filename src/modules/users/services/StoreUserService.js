@@ -3,11 +3,11 @@ import ForbiddenError from '../../../shared/errors/Forbidden'
 import buildDirectEmailParams from '../../../shared/helpers/buildDirectEmailParams'
 import generateRandomCode from '../../../shared/helpers/generateRandomCode'
 import EmailVerificationLink from '../../../shared/infra/sequelize/models/EmailVerificationLink'
+import PhoneNumberVerificationCode from '../../../shared/infra/sequelize/models/PhoneNumberVerificationCode'
 import SendEmailJob from '../../../shared/jobs/SendEmail'
 import SendSMSJob from '../../../shared/jobs/SendSMS'
 import Queue from '../../../shared/lib/Queue'
 import Address from '../infra/sequelize/models/Address'
-import PhoneNumberVerificationCode from '../infra/sequelize/models/PhoneNumberVerificationCode'
 import User from '../infra/sequelize/models/User'
 
 class StoreUserService {

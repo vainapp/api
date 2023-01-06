@@ -8,16 +8,16 @@ AWS.config.update({ region: 'us-east-1' })
 // Create createTemplate params
 let params = {
   Template: {
-    TemplateName: 'COMPANY_VERIFY_EMAIL' /* required */,
+    TemplateName: 'USER_FORGOT_PASSWORD' /* required */,
     HtmlPart: fs
       .readFileSync(
-        'src/modules/companies/views/COMPANY_VERIFY_EMAIL/COMPANY_VERIFY_EMAIL.html'
+        'src/modules/users/views/USER_FORGOT_PASSWORD/USER_FORGOT_PASSWORD.html'
       )
       .toString(),
     SubjectPart: 'Recuperação de senha',
     TextPart: fs
       .readFileSync(
-        'src/modules/companies/views/COMPANY_VERIFY_EMAIL/COMPANY_VERIFY_EMAIL.txt'
+        'src/modules/users/views/USER_FORGOT_PASSWORD/USER_FORGOT_PASSWORD.txt'
       )
       .toString(),
   },

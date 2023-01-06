@@ -5,7 +5,7 @@ AWS.config.update({ region: 'us-east-1' })
 
 // Create the promise and SES service object
 let templatePromise = new AWS.SES({ apiVersion: '2010-12-01' })
-  .deleteTemplate({ TemplateName: 'VERIFY_ACCOUNT' })
+  .deleteTemplate({ TemplateName: 'COMPANY_VERIFY_EMAIL' })
   .promise()
 
 // Handle promise's fulfilled/rejected states

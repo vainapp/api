@@ -28,6 +28,14 @@ class SignupCompanyService {
     })
 
     if (existingEmployee) {
+      if (
+        existingEmployee.verified === false &&
+        existingEmployee.phone_number !== phone_number
+      ) {
+        existingEmployee.phone_number = phone_number
+        await existingEmployee.save()
+      }
+
       throw new ForbiddenError('Este endereço de e-mail já está cadastrado')
     }
 

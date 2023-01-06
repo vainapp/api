@@ -6,7 +6,7 @@ class UpdateEmailVerificationLinkService {
   async execute({ id }) {
     const existingLink = await EmailVerificationLink.findByPk(id)
 
-    if (!existingLink) {
+    if (!existingLink || !existingLink.user_id) {
       throw new NotFoundError('Este link é inválido')
     }
 

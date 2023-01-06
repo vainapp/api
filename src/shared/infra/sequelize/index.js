@@ -8,11 +8,11 @@ import Franchise from '../../../modules/companies/infra/sequelize/models/Franchi
 import FranchiseEmployee from '../../../modules/companies/infra/sequelize/models/FranchiseEmployee'
 import Address from '../../../modules/users/infra/sequelize/models/Address'
 import ForgotPasswordCode from '../../../modules/users/infra/sequelize/models/ForgotPasswordCode'
-import PhoneNumberVerificationCode from '../../../modules/users/infra/sequelize/models/PhoneNumberVerificationCode'
 import ProfilePhoto from '../../../modules/users/infra/sequelize/models/ProfilePhoto'
 import User from '../../../modules/users/infra/sequelize/models/User'
 
 import EmailVerificationLink from './models/EmailVerificationLink'
+import PhoneNumberVerificationCode from './models/PhoneNumberVerificationCode'
 
 const models = [
   User,
