@@ -1,3 +1,4 @@
+import NotFoundError from '../../../shared/errors/NotFound'
 import stripe from '../../../shared/lib/Stripe'
 import Company from '../infra/sequelize/models/Company'
 
@@ -30,6 +31,12 @@ class ProcessStripeWebhookService {
     )
 
     const company = await Company.findByPk(client_reference_id)
+
+    if (!company) {
+      throw new NotFoundError(
+        'Company not found. This happens when Stripe sends a webhook without the client_reference_id'
+      )
+    }
 
     if (!company.customer_id) {
       company.customer_id = customer_id
