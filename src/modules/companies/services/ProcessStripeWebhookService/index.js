@@ -20,6 +20,8 @@ class ProcessStripeWebhookService {
       case 'invoice.payment_failed':
         await handleInvoicePaymentFailed(payload)
         break
+      case 'customer.subscription.trial_will_end':
+        break
       default:
         break
     }

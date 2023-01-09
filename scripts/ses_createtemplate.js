@@ -8,16 +8,16 @@ AWS.config.update({ region: 'us-east-1' })
 // Create createTemplate params
 let params = {
   Template: {
-    TemplateName: 'COMPANY_PAYMENT_INTENT_SUCCEEDED' /* required */,
+    TemplateName: 'COMPANY_SUBSCRIPTION_DELETED' /* required */,
     HtmlPart: fs
       .readFileSync(
-        'src/modules/companies/views/COMPANY_PAYMENT_INTENT_SUCCEEDED/COMPANY_PAYMENT_INTENT_SUCCEEDED.html'
+        'src/modules/companies/views/COMPANY_SUBSCRIPTION_DELETED/COMPANY_SUBSCRIPTION_DELETED.html'
       )
       .toString(),
-    SubjectPart: 'Pagamento confirmado',
+    SubjectPart: 'Assinatura cancelada',
     TextPart: fs
       .readFileSync(
-        'src/modules/companies/views/COMPANY_PAYMENT_INTENT_SUCCEEDED/COMPANY_PAYMENT_INTENT_SUCCEEDED.txt'
+        'src/modules/companies/views/COMPANY_SUBSCRIPTION_DELETED/COMPANY_SUBSCRIPTION_DELETED.txt'
       )
       .toString(),
   },

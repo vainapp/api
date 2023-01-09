@@ -1,6 +1,7 @@
 import Stripe from 'stripe'
 
 import Company from '../../modules/companies/infra/sequelize/models/Company'
+import Employee from '../../modules/companies/infra/sequelize/models/Employee'
 import EmployeeRole from '../../modules/companies/infra/sequelize/models/EmployeeRole'
 
 const stripe = new Stripe(process.env.STRIPE_API_KEY, {
@@ -66,7 +67,14 @@ export const generateCheckoutSession = async ({
   customer_id,
 }) => {
   if (!customer_id) {
-    throw new Error('Cannot create a checkout session without a customer')
+    const company = await Company.findByPk(company_id)
+    const employee = await Employee.findByPk(company.admin_id)
+
+    const { customer_id: new_customer_id } = await findOrCreateCustomer(
+      employee
+    )
+
+    customer_id = new_customer_id
   }
 
   const checkoutSessionsToExpire = await stripe.checkout.sessions.list({
@@ -86,6 +94,10 @@ export const generateCheckoutSession = async ({
     cancel_url: `${process.env.APP_WEB_URL}/checkout/cancel`,
     client_reference_id: company_id,
     customer: customer_id,
+    // TODO add trial if needed
+    // subscription_data: {
+    //   trial_end: '',
+    // },
     mode: 'subscription',
     line_items: [
       {

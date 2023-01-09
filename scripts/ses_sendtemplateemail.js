@@ -6,10 +6,9 @@ AWS.config.update({ region: 'us-east-1' })
 
 buildDirectEmailParams({
   toAddress: 'jopcmelo@gmail.com',
-  template: 'COMPANY_PAYMENT_INTENT_SUCCEEDED',
+  template: 'COMPANY_SUBSCRIPTION_DELETED',
   templateData: {
     name: 'João',
-    description: '1 × Pro (at R$ 60.00 / month)',
   },
 }).then((params) => {
   let sendPromise = new AWS.SES({ apiVersion: '2010-12-01' })

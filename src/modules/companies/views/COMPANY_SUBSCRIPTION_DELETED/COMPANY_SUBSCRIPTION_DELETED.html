@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Assinatura cancelada</title>
+    {{meta}} {{css}}
+  </head>
+  <body>
+    <table class="body-wrap">
+      <tr>
+        <td class="container">
+          <table>
+            {{header}}
+            <tr>
+              <td class="content">
+                <h2>Olá, {{name}}!</h2>
+                <p>
+                  Sua assinatura foi cancelada com sucesso. Vamos sentir sua falta!
+                </p>
+                <p>Sua assinatura será válida até {{subscription_active_until}}.</p>
+                {{signature}}
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+      {{footer}}
+    </table>
+  </body>
+</html>
