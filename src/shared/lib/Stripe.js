@@ -1,5 +1,8 @@
 import Stripe from 'stripe'
 
+import Company from '../../modules/companies/infra/sequelize/models/Company'
+import EmployeeRole from '../../modules/companies/infra/sequelize/models/EmployeeRole'
+
 const stripe = new Stripe(process.env.STRIPE_API_KEY, {
   apiVersion: '2022-08-01',
   appInfo: {
@@ -7,20 +10,71 @@ const stripe = new Stripe(process.env.STRIPE_API_KEY, {
   },
 })
 
-export const generateCheckoutSession = async ({
-  price_id,
-  company_id,
-  employee_email,
-  customer_id = undefined,
-}) => {
-  const existingPendingCheckoutSessions = await stripe.checkout.sessions.list({
-    customer_details: {
-      email: employee_email,
+export const findOrCreateCustomer = async (employee) => {
+  const adminRole = await EmployeeRole.findOne({
+    where: {
+      employee_id: employee.id,
+      role: 'ADMIN',
+    },
+    attributes: ['id', 'role'],
+  })
+
+  if (employee.verified === false) {
+    throw new Error(
+      'Cannot create a customer without a verified employee already registered in the database'
+    )
+  }
+
+  if (!adminRole) {
+    throw new Error('Cannot create a customer without an admin employee')
+  }
+
+  const company = await Company.findOne({
+    where: {
+      admin_id: employee.id,
     },
   })
 
+  if (!company) {
+    throw new Error('Cannot create a customer that is not admin of a company')
+  }
+
+  if (company.customer_id) {
+    return {
+      customer_id: company.customer_id,
+    }
+  }
+
+  const customer = await stripe.customers.create({
+    email: employee.email,
+    phone: employee.phone_number,
+    name: company.name,
+  })
+
+  await company.update({
+    customer_id: customer.id,
+  })
+
+  return {
+    customer_id: customer.id,
+  }
+}
+
+export const generateCheckoutSession = async ({
+  price_id,
+  company_id,
+  customer_id,
+}) => {
+  if (!customer_id) {
+    throw new Error('Cannot create a checkout session without a customer')
+  }
+
+  const checkoutSessionsToExpire = await stripe.checkout.sessions.list({
+    customer: customer_id,
+  })
+
   await Promise.all(
-    existingPendingCheckoutSessions.data.map(async (session) => {
+    checkoutSessionsToExpire.data.map(async (session) => {
       if (session.status === 'open') {
         await stripe.checkout.sessions.expire(session.id)
       }
@@ -31,7 +85,6 @@ export const generateCheckoutSession = async ({
     success_url: `${process.env.APP_WEB_URL}/checkout/success`,
     cancel_url: `${process.env.APP_WEB_URL}/checkout/cancel`,
     client_reference_id: company_id,
-    customer_email: customer_id ? undefined : employee_email,
     customer: customer_id,
     mode: 'subscription',
     line_items: [

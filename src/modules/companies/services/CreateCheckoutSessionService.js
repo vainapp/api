@@ -5,17 +5,8 @@ import Employee from '../infra/sequelize/models/Employee'
 import EmployeeRole from '../infra/sequelize/models/EmployeeRole'
 
 class CreateCheckoutSessionService {
-  async execute({ price_id, company_id, employee_email }) {
-    const company = await Company.findByPk(company_id)
-
-    if (!company) {
-      throw new NotFoundError('Empresa não encontrada')
-    }
-
-    const employee = await Employee.findOne({
-      where: {
-        email: employee_email,
-      },
+  async execute({ price_id, employee_id }) {
+    const employee = await Employee.findByPk(employee_id, {
       include: [
         {
           model: EmployeeRole,
@@ -34,15 +25,28 @@ class CreateCheckoutSessionService {
 
     const isAdmin = employee.EmployeeRoles.some((role) => role.role === 'ADMIN')
 
-    if (company.admin_id !== employee.id || isAdmin === false) {
+    if (isAdmin === false) {
+      throw new ForbiddenError('Apenas o administrador pode realizar essa ação')
+    }
+
+    const company = await Company.findOne({
+      where: {
+        admin_id: employee.id,
+      },
+    })
+
+    if (!company) {
+      throw new NotFoundError('Empresa não encontrada')
+    }
+
+    if (company.admin_id !== employee.id) {
       throw new ForbiddenError('Apenas o administrador pode realizar essa ação')
     }
 
     const { url: checkout_url } = await generateCheckoutSession({
       price_id,
-      company_id,
-      employee_email,
-      customer_id: company.customer_id || undefined,
+      company_id: company.id,
+      customer_id: company.customer_id,
     })
 
     return { checkout_url }

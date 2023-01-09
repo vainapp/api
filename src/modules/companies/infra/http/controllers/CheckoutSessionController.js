@@ -3,12 +3,11 @@ import ProcessStripeWebhookService from '../../../services/ProcessStripeWebhookS
 
 class CheckoutSessionController {
   async store(request, response) {
-    const { price_id, company_id, employee_email } = request.body
+    const { price_id, employee_id } = request.body
 
     const result = await CreateCheckoutSessionService.execute({
       price_id,
-      company_id,
-      employee_email,
+      employee_id,
     })
 
     return response.json(result)

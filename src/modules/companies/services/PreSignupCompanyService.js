@@ -79,8 +79,7 @@ class PreSignupCompanyService {
       const { url: checkout_url } = await generateCheckoutSession({
         price_id,
         company_id: company.id,
-        employee_email: existingEmployee.email,
-        customer_id: company.customer_id || undefined,
+        customer_id: company.customer_id,
       })
 
       return {
