@@ -1,0 +1,7 @@
+Olá, {{name}}!
+
+O seu período de teste do plano {{description}} acaba em 3 dias! Após esses 3 dias, iremos realizar
+uma tentativa de pagamento automática para que você possa continuar com o seu acesso à plataforma.
+
+Atenciosamente,
+Equipe Grupo C.

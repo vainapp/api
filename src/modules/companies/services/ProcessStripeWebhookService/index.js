@@ -1,5 +1,6 @@
 import { handleCustomerDeleted } from './webhooksHandlers/handleCustomerDeleted'
 import { handleCustomerSubscriptionDeleted } from './webhooksHandlers/handleCustomerSubscriptionDeleted'
+import { handleCustomerSubscriptionTrialWillEnd } from './webhooksHandlers/handleCustomerSubscriptionTrialWillEnd'
 import { handleInvoicePaymentFailed } from './webhooksHandlers/handleInvoicePaymentFailed'
 import { handlePaymentIntentSucceeded } from './webhooksHandlers/handlePaymentIntentSucceeded'
 
@@ -21,6 +22,7 @@ class ProcessStripeWebhookService {
         await handleInvoicePaymentFailed(payload)
         break
       case 'customer.subscription.trial_will_end':
+        await handleCustomerSubscriptionTrialWillEnd(payload)
         break
       default:
         break

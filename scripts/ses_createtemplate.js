@@ -8,16 +8,16 @@ AWS.config.update({ region: 'us-east-1' })
 // Create createTemplate params
 let params = {
   Template: {
-    TemplateName: 'COMPANY_SUBSCRIPTION_DELETED' /* required */,
+    TemplateName: 'COMPANY_CUSTOMER_SUBSCRIPTION_TRIAL_WILL_END' /* required */,
     HtmlPart: fs
       .readFileSync(
-        'src/modules/companies/views/COMPANY_SUBSCRIPTION_DELETED/COMPANY_SUBSCRIPTION_DELETED.html'
+        'src/modules/companies/views/COMPANY_CUSTOMER_SUBSCRIPTION_TRIAL_WILL_END/COMPANY_CUSTOMER_SUBSCRIPTION_TRIAL_WILL_END.html'
       )
       .toString(),
-    SubjectPart: 'Assinatura cancelada',
+    SubjectPart: 'O seu período de teste está acabando',
     TextPart: fs
       .readFileSync(
-        'src/modules/companies/views/COMPANY_SUBSCRIPTION_DELETED/COMPANY_SUBSCRIPTION_DELETED.txt'
+        'src/modules/companies/views/COMPANY_CUSTOMER_SUBSCRIPTION_TRIAL_WILL_END/COMPANY_CUSTOMER_SUBSCRIPTION_TRIAL_WILL_END.txt'
       )
       .toString(),
   },

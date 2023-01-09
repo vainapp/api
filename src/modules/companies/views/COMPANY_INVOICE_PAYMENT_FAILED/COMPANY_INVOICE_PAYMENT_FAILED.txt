@@ -1,0 +1,9 @@
+Olá, {{name}}!
+
+Não foi possível renovar sua assinatura ({{description}}) pois houve uma falha no pagamento.
+
+Evite ficar sem acesso à plataforma adicionando um novo método de pagamento clicando no link a seguir:
+{{checkout_url}}
+
+Atenciosamente,
+Equipe Grupo C.

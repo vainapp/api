@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Falha no pagamento</title>
+    {{meta}} {{css}}
+  </head>
+  <body>
+    <table class="body-wrap">
+      <tr>
+        <td class="container">
+          <table>
+            {{header}}
+            <tr>
+              <td class="content">
+                <h2>Olá, {{name}}!</h2>
+                <p>
+                  Não foi possível renovar sua assinatura ({{description}}) pois
+                  houve uma falha no pagamento.
+                </p>
+                <p>
+                  Evite ficar sem acesso à plataforma adicionando um novo método
+                  de pagamento clicando no botão a seguir:
+                </p>
+                <table>
+                  <tr>
+                    <td align="center">
+                      <span style="color: #ffffff; font-weight: 300">
+                        <a
+                          class="button"
+                          style="
+                            color: #ffffff;
+                            text-align: center;
+                            text-decoration: none;
+                          "
+                          href="{{checkout_url}}"
+                          >Resolver</a
+                        >
+                      </span>
+                    </td>
+                  </tr>
+                </table>
+                <br />
+                <p>
+                  Caso não consiga pressionar o botão acima, pode usar este
+                  link:
+                </p>
+                <a href="{{checkout_url}}">{{checkout_url}}</a><br /><br />
+                {{signature}}
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+      {{footer}}
+    </table>
+  </body>
+</html>
