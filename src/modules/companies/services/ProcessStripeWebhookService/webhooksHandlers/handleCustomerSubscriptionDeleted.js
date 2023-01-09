@@ -27,7 +27,9 @@ export const handleCustomerSubscriptionDeleted = async (payload) => {
     template: 'COMPANY_SUBSCRIPTION_DELETED',
     templateData: {
       name: admin.name,
-      subscription_active_until: formatDate(company.subscription_active_until),
+      subscription_active_until: formatDate(
+        company.subscription_active_until || Date.now()
+      ),
     },
   })
   await Queue.add(SendEmailJob.key, confirmationEmailParams)

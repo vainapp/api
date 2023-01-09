@@ -3,6 +3,8 @@ import Stripe from 'stripe'
 import Company from '../../modules/companies/infra/sequelize/models/Company'
 import Employee from '../../modules/companies/infra/sequelize/models/Employee'
 import EmployeeRole from '../../modules/companies/infra/sequelize/models/EmployeeRole'
+import { TRIAL_DURATION } from '../constants/trial'
+import NotFoundError from '../errors/NotFound'
 
 const stripe = new Stripe(process.env.STRIPE_API_KEY, {
   apiVersion: '2022-08-01',
@@ -66,8 +68,9 @@ export const generateCheckoutSession = async ({
   company_id,
   customer_id,
 }) => {
+  const company = await Company.findByPk(company_id)
+
   if (!customer_id) {
-    const company = await Company.findByPk(company_id)
     const employee = await Employee.findByPk(company.admin_id)
 
     const { customer_id: new_customer_id } = await findOrCreateCustomer(
@@ -89,15 +92,30 @@ export const generateCheckoutSession = async ({
     })
   )
 
+  const { product } = await stripe.prices.retrieve(price_id, {
+    expand: ['product'],
+  })
+
+  if (product.active === false) {
+    throw new NotFoundError('Plano não encontrado')
+  }
+
+  const hasTrial =
+    product.metadata.allow_free_trial === 'true' &&
+    company.subscription_active_until === null
+
   const result = await stripe.checkout.sessions.create({
     success_url: `${process.env.APP_WEB_URL}/checkout/success`,
     cancel_url: `${process.env.APP_WEB_URL}/checkout/cancel`,
     client_reference_id: company_id,
     customer: customer_id,
-    // TODO add trial if needed
-    // subscription_data: {
-    //   trial_end: '',
-    // },
+    ...(hasTrial
+      ? {
+          subscription_data: {
+            trial_end: TRIAL_DURATION,
+          },
+        }
+      : {}),
     mode: 'subscription',
     line_items: [
       {
