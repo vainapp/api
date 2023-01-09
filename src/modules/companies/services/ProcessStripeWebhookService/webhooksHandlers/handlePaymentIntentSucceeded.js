@@ -1,4 +1,7 @@
 import { NotFoundError } from '../../../../../shared/errors'
+import buildDirectEmailParams from '../../../../../shared/helpers/buildDirectEmailParams'
+import SendEmailJob from '../../../../../shared/jobs/SendEmail'
+import Queue from '../../../../../shared/lib/Queue'
 import stripe from '../../../../../shared/lib/Stripe'
 import Company from '../../../infra/sequelize/models/Company'
 import Employee from '../../../infra/sequelize/models/Employee'
@@ -27,15 +30,27 @@ export const handlePaymentIntentSucceeded = async (payload) => {
     throw new NotFoundError(`Admin with id ${company.admin_id} not found`)
   }
 
-  const charge = await stripe.charges.retrieve(charges.data[0].id, {
+  const { invoice } = await stripe.charges.retrieve(charges.data[0].id, {
     expand: ['invoice.subscription'],
   })
-  const { price } = charge.invoice.subscription.items.data[0]
+
+  const { price } = invoice.subscription.items.data[0]
+  const { period, description } = invoice.lines.data[0]
 
   await company.update({
     price_id: price.id,
     product_id: price.product,
+    subscription_active_until: new Date(period.end * 1000),
   })
 
-  console.log({ email: admin.email }) // TODO send a confirmation email to admin
+  const confirmationEmailParams = await buildDirectEmailParams({
+    toAddress: admin.email,
+    template: 'COMPANY_PAYMENT_INTENT_SUCCEEDED',
+    templateData: {
+      name: admin.name,
+      description,
+      payment_intent_id: payment_intent.id,
+    },
+  })
+  await Queue.add(SendEmailJob.key, confirmationEmailParams)
 }

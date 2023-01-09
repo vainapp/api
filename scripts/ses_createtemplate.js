@@ -8,16 +8,16 @@ AWS.config.update({ region: 'us-east-1' })
 // Create createTemplate params
 let params = {
   Template: {
-    TemplateName: 'USER_FORGOT_PASSWORD' /* required */,
+    TemplateName: 'COMPANY_PAYMENT_INTENT_SUCCEEDED' /* required */,
     HtmlPart: fs
       .readFileSync(
-        'src/modules/users/views/USER_FORGOT_PASSWORD/USER_FORGOT_PASSWORD.html'
+        'src/modules/companies/views/COMPANY_PAYMENT_INTENT_SUCCEEDED/COMPANY_PAYMENT_INTENT_SUCCEEDED.html'
       )
       .toString(),
-    SubjectPart: 'Recuperação de senha',
+    SubjectPart: 'Pagamento confirmado',
     TextPart: fs
       .readFileSync(
-        'src/modules/users/views/USER_FORGOT_PASSWORD/USER_FORGOT_PASSWORD.txt'
+        'src/modules/companies/views/COMPANY_PAYMENT_INTENT_SUCCEEDED/COMPANY_PAYMENT_INTENT_SUCCEEDED.txt'
       )
       .toString(),
   },

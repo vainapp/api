@@ -1,5 +1,7 @@
 import Sequelize, { Model } from 'sequelize'
 
+import isDateAfterNow from '../../../../../shared/helpers/isDateAfterNow'
+
 class Company extends Model {
   static init(sequelize) {
     super.init(
@@ -30,6 +32,16 @@ class Company extends Model {
         customer_id: {
           type: Sequelize.STRING,
           allowNull: true,
+        },
+        subscription_active_until: {
+          type: Sequelize.DATE,
+          allowNull: true,
+        },
+        has_active_subscription: {
+          type: Sequelize.VIRTUAL,
+          get() {
+            return isDateAfterNow(this.subscription_active_until)
+          },
         },
       },
       { sequelize }

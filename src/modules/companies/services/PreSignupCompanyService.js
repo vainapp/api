@@ -69,12 +69,11 @@ class PreSignupCompanyService {
     const company = await Company.findOne({
       where: { admin_id: existingEmployee.id },
     })
-    const hasActiveSubscription = !!company.product_id && !!company.price_id
 
     if (
       isAdmin === true &&
       existingEmployee.verified === true &&
-      hasActiveSubscription === false
+      company.has_active_subscription === false
     ) {
       const { url: checkout_url } = await generateCheckoutSession({
         price_id,
@@ -94,7 +93,7 @@ class PreSignupCompanyService {
     if (
       isAdmin === true &&
       existingEmployee.verified === true &&
-      hasActiveSubscription
+      company.has_active_subscription === true
     ) {
       throw new ForbiddenError('Este endereço de e-mail já está cadastrado')
     }

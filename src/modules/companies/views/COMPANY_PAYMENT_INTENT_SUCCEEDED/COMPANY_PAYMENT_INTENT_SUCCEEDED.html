@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Pagamento confirmado!</title>
+    {{meta}} {{css}}
+  </head>
+  <body>
+    <table class="body-wrap">
+      <tr>
+        <td class="container">
+          <table>
+            {{header}}
+            <tr>
+              <td class="content">
+                <h2>Olá, {{name}}!</h2>
+                <p>
+                  Já identificamos o seu pagamento! Segue as informações de confirmação:
+                </p>
+                <p>
+                  {{description}}
+                </p>
+                <p>ID da transação: {{payment_intent_id}}</p>
+                {{signature}}
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+      {{footer}}
+    </table>
+  </body>
+</html>
