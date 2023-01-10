@@ -1,5 +1,5 @@
+import BadRequestError from '../../../shared/errors/BadRequest'
 import NotFoundError from '../../../shared/errors/NotFound'
-import BadRequestError from '../../../shared/errors/UnsupportedMediaType'
 import generateRandomCode from '../../../shared/helpers/generateRandomCode'
 import EmailVerificationLink from '../../../shared/infra/sequelize/models/EmailVerificationLink'
 import PhoneNumberVerificationCode from '../../../shared/infra/sequelize/models/PhoneNumberVerificationCode'

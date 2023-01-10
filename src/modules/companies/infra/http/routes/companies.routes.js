@@ -1,14 +1,11 @@
 import { Router } from 'express'
 
 import validatorMiddleware from '../../../../../shared/infra/http/middlewares/validator'
-import CheckoutSessionController from '../controllers/CheckoutSessionController'
 import CompanyController from '../controllers/CompanyController'
 import EmailVerificationLinkController from '../controllers/EmailVerificationLinkController'
 import PhoneNumberVerificationCodeController from '../controllers/PhoneNumberVerificationCodeController'
-import stripeAuthenticationMiddleware from '../middlewares/stripeAuthentication'
 import companyPreSignupSchema from '../validators/companyPreSignupValidator'
 import companySignupSchema from '../validators/companySignupValidator'
-import createCheckoutSessionSchema from '../validators/createCheckoutSessionValidator'
 import phoneNumberVerificationCodeUpdateSchema from '../validators/phoneNumberVerificationCodeUpdateValidator'
 import resendEmailVerificationSchema from '../validators/resendEmailVerificationValidator'
 import resendPhoneNumberVerificationCodeSchema from '../validators/resendPhoneNumberVerificationCodeValidator'
@@ -48,18 +45,6 @@ companiesRouter.post(
   '/verify-phone-number/resend',
   validatorMiddleware(resendPhoneNumberVerificationCodeSchema),
   PhoneNumberVerificationCodeController.store
-)
-
-companiesRouter.post(
-  '/checkout-session',
-  validatorMiddleware(createCheckoutSessionSchema),
-  CheckoutSessionController.store
-)
-
-companiesRouter.post(
-  '/stripe-webhook',
-  stripeAuthenticationMiddleware,
-  CheckoutSessionController.update
 )
 
 export default companiesRouter

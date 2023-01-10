@@ -40,6 +40,10 @@ class Company extends Model {
         has_active_subscription: {
           type: Sequelize.VIRTUAL,
           get() {
+            if (this.subscription_active_until === null) {
+              return false
+            }
+
             return isDateAfterNow(this.subscription_active_until)
           },
         },

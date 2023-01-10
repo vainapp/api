@@ -39,10 +39,6 @@ class CreateCheckoutSessionService {
       throw new NotFoundError('Empresa não encontrada')
     }
 
-    if (company.admin_id !== employee.id) {
-      throw new ForbiddenError('Apenas o administrador pode realizar essa ação')
-    }
-
     const { url: checkout_url } = await generateCheckoutSession({
       price_id,
       company_id: company.id,
