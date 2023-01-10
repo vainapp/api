@@ -5,6 +5,7 @@ import bcrypt from 'bcrypt'
 import request from 'supertest'
 import { v4 as uuidV4 } from 'uuid'
 
+import ForgotPasswordCode from '../../src/modules/users/infra/sequelize/models/ForgotPasswordCode'
 import ProfilePhoto from '../../src/modules/users/infra/sequelize/models/ProfilePhoto'
 import User from '../../src/modules/users/infra/sequelize/models/User'
 import app from '../../src/shared/infra/http/app'
@@ -22,11 +23,11 @@ afterAll(async () => {
   await closeQueueRedisConnection()
 })
 
-describe('POST /users', () => {
-  beforeEach(async () => {
-    await truncate()
-  })
+beforeEach(async () => {
+  await truncate()
+})
 
+describe('POST /users', () => {
   it('should not allow a sign-up with different passwords', async () => {
     const body = {
       name: faker.name.findName(),
@@ -208,10 +209,6 @@ describe('POST /users', () => {
 })
 
 describe('GET /users/verify-email/:email_verification_link_id', () => {
-  beforeEach(async () => {
-    await truncate()
-  })
-
   it('should not allow verify an invalid link', async () => {
     await request(app).get(`/users/verify-email/${uuidV4()}`).expect(404)
   })
@@ -246,10 +243,6 @@ describe('GET /users/verify-email/:email_verification_link_id', () => {
 })
 
 describe('POST /users/verify-email/resend', () => {
-  beforeEach(async () => {
-    await truncate()
-  })
-
   it('should not allow resend verification link for an invalid email', async () => {
     await request(app)
       .post('/users/verify-email/resend')
@@ -300,10 +293,6 @@ describe('POST /users/verify-email/resend', () => {
 })
 
 describe('POST /users/verify-phone-number', () => {
-  beforeEach(async () => {
-    await truncate()
-  })
-
   it('should not allow request with invalid user ids', async () => {
     const response = await request(app)
       .post('/users/verify-phone-number')
@@ -366,10 +355,6 @@ describe('POST /users/verify-phone-number', () => {
 })
 
 describe('POST /users/verify-phone-number/resend', () => {
-  beforeEach(async () => {
-    await truncate()
-  })
-
   it('should not allow resend verification sms for an invalid email', async () => {
     await request(app)
       .post('/users/verify-phone-number/resend')
@@ -420,10 +405,6 @@ describe('POST /users/verify-phone-number/resend', () => {
 })
 
 describe('POST /users/profile-photo', () => {
-  beforeEach(async () => {
-    await truncate()
-  })
-
   it('should not be able to send a request if the user is not authenticated', async () => {
     await request(app).post('/users/profile-photo').expect(401)
   })
@@ -434,7 +415,7 @@ describe('POST /users/profile-photo', () => {
       phone_number_verified: true,
     })
 
-    const sessionResponse = await request(app).post('/sessions').send({
+    const sessionResponse = await request(app).post('/users/sessions').send({
       email: user.email,
       password: user.password,
     })
@@ -454,7 +435,7 @@ describe('POST /users/profile-photo', () => {
       phone_number_verified: true,
     })
 
-    const sessionResponse = await request(app).post('/sessions').send({
+    const sessionResponse = await request(app).post('/users/sessions').send({
       email: user.email,
       password: user.password,
     })
@@ -478,11 +459,11 @@ describe('POST /users/profile-photo', () => {
       phone_number_verified: true,
     })
 
-    const session1Response = await request(app).post('/sessions').send({
+    const session1Response = await request(app).post('/users/sessions').send({
       email: user1.email,
       password: user1.password,
     })
-    const session2Response = await request(app).post('/sessions').send({
+    const session2Response = await request(app).post('/users/sessions').send({
       email: user2.email,
       password: user2.password,
     })
@@ -506,7 +487,7 @@ describe('POST /users/profile-photo', () => {
       phone_number_verified: true,
     })
 
-    const sessionResponse = await request(app).post('/sessions').send({
+    const sessionResponse = await request(app).post('/users/sessions').send({
       email: user.email,
       password: user.password,
     })
@@ -530,10 +511,6 @@ describe('POST /users/profile-photo', () => {
 })
 
 describe('GET /users/me', () => {
-  beforeEach(async () => {
-    await truncate()
-  })
-
   it('should not allow a request if the user is not authenticated', async () => {
     await request(app).get('/users/me').expect(401)
   })
@@ -544,7 +521,7 @@ describe('GET /users/me', () => {
       phone_number_verified: true,
     })
 
-    const sessionResponse = await request(app).post('/sessions').send({
+    const sessionResponse = await request(app).post('/users/sessions').send({
       email: user.email,
       password: user.password,
     })
@@ -568,10 +545,6 @@ describe('GET /users/me', () => {
 })
 
 describe('PUT /users/change-password', () => {
-  beforeEach(async () => {
-    await truncate()
-  })
-
   it('should not allow a request if the user is not authenticated', async () => {
     const password = faker.internet.password()
 
@@ -591,7 +564,7 @@ describe('PUT /users/change-password', () => {
       phone_number_verified: true,
     })
 
-    const sessionResponse = await request(app).post('/sessions').send({
+    const sessionResponse = await request(app).post('/users/sessions').send({
       email: user.email,
       password: user.password,
     })
@@ -615,7 +588,7 @@ describe('PUT /users/change-password', () => {
       phone_number_verified: true,
     })
 
-    const sessionResponse = await request(app).post('/sessions').send({
+    const sessionResponse = await request(app).post('/users/sessions').send({
       email: user.email,
       password: user.password,
     })
@@ -639,7 +612,7 @@ describe('PUT /users/change-password', () => {
       phone_number_verified: true,
     })
 
-    const sessionResponse = await request(app).post('/sessions').send({
+    const sessionResponse = await request(app).post('/users/sessions').send({
       email: user.email,
       password: user.password,
     })
@@ -657,11 +630,403 @@ describe('PUT /users/change-password', () => {
       .expect(200)
 
     await request(app)
-      .post('/sessions')
+      .post('/users/sessions')
       .send({
         email: user.email,
         password: new_password,
       })
       .expect(200)
+  })
+})
+
+describe('POST /users/sessions', () => {
+  it('should not allow an unverified user to sign-in', async () => {
+    const user = await factory.create('User')
+
+    await request(app)
+      .post('/users/sessions')
+      .send({
+        email: user.email,
+        password: user.password,
+      })
+      .expect(403)
+  })
+
+  it('should not allow a verified user to sign-in with invalid credentials', async () => {
+    const user = await factory.create('User', {
+      email_verified: true,
+      phone_number_verified: true,
+    })
+
+    await request(app)
+      .post('/users/sessions')
+      .send({
+        email: user.email,
+        password: faker.internet.password(),
+      })
+      .expect(403)
+  })
+
+  it('should not allow to use the refresh_token as a valid token', async () => {
+    const user = await factory.create('User', {
+      email_verified: true,
+      phone_number_verified: true,
+    })
+
+    const { body } = await request(app)
+      .post('/users/sessions')
+      .send({
+        email: user.email,
+        password: user.password,
+      })
+      .expect(200)
+
+    await request(app)
+      .get('/users/me')
+      .set('Authorization', `Bearer ${body.refresh_token}`)
+      .expect(403)
+  })
+
+  it('should allow a verified user to sign-in with correct credentials', async () => {
+    const user = await factory.create('User', {
+      email_verified: true,
+      phone_number_verified: true,
+    })
+
+    const response = await request(app).post('/users/sessions').send({
+      email: user.email,
+      password: user.password,
+    })
+
+    expect(response.body).toHaveProperty('user')
+    expect(response.body).toHaveProperty('access_token')
+    expect(response.body).toHaveProperty('refresh_token')
+  })
+})
+
+describe('POST /users/sessions/refresh', () => {
+  jest.useFakeTimers({
+    doNotFake: [
+      'nextTick',
+      'setImmediate',
+      'clearImmediate',
+      'setInterval',
+      'clearInterval',
+      'setTimeout',
+      'clearTimeout',
+    ],
+  })
+
+  it('should not allow a user to refresh a token with an invalid refresh_token', async () => {
+    await request(app)
+      .post('/users/sessions/refresh')
+      .send({
+        refresh_token: faker.datatype.uuid(),
+      })
+      .expect(403)
+  })
+
+  it('should not allow a user to refresh a token with an expired refresh_token', async () => {
+    const user = await factory.create('User', {
+      email_verified: true,
+      phone_number_verified: true,
+    })
+
+    const { body } = await request(app)
+      .post('/users/sessions')
+      .send({
+        email: user.email,
+        password: user.password,
+      })
+      .expect(200)
+
+    const now = new Date()
+    jest.setSystemTime(now.setMonth(now.getMonth() + 2))
+
+    await request(app)
+      .post('/users/sessions/refresh')
+      .send({
+        refresh_token: body.refresh_token,
+      })
+      .expect(403)
+  })
+
+  it('should allow a user to refresh a token with a valid refresh_token', async () => {
+    const user = await factory.create('User', {
+      email_verified: true,
+      phone_number_verified: true,
+    })
+
+    const { body } = await request(app)
+      .post('/users/sessions')
+      .send({
+        email: user.email,
+        password: user.password,
+      })
+      .expect(200)
+
+    const response = await request(app)
+      .post('/users/sessions/refresh')
+      .send({
+        refresh_token: body.refresh_token,
+      })
+      .expect(200)
+
+    expect(response.body).toHaveProperty('user')
+    expect(response.body).toHaveProperty('access_token')
+    expect(response.body).toHaveProperty('refresh_token')
+  })
+
+  it('should not allow a user to refresh a token using an access token', async () => {
+    const user = await factory.create('User', {
+      email_verified: true,
+      phone_number_verified: true,
+    })
+
+    const { body } = await request(app)
+      .post('/users/sessions')
+      .send({
+        email: user.email,
+        password: user.password,
+      })
+      .expect(200)
+
+    await request(app)
+      .post('/users/sessions/refresh')
+      .send({
+        refresh_token: body.access_token,
+      })
+      .expect(403)
+  })
+})
+
+describe('POST /users/passwords/forgot-password', () => {
+  it('should not allow an unverified user to recover password', async () => {
+    const user = await factory.create('User')
+
+    await request(app)
+      .post('/users/passwords/forgot')
+      .send({
+        email: user.email,
+      })
+      .expect(404)
+  })
+
+  it('should generate a ForgotPasswordCode for an user', async () => {
+    const user = await factory.create('User', {
+      email_verified: true,
+      phone_number_verified: true,
+    })
+
+    await request(app).post('/users/passwords/forgot').send({
+      email: user.email,
+    })
+
+    const forgotPasswordCode = await ForgotPasswordCode.findOne({
+      where: {
+        user_id: user.id,
+      },
+    })
+
+    expect(forgotPasswordCode.active).toBeTruthy()
+  })
+
+  it('should invalidate a previous ForgotPasswordCode and generate a new active one for an user', async () => {
+    const user = await factory.create('User', {
+      email_verified: true,
+      phone_number_verified: true,
+    })
+
+    await request(app).post('/users/passwords/forgot').send({
+      email: user.email,
+    })
+
+    const firstForgotPasswordCode = await ForgotPasswordCode.findOne({
+      where: {
+        user_id: user.id,
+      },
+    })
+
+    expect(firstForgotPasswordCode.active).toBeTruthy()
+
+    await request(app).post('/users/passwords/forgot').send({
+      email: user.email,
+    })
+
+    const newFirstForgotPasswordCode = await ForgotPasswordCode.findByPk(
+      firstForgotPasswordCode.id
+    )
+    const secondForgotPasswordCode = await ForgotPasswordCode.findOne({
+      where: {
+        user_id: user.id,
+        active: true,
+      },
+    })
+
+    expect(newFirstForgotPasswordCode.active).toBeFalsy()
+    expect(secondForgotPasswordCode.active).toBeTruthy()
+  })
+})
+
+describe('POST /users/passwords/verify', () => {
+  it('should not allow an unverified user to recover password', async () => {
+    const user = await factory.create('User')
+
+    await request(app)
+      .post('/users/passwords/verify')
+      .send({
+        email: user.email,
+        code: String(faker.datatype.number({ min: 1000, max: 9999 })),
+      })
+      .expect(404)
+  })
+
+  it('should not allow to recover an account with an expired code', async () => {
+    const user = await factory.create('User', {
+      email_verified: true,
+      phone_number_verified: true,
+    })
+    const code = await factory.create('ForgotPasswordCode', {
+      active: false,
+      user_id: user.id,
+    })
+
+    await request(app)
+      .post('/users/passwords/verify')
+      .send({
+        email: user.email,
+        code: code.code,
+      })
+      .expect(404)
+  })
+
+  it('should return the token if everything is as expected', async () => {
+    const user = await factory.create('User', {
+      email_verified: true,
+      phone_number_verified: true,
+    })
+    const code = await factory.create('ForgotPasswordCode', {
+      user_id: user.id,
+    })
+
+    const response = await request(app).post('/users/passwords/verify').send({
+      email: user.email,
+      code: code.code,
+    })
+
+    expect(response.body).toHaveProperty('token')
+  })
+})
+
+describe('POST /users/passwords/reset', () => {
+  beforeEach(async () => {
+    await truncate()
+  })
+
+  afterAll(async () => {
+    await closeQueueRedisConnection()
+  })
+
+  it('should not allow an expired code to change password', async () => {
+    const user = await factory.create('User', {
+      email_verified: true,
+      phone_number_verified: true,
+    })
+    const code = await factory.create('ForgotPasswordCode', {
+      user_id: user.id,
+      active: false,
+    })
+    const password = faker.internet.password()
+
+    await request(app)
+      .post('/users/passwords/reset')
+      .send({
+        token: code.id,
+        password,
+        password_confirmation: password,
+      })
+      .expect(404)
+  })
+
+  it('should not allow to update a password when passwords do not match', async () => {
+    const user = await factory.create('User', {
+      email_verified: true,
+      phone_number_verified: true,
+    })
+    const code = await factory.create('ForgotPasswordCode', {
+      user_id: user.id,
+    })
+
+    await request(app)
+      .post('/users/passwords/reset')
+      .send({
+        token: code.id,
+        password: faker.internet.password(),
+        password_confirmation: faker.internet.password(),
+      })
+      .expect(400)
+  })
+
+  it('should not allow an unverified user to update their password', async () => {
+    const user = await factory.create('User')
+    const code = await factory.create('ForgotPasswordCode', {
+      user_id: user.id,
+    })
+    const password = faker.internet.password()
+
+    await request(app)
+      .post('/users/passwords/reset')
+      .send({
+        token: code.id,
+        password,
+        password_confirmation: password,
+      })
+      .expect(404)
+  })
+
+  it('should not allow an user to update their password providing different password', async () => {
+    const user = await factory.create('User', {
+      email_verified: true,
+      phone_number_verified: true,
+    })
+    const code = await factory.create('ForgotPasswordCode', {
+      user_id: user.id,
+    })
+
+    await request(app)
+      .post('/users/passwords/reset')
+      .send({
+        token: code.id,
+        password: faker.internet.password(),
+        password_confirmation: faker.internet.password(),
+      })
+      .expect(400)
+  })
+
+  it("should change the user's password and invalidate a code", async () => {
+    const user = await factory.create('User', {
+      email_verified: true,
+      phone_number_verified: true,
+    })
+    const code = await factory.create('ForgotPasswordCode', {
+      user_id: user.id,
+    })
+    const password = faker.internet.password()
+
+    await request(app).post('/users/passwords/reset').send({
+      token: code.id,
+      password,
+      password_confirmation: password,
+    })
+
+    const forgotPasswordCode = await ForgotPasswordCode.findByPk(code.id)
+    const userFromDb = await User.findByPk(user.id)
+    const passwordsMatch = await bcrypt.compare(
+      password,
+      userFromDb.password_hash
+    )
+
+    expect(forgotPasswordCode.active).toBeFalsy()
+    expect(passwordsMatch).toBeTruthy()
   })
 })

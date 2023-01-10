@@ -20,7 +20,7 @@ class FranchiseEmployee extends Model {
           allowNull: false,
         },
       },
-      { sequelize }
+      { sequelize, tableName: 'franchises_employees' }
     )
 
     return this

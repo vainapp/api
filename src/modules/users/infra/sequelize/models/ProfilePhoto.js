@@ -50,6 +50,7 @@ class ProfilePhoto extends Model {
 
     this.addHook('beforeDestroy', async (profilePhoto) => {
       if (process.env.STORAGE_TYPE === 's3') {
+        // TODO: add a queue job to delete a file from AWS S3 in background
         return new AWS.S3()
           .deleteObject({
             Bucket: process.env.BUCKET_NAME,
