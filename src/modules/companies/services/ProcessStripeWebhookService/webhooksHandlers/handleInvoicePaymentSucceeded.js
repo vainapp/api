@@ -32,10 +32,6 @@ export const handleInvoicePaymentSucceeded = async (payload) => {
     },
   })
 
-  if (!admin) {
-    throw new NotFoundError(`Admin with id ${company.admin_id} not found`)
-  }
-
   const { price, period, description } = invoice.lines.data[0]
 
   await company.update({

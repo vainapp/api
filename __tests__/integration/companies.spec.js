@@ -7,11 +7,18 @@ import Company from '../../src/modules/companies/infra/sequelize/models/Company'
 import Employee from '../../src/modules/companies/infra/sequelize/models/Employee'
 import EmployeeRole from '../../src/modules/companies/infra/sequelize/models/EmployeeRole'
 import buildDirectEmailParams from '../../src/shared/helpers/buildDirectEmailParams'
+import formatDate from '../../src/shared/helpers/formatDate'
 import app from '../../src/shared/infra/http/app'
 import EmailVerificationLink from '../../src/shared/infra/sequelize/models/EmailVerificationLink'
 import PhoneNumberVerificationCode from '../../src/shared/infra/sequelize/models/PhoneNumberVerificationCode'
 import * as stripe from '../../src/shared/lib/Stripe'
 import factory from '../factories'
+import { generateCustomerDeletedMock } from '../mocks/generateCustomerDeletedMock'
+import { generateCustomerSubscriptionDeletedMock } from '../mocks/generateCustomerSubscriptionDeletedMock'
+import { generateCustomerSubscriptionTrailWillEndMock } from '../mocks/generateCustomerSubscriptionTrailWillEndMock'
+import { generateInvoicePaymentFailedMock } from '../mocks/generateInvoicePaymentFailedMock'
+import { generateInvoicePaymentSucceededMock } from '../mocks/generateInvoicePaymentSucceededMock'
+import { generatePaymentIntentSucceededMock } from '../mocks/generatePaymentIntentSucceededMock'
 import {
   closeQueueRedisConnection,
   closeRedisConnection,
@@ -714,5 +721,414 @@ describe('POST /companies/payments/checkout-session', () => {
     })
     expect(response.body).toHaveProperty('checkout_url')
     expect(response.body.checkout_url).toBe(url)
+  })
+})
+
+describe('POST /companies/payments/stripe-webhook', () => {
+  describe('payment_intent.succeeded event', () => {
+    it('should return 404 if the customer_id does not exist', async () => {
+      const mock = generatePaymentIntentSucceededMock({
+        customer_id: faker.datatype.uuid(),
+      })
+
+      jest
+        .spyOn(stripe.default.webhooks, 'constructEvent')
+        .mockReturnValue(mock)
+
+      await request(app)
+        .post('/companies/payments/stripe-webhook')
+        .send(mock)
+        .expect(404)
+    })
+
+    it('should send confirmation email if the payment is confirmed', async () => {
+      const employee = await factory.create('Employee', {
+        email_verified: true,
+        phone_number_verified: true,
+      })
+      const company = await factory.create('Company', {
+        customer_id: faker.datatype.uuid(),
+        admin_id: employee.id,
+      })
+
+      const mock = generatePaymentIntentSucceededMock({
+        customer_id: company.customer_id,
+      })
+
+      jest
+        .spyOn(stripe.default.webhooks, 'constructEvent')
+        .mockReturnValue(mock)
+
+      const chargeMock = {
+        invoice: {
+          subscription: {
+            items: {
+              data: [
+                {
+                  price: {
+                    id: faker.datatype.uuid(),
+                    product: faker.datatype.uuid(),
+                  },
+                },
+              ],
+            },
+          },
+          lines: {
+            data: [
+              {
+                period: {
+                  end: faker.date.future().getTime() / 1000,
+                },
+                description: 'Payment description',
+              },
+            ],
+          },
+        },
+      }
+      jest
+        .spyOn(stripe.default.charges, 'retrieve')
+        .mockResolvedValue(chargeMock)
+
+      const spy = jest.spyOn(buildDirectEmailParams, 'call')
+
+      await request(app)
+        .post('/companies/payments/stripe-webhook')
+        .send(mock)
+        .expect(200)
+
+      await company.reload()
+
+      expect(company.price_id).toBe(
+        chargeMock.invoice.subscription.items.data[0].price.id
+      )
+      expect(company.product_id).toBe(
+        chargeMock.invoice.subscription.items.data[0].price.product
+      )
+      expect(company.subscription_active_until).toStrictEqual(
+        new Date(chargeMock.invoice.lines.data[0].period.end * 1000)
+      )
+      expect(spy).toHaveBeenCalledTimes(1)
+      expect(spy).toHaveBeenNthCalledWith(1, undefined, {
+        toAddress: employee.email,
+        template: 'COMPANY_PAYMENT_INTENT_SUCCEEDED',
+        templateData: {
+          name: employee.name,
+          description: chargeMock.invoice.lines.data[0].description,
+          payment_intent_id: mock.data.object.id,
+        },
+      })
+    })
+  })
+
+  describe('invoice.payment_succeeded', () => {
+    it('should return 200 if the total is greater than 0', async () => {
+      const mock = generateInvoicePaymentSucceededMock({
+        customer_id: faker.datatype.uuid(),
+        total: faker.datatype.number({ min: 1 }),
+      })
+
+      jest
+        .spyOn(stripe.default.webhooks, 'constructEvent')
+        .mockReturnValue(mock)
+
+      await request(app)
+        .post('/companies/payments/stripe-webhook')
+        .send(mock)
+        .expect(200)
+    })
+
+    it('should return 404 if the company does not exist', async () => {
+      const mock = generateInvoicePaymentSucceededMock({
+        customer_id: faker.datatype.uuid(),
+        total: 0,
+      })
+
+      jest
+        .spyOn(stripe.default.webhooks, 'constructEvent')
+        .mockReturnValue(mock)
+
+      await request(app)
+        .post('/companies/payments/stripe-webhook')
+        .send(mock)
+        .expect(404)
+    })
+
+    it('should return 200 and update the company with the new details and send an email', async () => {
+      const employee = await factory.create('Employee', {
+        email_verified: true,
+        phone_number_verified: true,
+      })
+      const company = await factory.create('Company', {
+        customer_id: faker.datatype.uuid(),
+        admin_id: employee.id,
+      })
+      const mock = generateInvoicePaymentSucceededMock({
+        customer_id: company.customer_id,
+        total: 0,
+      })
+
+      jest
+        .spyOn(stripe.default.webhooks, 'constructEvent')
+        .mockReturnValue(mock)
+
+      const spy = jest.spyOn(buildDirectEmailParams, 'call')
+
+      await request(app)
+        .post('/companies/payments/stripe-webhook')
+        .send(mock)
+        .expect(200)
+
+      expect(spy).toHaveBeenCalledTimes(1)
+      expect(spy).toHaveBeenNthCalledWith(1, undefined, {
+        toAddress: employee.email,
+        template: 'COMPANY_PAYMENT_INTENT_SUCCEEDED',
+        templateData: {
+          name: employee.name,
+          description: mock.data.object.lines.data[0].description,
+          payment_intent_id: mock.data.object.id,
+        },
+      })
+    })
+  })
+
+  describe('customer.subscription.deleted', () => {
+    it('should return 404 if the company does not exist', async () => {
+      const mock = generateCustomerSubscriptionDeletedMock({
+        customer_id: faker.datatype.uuid(),
+      })
+
+      jest
+        .spyOn(stripe.default.webhooks, 'constructEvent')
+        .mockReturnValue(mock)
+
+      await request(app)
+        .post('/companies/payments/stripe-webhook')
+        .send(mock)
+        .expect(404)
+    })
+
+    it('should send an email if a company if found', async () => {
+      const employee = await factory.create('Employee', {
+        email_verified: true,
+        phone_number_verified: true,
+      })
+      const company = await factory.create('Company', {
+        admin_id: employee.id,
+        customer_id: faker.datatype.uuid(),
+      })
+
+      const mock = generateCustomerSubscriptionDeletedMock({
+        customer_id: company.customer_id,
+      })
+
+      jest
+        .spyOn(stripe.default.webhooks, 'constructEvent')
+        .mockReturnValue(mock)
+
+      const spy = jest.spyOn(buildDirectEmailParams, 'call')
+
+      await request(app)
+        .post('/companies/payments/stripe-webhook')
+        .send(mock)
+        .expect(200)
+
+      expect(spy).toHaveBeenCalledTimes(1)
+      expect(spy).toHaveBeenNthCalledWith(1, undefined, {
+        toAddress: employee.email,
+        template: 'COMPANY_SUBSCRIPTION_DELETED',
+        templateData: {
+          name: employee.name,
+          subscription_active_until: formatDate(Date.now()),
+        },
+      })
+    })
+  })
+
+  describe('customer.deleted', () => {
+    it('should return 404 if the company does not exist', async () => {
+      const mock = generateCustomerDeletedMock({
+        customer_id: faker.datatype.uuid(),
+      })
+
+      jest
+        .spyOn(stripe.default.webhooks, 'constructEvent')
+        .mockReturnValue(mock)
+
+      await request(app)
+        .post('/companies/payments/stripe-webhook')
+        .send(mock)
+        .expect(404)
+    })
+
+    it('should reset the company payment info', async () => {
+      const employee = await factory.create('Employee', {
+        email_verified: true,
+        phone_number_verified: true,
+      })
+      const company = await factory.create('Company', {
+        admin_id: employee.id,
+        customer_id: faker.datatype.uuid(),
+        subscription_active_until: faker.date.future(),
+        product_id: faker.datatype.uuid(),
+        price_id: faker.datatype.uuid(),
+      })
+
+      const mock = generateCustomerDeletedMock({
+        customer_id: company.customer_id,
+      })
+
+      jest
+        .spyOn(stripe.default.webhooks, 'constructEvent')
+        .mockReturnValue(mock)
+
+      await request(app)
+        .post('/companies/payments/stripe-webhook')
+        .send(mock)
+        .expect(200)
+
+      await company.reload()
+
+      expect(company.customer_id).toBeNull()
+      expect(company.subscription_active_until).toBeNull()
+      expect(company.product_id).toBeNull()
+      expect(company.price_id).toBeNull()
+    })
+  })
+
+  describe('invoice.payment_failed', () => {
+    it('should return 404 if the company does not exist', async () => {
+      const mock = generateInvoicePaymentFailedMock({
+        customer_id: faker.datatype.uuid(),
+      })
+
+      jest
+        .spyOn(stripe.default.webhooks, 'constructEvent')
+        .mockReturnValue(mock)
+
+      await request(app)
+        .post('/companies/payments/stripe-webhook')
+        .send(mock)
+        .expect(404)
+    })
+
+    it('should return 200 if there is no subscription_active_until', async () => {
+      const employee = await factory.create('Employee', {
+        email_verified: true,
+        phone_number_verified: true,
+      })
+      const company = await factory.create('Company', {
+        admin_id: employee.id,
+        customer_id: faker.datatype.uuid(),
+      })
+      const mock = generateInvoicePaymentFailedMock({
+        customer_id: company.customer_id,
+      })
+
+      jest
+        .spyOn(stripe.default.webhooks, 'constructEvent')
+        .mockReturnValue(mock)
+
+      await request(app)
+        .post('/companies/payments/stripe-webhook')
+        .send(mock)
+        .expect(200)
+    })
+
+    it('should send a checkout session url via email', async () => {
+      const employee = await factory.create('Employee', {
+        email_verified: true,
+        phone_number_verified: true,
+      })
+      const company = await factory.create('Company', {
+        admin_id: employee.id,
+        customer_id: faker.datatype.uuid(),
+        subscription_active_until: faker.date.future(),
+      })
+      const url = faker.internet.url()
+      const mock = generateInvoicePaymentFailedMock({
+        customer_id: company.customer_id,
+      })
+
+      jest
+        .spyOn(stripe.default.webhooks, 'constructEvent')
+        .mockReturnValue(mock)
+
+      const generateCheckoutSessionSpy = jest
+        .spyOn(stripe, 'generateCheckoutSession')
+        .mockResolvedValue({
+          url,
+        })
+      const buildDirectEmailParamsSpy = jest.spyOn(
+        buildDirectEmailParams,
+        'call'
+      )
+
+      await request(app)
+        .post('/companies/payments/stripe-webhook')
+        .send(mock)
+        .expect(200)
+
+      expect(generateCheckoutSessionSpy).toHaveBeenCalledTimes(1)
+      expect(buildDirectEmailParamsSpy).toHaveBeenCalledTimes(1)
+      expect(buildDirectEmailParamsSpy).toHaveBeenNthCalledWith(1, undefined, {
+        toAddress: employee.email,
+        template: 'COMPANY_INVOICE_PAYMENT_FAILED',
+        templateData: {
+          name: employee.name,
+          description: mock.data.object.lines.data[0].description,
+          checkout_url: url,
+        },
+      })
+    })
+  })
+
+  describe('customer.subscription.trial_will_end', () => {
+    it('should return 404 if the company does not exist', async () => {
+      const mock = generateCustomerSubscriptionTrailWillEndMock({
+        customer_id: faker.datatype.uuid(),
+      })
+
+      jest
+        .spyOn(stripe.default.webhooks, 'constructEvent')
+        .mockReturnValue(mock)
+
+      await request(app)
+        .post('/companies/payments/stripe-webhook')
+        .send(mock)
+        .expect(404)
+    })
+  })
+
+  it('should send an email notification', async () => {
+    const employee = await factory.create('Employee', {
+      email_verified: true,
+      phone_number_verified: true,
+    })
+    const company = await factory.create('Company', {
+      admin_id: employee.id,
+      customer_id: faker.datatype.uuid(),
+    })
+    const mock = generateCustomerSubscriptionTrailWillEndMock({
+      customer_id: company.customer_id,
+    })
+
+    jest.spyOn(stripe.default.webhooks, 'constructEvent').mockReturnValue(mock)
+
+    const spy = jest.spyOn(buildDirectEmailParams, 'call')
+
+    await request(app)
+      .post('/companies/payments/stripe-webhook')
+      .send(mock)
+      .expect(200)
+
+    expect(spy).toHaveBeenCalledTimes(1)
+    expect(spy).toHaveBeenNthCalledWith(1, undefined, {
+      toAddress: employee.email,
+      template: 'COMPANY_CUSTOMER_SUBSCRIPTION_TRIAL_WILL_END',
+      templateData: {
+        name: employee.name,
+        description: mock.data.object.description,
+      },
+    })
   })
 })

@@ -26,10 +26,6 @@ export const handlePaymentIntentSucceeded = async (payload) => {
     },
   })
 
-  if (!admin) {
-    throw new NotFoundError(`Admin with id ${company.admin_id} not found`)
-  }
-
   const { invoice } = await stripe.charges.retrieve(charges.data[0].id, {
     expand: ['invoice.subscription'],
   })
