@@ -8,13 +8,17 @@ AWS.config.update({ region: 'us-east-1' })
 // Create updateTemplate parameters
 let params = {
   Template: {
-    TemplateName: 'FORGOT_PASSWORD' /* required */,
+    TemplateName: 'COMPANY_SUBSCRIPTION_DELETED' /* required */,
     HtmlPart: fs
-      .readFileSync('src/app/views/FORGOT_PASSWORD/FORGOT_PASSWORD.html')
+      .readFileSync(
+        'src/modules/companies/views/COMPANY_SUBSCRIPTION_DELETED/COMPANY_SUBSCRIPTION_DELETED.html'
+      )
       .toString(),
-    SubjectPart: 'Recuperação de senha',
+    SubjectPart: 'Assinatura cancelada',
     TextPart: fs
-      .readFileSync('src/app/views/FORGOT_PASSWORD/FORGOT_PASSWORD.txt')
+      .readFileSync(
+        'src/modules/companies/views/COMPANY_SUBSCRIPTION_DELETED/COMPANY_SUBSCRIPTION_DELETED.txt'
+      )
       .toString(),
   },
 }

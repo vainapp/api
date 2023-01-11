@@ -6,7 +6,6 @@ import * as Sentry from '@sentry/node'
 import Sequelize, { Model } from 'sequelize'
 
 import AWS from '../../../../../config/aws'
-import isProduction from '../../../../../shared/helpers/isProduction'
 
 class ProfilePhoto extends Model {
   static init(sequelize) {
@@ -45,14 +44,13 @@ class ProfilePhoto extends Model {
 
     this.addHook('beforeSave', async (profilePhoto) => {
       if (!profilePhoto.url) {
-        profilePhoto.url = `${process.env.APP_HOST}${
-          !isProduction() ? `:${process.env.PORT}` : ''
-        }/files/${profilePhoto.key}`
+        profilePhoto.url = `${process.env.API_URL}/files/${profilePhoto.key}`
       }
     })
 
     this.addHook('beforeDestroy', async (profilePhoto) => {
       if (process.env.STORAGE_TYPE === 's3') {
+        // TODO: add a queue job to delete a file from AWS S3 in background
         return new AWS.S3()
           .deleteObject({
             Bucket: process.env.BUCKET_NAME,

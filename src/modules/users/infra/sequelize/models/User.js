@@ -1,7 +1,8 @@
-import bcrypt from 'bcrypt'
-import Sequelize, { Model } from 'sequelize'
+import Sequelize from 'sequelize'
 
-class User extends Model {
+import AuthenticableEntity from '../../../../../shared/infra/sequelize/models/AuthenticableEntity'
+
+class User extends AuthenticableEntity {
   static init(sequelize) {
     super.init(
       {
@@ -57,16 +58,10 @@ class User extends Model {
     )
 
     this.addHook('beforeSave', async (user) => {
-      if (user.password) {
-        user.password_hash = await bcrypt.hash(user.password, 8)
-      }
+      await this.beforeSaveLogic(user)
     })
 
     return this
-  }
-
-  checkPassword(password) {
-    return bcrypt.compare(password, this.password_hash)
   }
 }
 

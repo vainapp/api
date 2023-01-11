@@ -1,6 +1,6 @@
 import Sequelize, { Model } from 'sequelize'
 
-class PhoneNumberVerificationCode extends Model {
+class FranchiseEmployee extends Model {
   static init(sequelize) {
     super.init(
       {
@@ -11,25 +11,20 @@ class PhoneNumberVerificationCode extends Model {
           primaryKey: true,
           unique: true,
         },
-        code: {
-          type: Sequelize.STRING,
+        employee_id: {
+          type: Sequelize.UUID,
           allowNull: false,
         },
-        verified: {
-          type: Sequelize.BOOLEAN,
-          defaultValue: false,
-          allowNull: false,
-        },
-        user_id: {
+        franchise_id: {
           type: Sequelize.UUID,
           allowNull: false,
         },
       },
-      { sequelize }
+      { sequelize, tableName: 'franchises_employees' }
     )
 
     return this
   }
 }
 
-export default PhoneNumberVerificationCode
+export default FranchiseEmployee

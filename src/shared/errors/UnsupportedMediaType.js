@@ -1,4 +1,4 @@
-export default class BadRequestError extends Error {
+export default class UnsupportedMediaType extends Error {
   constructor(message = 'Tipo de mídia não suportado') {
     super(message)
 

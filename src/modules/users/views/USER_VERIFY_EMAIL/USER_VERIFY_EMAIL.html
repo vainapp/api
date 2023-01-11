@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Verifique sua conta</title>
+    {{meta}} {{css}}
+  </head>
+  <body>
+    <table class="body-wrap">
+      <tr>
+        <td class="container">
+          <table>
+            {{header}}
+            <tr>
+              <td class="content">
+                <h2>Olá, {{name}}!</h2>
+                <p>
+                  Você acaba de criar uma conta na Grupo C! Esse é um ótimo
+                  passo!
+                </p>
+                <p>
+                  Para começar a usar a Grupo C, você só precisa validar o seu
+                  endereço de e-mail clicando no link a seguir ou no botão
+                  abaixo :)
+                </p>
+                <table>
+                  <tr>
+                    <td align="center">
+                      <span style="color: #ffffff; font-weight: 300">
+                        <a
+                          class="button"
+                          style="
+                            color: #ffffff;
+                            text-align: center;
+                            text-decoration: none;
+                          "
+                          href="{{link}}"
+                          >Validar minha conta</a
+                        >
+                      </span>
+                    </td>
+                  </tr>
+                </table>
+                <br />
+                <p>
+                  Caso não consiga pressionar o botão acima, pode usar este
+                  link:
+                </p>
+                <a href="{{link}}">{{link}}</a><br /><br />
+                {{signature}}
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+      {{footer}}
+    </table>
+  </body>
+</html>

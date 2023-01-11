@@ -9,7 +9,7 @@ import forgotPasswordUpdateValidator from '../validators/forgotPasswordUpdateVal
 const passwordsRouter = Router()
 
 passwordsRouter.post(
-  '/',
+  '/forgot',
   validatorMiddleware(forgotPasswordStoreValidator),
   ForgotPasswordController.store
 )

@@ -3,24 +3,24 @@ version: '3'
 services:
   postgresql:
     image: postgres
-    container_name: postgresql
+    container_name: postgresql_local
     ports:
       - '5432:5432'
     volumes:
-      - postgresql:/var/lib/postgresql/data
+      - postgresql_local:/var/lib/postgresql/data
     environment:
       - POSTGRES_DB=grupoc
       - POSTGRES_PASSWORD=postgres
 
   redis:
     image: redis
-    container_name: redis
+    container_name: redis_local
     ports:
       - '6379:6379'
     volumes:
-      - redis:/var/lib/redis/data
+      - redis_local:/var/lib/redis/data
     command: 'redis-server --appendonly yes  --requirepass "redis"'
 
 volumes:
-  postgresql:
-  redis:
+  postgresql_local:
+  redis_local:

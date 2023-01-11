@@ -1,13 +1,13 @@
-import { readFile } from 'fs/promises'
-import path from 'path'
+const { readFile } = require('fs/promises')
+const path = require('path')
 
-import { noReply, help } from '../constants/emails'
+const { noReply, help } = require('../constants/emails')
 
 function getContent(filePath) {
   return readFile(filePath, 'utf-8')
 }
 
-export default async function buildDirectEmailParams({
+async function buildDirectEmailParams({
   toAddress,
   sourceAddress = noReply,
   template,
@@ -31,3 +31,5 @@ export default async function buildDirectEmailParams({
     replyToAddresses,
   }
 }
+
+module.exports = buildDirectEmailParams

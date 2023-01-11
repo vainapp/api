@@ -7,17 +7,16 @@
   "license": "MIT",
   "scripts": {
     "server:dev": "cross-env NODE_ENV=development nodemon --ignore scripts/ --inspect src/shared/infra/http/index.js",
-    "server:staging": "cross-env NODE_ENV=staging nodemon --ignore scripts/ src/shared/infra/http/index.js",
-    "server:production": "cross-env NODE_ENV=production nodemon --ignore scripts/ src/shared/infra/http/index.js",
-    "server:start": "nodemon --ignore scripts/ src/shared/infra/http/index.js",
+    "server:staging": "yarn build && cross-env NODE_ENV=staging node dist/shared/infra/http/index.js",
+    "server:production": "yarn build && cross-env NODE_ENV=production node dist/shared/infra/http/index.js",
     "queue:dev": "cross-env NODE_ENV=development nodemon --ignore scripts/ --inspect src/shared/infra/http/queue.js",
-    "queue:staging": "cross-env NODE_ENV=staging nodemon --ignore scripts/ --inspect src/shared/infra/http/queue.js",
-    "queue:production": "cross-env NODE_ENV=production nodemon --ignore scripts/ --inspect src/shared/infra/http/queue.js",
-    "queue:start": "nodemon --ignore scripts/ dist/shared/infra/http/queue.js",
-    "build": "sucrase ./src -d ./dist --transforms imports",
+    "queue:staging": "yarn build && cross-env NODE_ENV=staging node dist/shared/infra/http/queue.js",
+    "queue:production": "yarn build && cross-env NODE_ENV=production node dist/shared/infra/http/queue.js",
+    "build": "babel ./src -d ./dist --copy-files",
     "test:autocannon": "npx autocannon -c 500 -d 30 --workers 10 --renderStatusCodes --latency --warmup [ -c 1 -d 2 ] localhost:3333/verify-email/8d520557-b22c-486d-874f-7094cf35fb0f",
     "pretest": "sequelize db:migrate",
     "test": "jest --detectOpenHandles --forceExit",
+    "test:coverage": "jest --coverage --detectOpenHandles --forceExit",
     "posttest": "sequelize db:migrate:undo:all",
     "madge": "madge --circular ./src",
     "lint": "eslint . --ext .js",
@@ -29,9 +28,6 @@
       "yarn madge",
       "yarn lint:fix"
     ]
-  },
-  "engines": {
-    "node": "16.18.1"
   },
   "dependencies": {
     "@sentry/node": "6.7.2",
@@ -53,10 +49,14 @@
     "pg": "8.6.0",
     "pg-hstore": "2.3.4",
     "sequelize": "6.6.2",
+    "stripe": "11.5.0",
     "uuid": "8.3.2",
     "youch": "2.2.2"
   },
   "devDependencies": {
+    "@babel/cli": "7.20.7",
+    "@babel/core": "7.20.12",
+    "@babel/preset-env": "7.20.2",
     "@faker-js/faker": "6.3.1",
     "@sucrase/jest-plugin": "2.2.1",
     "@types/jest": "27.5.0",

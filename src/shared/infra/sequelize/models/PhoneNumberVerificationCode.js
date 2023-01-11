@@ -1,6 +1,6 @@
 import Sequelize, { Model } from 'sequelize'
 
-class EmailVerificationLink extends Model {
+class PhoneNumberVerificationCode extends Model {
   static init(sequelize) {
     super.init(
       {
@@ -11,6 +11,10 @@ class EmailVerificationLink extends Model {
           primaryKey: true,
           unique: true,
         },
+        code: {
+          type: Sequelize.STRING,
+          allowNull: false,
+        },
         verified: {
           type: Sequelize.BOOLEAN,
           defaultValue: false,
@@ -18,7 +22,11 @@ class EmailVerificationLink extends Model {
         },
         user_id: {
           type: Sequelize.UUID,
-          allowNull: false,
+          allowNull: true,
+        },
+        employee_id: {
+          type: Sequelize.UUID,
+          allowNull: true,
         },
       },
       { sequelize }
@@ -28,4 +36,4 @@ class EmailVerificationLink extends Model {
   }
 }
 
-export default EmailVerificationLink
+export default PhoneNumberVerificationCode

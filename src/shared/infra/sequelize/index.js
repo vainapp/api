@@ -1,12 +1,18 @@
 import Sequelize from 'sequelize'
 
 import databaseConfig from '../../../config/database'
+import Company from '../../../modules/companies/infra/sequelize/models/Company'
+import Employee from '../../../modules/companies/infra/sequelize/models/Employee'
+import EmployeeRole from '../../../modules/companies/infra/sequelize/models/EmployeeRole'
+import Franchise from '../../../modules/companies/infra/sequelize/models/Franchise'
+import FranchiseEmployee from '../../../modules/companies/infra/sequelize/models/FranchiseEmployee'
 import Address from '../../../modules/users/infra/sequelize/models/Address'
-import EmailVerificationLink from '../../../modules/users/infra/sequelize/models/EmailVerificationLink'
 import ForgotPasswordCode from '../../../modules/users/infra/sequelize/models/ForgotPasswordCode'
-import PhoneNumberVerificationCode from '../../../modules/users/infra/sequelize/models/PhoneNumberVerificationCode'
 import ProfilePhoto from '../../../modules/users/infra/sequelize/models/ProfilePhoto'
 import User from '../../../modules/users/infra/sequelize/models/User'
+
+import EmailVerificationLink from './models/EmailVerificationLink'
+import PhoneNumberVerificationCode from './models/PhoneNumberVerificationCode'
 
 const models = [
   User,
@@ -15,6 +21,11 @@ const models = [
   Address,
   PhoneNumberVerificationCode,
   ProfilePhoto,
+  Employee,
+  Company,
+  EmployeeRole,
+  Franchise,
+  FranchiseEmployee,
 ]
 
 class Database {

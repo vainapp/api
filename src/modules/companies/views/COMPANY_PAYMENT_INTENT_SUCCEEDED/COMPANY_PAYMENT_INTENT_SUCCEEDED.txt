@@ -1,0 +1,9 @@
+Olá, {{name}}!
+
+Já identificamos o seu pagamento! Segue as informações de confirmação:
+{{description}}
+
+ID da transação: {{payment_intent_id}}
+
+Atenciosamente,
+Equipe Grupo C.

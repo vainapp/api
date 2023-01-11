@@ -2,13 +2,12 @@ import BadRequestError from '../../../shared/errors/BadRequest'
 import ForbiddenError from '../../../shared/errors/Forbidden'
 import buildDirectEmailParams from '../../../shared/helpers/buildDirectEmailParams'
 import generateRandomCode from '../../../shared/helpers/generateRandomCode'
-import isProduction from '../../../shared/helpers/isProduction'
+import EmailVerificationLink from '../../../shared/infra/sequelize/models/EmailVerificationLink'
+import PhoneNumberVerificationCode from '../../../shared/infra/sequelize/models/PhoneNumberVerificationCode'
 import SendEmailJob from '../../../shared/jobs/SendEmail'
 import SendSMSJob from '../../../shared/jobs/SendSMS'
 import Queue from '../../../shared/lib/Queue'
 import Address from '../infra/sequelize/models/Address'
-import EmailVerificationLink from '../infra/sequelize/models/EmailVerificationLink'
-import PhoneNumberVerificationCode from '../infra/sequelize/models/PhoneNumberVerificationCode'
 import User from '../infra/sequelize/models/User'
 
 class StoreUserService {
@@ -78,12 +77,12 @@ class StoreUserService {
 
     const verificationEmailParams = await buildDirectEmailParams({
       toAddress: email,
-      template: 'VERIFY_ACCOUNT',
+      template: 'USER_VERIFY_EMAIL',
       templateData: {
         name,
-        link: `${process.env.APP_HOST}${
-          !isProduction() ? `:${process.env.PORT}` : ''
-        }/users/verify-email/${(existingLink || newLink).id}`,
+        link: `${process.env.APP_HOST}/users/verify-email/${
+          (existingLink || newLink).id
+        }`,
       },
     })
 

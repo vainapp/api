@@ -1,12 +1,12 @@
 import NotFoundError from '../../../shared/errors/NotFound'
-import EmailVerificationLink from '../infra/sequelize/models/EmailVerificationLink'
+import EmailVerificationLink from '../../../shared/infra/sequelize/models/EmailVerificationLink'
 import User from '../infra/sequelize/models/User'
 
 class UpdateEmailVerificationLinkService {
   async execute({ id }) {
     const existingLink = await EmailVerificationLink.findByPk(id)
 
-    if (!existingLink) {
+    if (!existingLink || !existingLink.user_id) {
       throw new NotFoundError('Este link é inválido')
     }
 

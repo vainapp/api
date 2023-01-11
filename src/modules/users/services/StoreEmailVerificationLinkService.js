@@ -1,10 +1,9 @@
 import { ForbiddenError } from '../../../shared/errors'
 import NotFoundError from '../../../shared/errors/NotFound'
 import buildDirectEmailParams from '../../../shared/helpers/buildDirectEmailParams'
-import isProduction from '../../../shared/helpers/isProduction'
+import EmailVerificationLink from '../../../shared/infra/sequelize/models/EmailVerificationLink'
 import SendEmailJob from '../../../shared/jobs/SendEmail'
 import Queue from '../../../shared/lib/Queue'
-import EmailVerificationLink from '../infra/sequelize/models/EmailVerificationLink'
 import User from '../infra/sequelize/models/User'
 
 class StoreEmailVerificationLinkService {
@@ -31,12 +30,10 @@ class StoreEmailVerificationLinkService {
 
     const verificationEmailParams = await buildDirectEmailParams({
       toAddress: email,
-      template: 'VERIFY_ACCOUNT',
+      template: 'USER_VERIFY_ACCOUNT',
       templateData: {
         name: user.name,
-        link: `${process.env.APP_HOST}${
-          !isProduction() ? `:${process.env.PORT}` : ''
-        }/users/verify-email/${emailVerificationLink.id}`,
+        link: `${process.env.API_URL}/users/verify-email/${emailVerificationLink.id}`,
       },
     })
 

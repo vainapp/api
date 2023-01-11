@@ -8,13 +8,17 @@ AWS.config.update({ region: 'us-east-1' })
 // Create createTemplate params
 let params = {
   Template: {
-    TemplateName: 'FORGOT_PASSWORD' /* required */,
+    TemplateName: 'COMPANY_CUSTOMER_SUBSCRIPTION_TRIAL_WILL_END' /* required */,
     HtmlPart: fs
-      .readFileSync('src/app/views/FORGOT_PASSWORD/FORGOT_PASSWORD.html')
+      .readFileSync(
+        'src/modules/companies/views/COMPANY_CUSTOMER_SUBSCRIPTION_TRIAL_WILL_END/COMPANY_CUSTOMER_SUBSCRIPTION_TRIAL_WILL_END.html'
+      )
       .toString(),
-    SubjectPart: 'Recuperação de senha',
+    SubjectPart: 'O seu período de teste está acabando',
     TextPart: fs
-      .readFileSync('src/app/views/FORGOT_PASSWORD/FORGOT_PASSWORD.txt')
+      .readFileSync(
+        'src/modules/companies/views/COMPANY_CUSTOMER_SUBSCRIPTION_TRIAL_WILL_END/COMPANY_CUSTOMER_SUBSCRIPTION_TRIAL_WILL_END.txt'
+      )
       .toString(),
   },
 }
