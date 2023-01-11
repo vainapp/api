@@ -25,7 +25,7 @@ export const handleCustomerSubscriptionTrialWillEnd = async (payload) => {
     },
   })
 
-  const paymentFailureParams = await buildDirectEmailParams({
+  const subscriptionTrialWillEndParams = await buildDirectEmailParams({
     toAddress: admin.email,
     template: 'COMPANY_CUSTOMER_SUBSCRIPTION_TRIAL_WILL_END',
     templateData: {
@@ -33,5 +33,5 @@ export const handleCustomerSubscriptionTrialWillEnd = async (payload) => {
       description,
     },
   })
-  await Queue.add(SendEmailJob.key, paymentFailureParams)
+  await Queue.add(SendEmailJob.key, subscriptionTrialWillEndParams)
 }
