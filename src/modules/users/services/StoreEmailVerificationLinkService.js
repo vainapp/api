@@ -30,7 +30,7 @@ class StoreEmailVerificationLinkService {
 
     const verificationEmailParams = await buildDirectEmailParams({
       toAddress: email,
-      template: 'USER_VERIFY_ACCOUNT',
+      template: 'USER_VERIFY_EMAIL',
       templateData: {
         name: user.name,
         link: `${process.env.API_URL}/users/verify-email/${emailVerificationLink.id}`,
