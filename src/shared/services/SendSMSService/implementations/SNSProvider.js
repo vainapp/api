@@ -3,7 +3,7 @@ import AWS from '../../../../config/aws'
 class SendSMSService {
   constructor({ phone, message }) {
     this.phone = phone
-    this.message = `Grupo C: ${message}`
+    this.message = `Vain: ${message}`
     this.client = new AWS.SNS({ apiVersion: '2010-03-31' })
   }
 

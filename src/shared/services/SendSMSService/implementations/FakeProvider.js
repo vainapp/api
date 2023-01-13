@@ -1,7 +1,7 @@
 class FakeProvider {
   constructor({ phone, message }) {
     this.phone = phone
-    this.message = `Grupo C: ${message}`
+    this.message = `Vain: ${message}`
   }
 
   async execute() {

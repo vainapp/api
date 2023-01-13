@@ -1,9 +1,9 @@
 Olá, {{name}}!
 
-Você acaba de criar uma conta na Grupo C! Esse é um ótimo passo!
+Você acaba de criar uma conta na Vain! Esse é um ótimo passo!
 
-Para começar a usar a Grupo C, você só precisa validar o seu endereço de e-mail clicando no link a seguir:
+Para começar a usar o aplicativo, você só precisa validar o seu endereço de e-mail clicando no link a seguir:
 {{link}}
 
 Atenciosamente,
-Equipe Grupo C.
+Equipe Vain.

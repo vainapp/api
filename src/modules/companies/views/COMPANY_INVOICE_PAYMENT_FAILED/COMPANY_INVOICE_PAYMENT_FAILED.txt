@@ -6,4 +6,4 @@ Evite ficar sem acesso à plataforma adicionando um novo método de pagamento cl
 {{checkout_url}}
 
 Atenciosamente,
-Equipe Grupo C.
+Equipe Vain.

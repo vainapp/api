@@ -5,4 +5,4 @@ Sua assinatura foi cancelada com sucesso. Vamos sentir sua falta!
 Sua assinatura será válida até {{subscription_active_until}}.
 
 Atenciosamente,
-Equipe Grupo C.
+Equipe Vain.

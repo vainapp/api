@@ -2,8 +2,8 @@
   "name": "back-end",
   "version": "0.0.1",
   "main": "index.js",
-  "repository": "git@github.com:grupo-c-tech/back-end.git",
-  "author": "Grupo C",
+  "repository": "git@github.com:vainapp/back-end.git",
+  "author": "Vain",
   "license": "MIT",
   "scripts": {
     "server:dev": "cross-env NODE_ENV=development nodemon --ignore scripts/ --inspect src/shared/infra/http/index.js",

@@ -6,4 +6,4 @@ Já identificamos o seu pagamento! Segue as informações de confirmação:
 ID da transação: {{payment_intent_id}}
 
 Atenciosamente,
-Equipe Grupo C.
+Equipe Vain.
