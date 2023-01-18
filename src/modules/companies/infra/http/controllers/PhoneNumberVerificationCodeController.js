@@ -3,10 +3,10 @@ import UpdatePhoneNumberVerificationCodeService from '../../../services/UpdatePh
 
 class PhoneNumberVerificationCodeController {
   async store(request, response) {
-    const { email } = request.body
+    const { employee_id } = request.body
 
     await StorePhoneNumberVerificationCodeService.execute({
-      email,
+      employee_id,
     })
 
     return response.sendStatus(200)
