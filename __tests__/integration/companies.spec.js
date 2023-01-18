@@ -587,7 +587,7 @@ describe('POST /companies/verify-phone-number/resend', () => {
     await request(app)
       .post('/companies/verify-phone-number/resend')
       .send({
-        email: faker.internet.email(),
+        employee_id: faker.datatype.uuid(),
       })
       .expect(404)
   })
@@ -600,7 +600,7 @@ describe('POST /companies/verify-phone-number/resend', () => {
     await request(app)
       .post('/companies/verify-phone-number/resend')
       .send({
-        email: employee.email,
+        employee_id: employee.id,
       })
       .expect(403)
   })
@@ -616,7 +616,7 @@ describe('POST /companies/verify-phone-number/resend', () => {
     await request(app)
       .post('/companies/verify-phone-number/resend')
       .send({
-        email: employee.email,
+        employee_id: employee.id,
       })
       .expect(404)
   })

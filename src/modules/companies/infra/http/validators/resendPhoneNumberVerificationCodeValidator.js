@@ -1,7 +1,7 @@
 import Joi from 'joi'
 
 const resendPhoneNumberVerificationCodeSchema = Joi.object({
-  email: Joi.string().email().required().label('Endereço de e-mail'),
+  employee_id: Joi.string().required().label('ID da conta'),
 })
 
 export default resendPhoneNumberVerificationCodeSchema

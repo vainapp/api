@@ -6,13 +6,11 @@ import Queue from '../../../shared/lib/Queue'
 import Employee from '../infra/sequelize/models/Employee'
 
 class StorePhoneNumberVerificationCodeService {
-  async execute({ email }) {
-    const employee = await Employee.findOne({
-      where: { email },
-    })
+  async execute({ employee_id }) {
+    const employee = await Employee.findByPk(employee_id)
 
     if (!employee) {
-      throw new NotFoundError('Endereço de e-mail não encontrado')
+      throw new NotFoundError('Conta não encontrada')
     }
 
     if (employee.phone_number_verified) {

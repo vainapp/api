@@ -105,8 +105,8 @@ export const generateCheckoutSession = async ({
     company.subscription_active_until === null
 
   const result = await stripe.checkout.sessions.create({
-    success_url: `${process.env.APP_WEB_URL}/checkout/success`,
-    cancel_url: `${process.env.APP_WEB_URL}/checkout/cancel`,
+    success_url: `${process.env.APP_WEB_URL}/payment-succeeded`,
+    cancel_url: `${process.env.APP_WEB_URL}/`,
     client_reference_id: company_id,
     customer: customer_id,
     ...(hasTrial
