@@ -34,14 +34,17 @@ class App {
     this.server.use(maybeMiddleware(express.json()))
     this.server.use(express.urlencoded({ extended: true }))
     this.server.use(morgan('combined'))
-    this.server.use(
-      rateLimit({
-        windowMs: 7 * 60 * 1000, // 7 minutes
-        max: 30,
-        standardHeaders: true,
-        legacyHeaders: false,
-      })
-    )
+
+    if (process.env.NODE_ENV !== 'test') {
+      this.server.use(
+        rateLimit({
+          windowMs: 7 * 60 * 1000, // 7 minutes
+          max: 30,
+          standardHeaders: true,
+          legacyHeaders: false,
+        })
+      )
+    }
   }
 
   routes() {
