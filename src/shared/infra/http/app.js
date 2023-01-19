@@ -4,6 +4,7 @@ import * as Sentry from '@sentry/node'
 import cors from 'cors'
 import express from 'express'
 import 'express-async-errors'
+import rateLimit from 'express-rate-limit'
 import { pick } from 'lodash'
 import morgan from 'morgan'
 import Youch from 'youch'
@@ -32,7 +33,15 @@ class App {
     this.server.use(cors())
     this.server.use(maybeMiddleware(express.json()))
     this.server.use(express.urlencoded({ extended: true }))
-    this.server.use(morgan('dev'))
+    this.server.use(morgan('combined'))
+    this.server.use(
+      rateLimit({
+        windowMs: 7 * 60 * 1000, // 7 minutes
+        max: 30,
+        standardHeaders: true,
+        legacyHeaders: false,
+      })
+    )
   }
 
   routes() {
