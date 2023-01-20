@@ -1,3 +1,14 @@
+## [1.0.1](https://github.com/vainapp/back-end/compare/v1.0.0...v1.0.1) (2023-01-20)
+
+
+### Bug Fixes
+
+* testing husky/commit-msg hook ([b1bc4f0](https://github.com/vainapp/back-end/commit/b1bc4f0f5a80ce06b90b2658bb066e4d18628ad1))
+* testing husky/commit-msg hook ([34df1cb](https://github.com/vainapp/back-end/commit/34df1cb7b7f2ccf0fb5fd2a8388deddfdc83ad74))
+* testing husky/commit-msg hook ([848959f](https://github.com/vainapp/back-end/commit/848959f46e5d8af03d5b3c3b9ecb0b2d48f2dd0c))
+* testing husky/commit-msg hook ([26cd1b2](https://github.com/vainapp/back-end/commit/26cd1b2e86c4d023cb2bf38c4a92ab73125aee15))
+* testing husky/commit-msg hook ([1658e94](https://github.com/vainapp/back-end/commit/1658e94ee048370bb50939fcee35dea2a4762b5c))
+
 # 1.0.0 (2023-01-20)
 
 
