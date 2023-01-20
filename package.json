@@ -7,11 +7,11 @@
   "license": "MIT",
   "scripts": {
     "server:dev": "cross-env NODE_ENV=development nodemon --ignore scripts/ --inspect src/shared/infra/http/index.js",
-    "server:staging": "yarn build && cross-env NODE_ENV=staging node dist/shared/infra/http/index.js",
-    "server:production": "yarn build && cross-env NODE_ENV=production node dist/shared/infra/http/index.js",
+    "server:staging": "npm run build && cross-env NODE_ENV=staging node dist/shared/infra/http/index.js",
+    "server:production": "npm run build && cross-env NODE_ENV=production node dist/shared/infra/http/index.js",
     "queue:dev": "cross-env NODE_ENV=development nodemon --ignore scripts/ --inspect src/shared/infra/http/queue.js",
-    "queue:staging": "yarn build && cross-env NODE_ENV=staging node dist/shared/infra/http/queue.js",
-    "queue:production": "yarn build && cross-env NODE_ENV=production node dist/shared/infra/http/queue.js",
+    "queue:staging": "npm run build && cross-env NODE_ENV=staging node dist/shared/infra/http/queue.js",
+    "queue:production": "npm run build && cross-env NODE_ENV=production node dist/shared/infra/http/queue.js",
     "build": "babel ./src -d ./dist --copy-files",
     "test:autocannon": "npx autocannon -c 500 -d 30 --workers 10 --renderStatusCodes --latency --warmup [ -c 1 -d 2 ] localhost:3333/verify-email/8d520557-b22c-486d-874f-7094cf35fb0f",
     "pretest": "sequelize db:migrate",
@@ -21,12 +21,13 @@
     "madge": "madge --circular ./src",
     "lint": "eslint . --ext .js",
     "lint:fix": "eslint . --ext .js --fix",
-    "pre-commit": "lint-staged"
+    "pre-commit": "lint-staged",
+    "prepare": "husky install"
   },
   "lint-staged": {
     "*.js": [
-      "yarn madge",
-      "yarn lint:fix"
+      "npm run madge",
+      "npm run lint:fix"
     ]
   },
   "dependencies": {
@@ -71,7 +72,7 @@
     "eslint-plugin-import": "2.26.0",
     "eslint-plugin-prettier": "3.4.0",
     "factory-girl": "5.0.4",
-    "husky": "8.0.1",
+    "husky": "8.0.3",
     "jest": "28.1.0",
     "lint-staged": "13.0.3",
     "madge": "5.0.1",
