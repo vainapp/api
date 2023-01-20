@@ -33,7 +33,7 @@ class App {
     this.server.use(cors())
     this.server.use(maybeMiddleware(express.json()))
     this.server.use(express.urlencoded({ extended: true }))
-    this.server.use(morgan('combined'))
+    this.server.use(morgan('dev'))
 
     if (process.env.NODE_ENV !== 'test') {
       this.server.use(
