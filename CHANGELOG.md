@@ -1,3 +1,10 @@
+## [1.0.2](https://github.com/vainapp/back-end/compare/v1.0.1...v1.0.2) (2023-01-20)
+
+
+### Bug Fixes
+
+* fix commitlint + Husky + semantic-release integration ([#57](https://github.com/vainapp/back-end/issues/57)) ([48224fd](https://github.com/vainapp/back-end/commit/48224fd26db0650a1db2f6276c2204a5d6a9b03a))
+
 ## [1.0.1](https://github.com/vainapp/back-end/compare/v1.0.0...v1.0.1) (2023-01-20)
 
 
