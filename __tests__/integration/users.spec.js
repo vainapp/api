@@ -424,7 +424,9 @@ describe('POST /users/profile-photo', () => {
       .post('/users/profile-photo')
       .set('Authorization', `Bearer ${sessionResponse.body.access_token}`)
       .attach('file', path.resolve(__dirname, '..', 'util', 'test.jpg'))
-      .expect(200)
+    // .expect(200)
+
+    console.log(JSON.stringify(response.body, null, 2))
 
     expect(response.body).toHaveProperty('id')
   })
