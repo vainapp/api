@@ -35,28 +35,13 @@ jobs:
       - name: Install doctl
         uses: digitalocean/action-doctl@v2
         with:
-          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+          token: ${{ secrets.DO_ACCESS_TOKEN }}
 
       - name: Delete the old build
-        run: doctl compute ssh ${{ secrets.DIGITALOCEAN_DEVELOPMENT_DROPLET_ID }} --ssh-user deploy --ssh-command "cd ~/app/server && rm -rf dist"
-        # run: ssh deploy@${{ secrets.DO_DEVELOPMENT_DROPLET_HOST }} "rm -rf ~/app/server/dist"
+        run: doctl compute ssh ${{ secrets.DO_DEVELOPMENT_DROPLET_ID }} --ssh-user deploy --ssh-command "cd ~/app/server && rm -rf dist"
 
       - name: Upload the build to the server
         run: rsync -r ./dist/ deploy@${{ secrets.DO_DEVELOPMENT_DROPLET_HOST }}:~/app/server/dist
 
       - name: Restart pm2
-        run: doctl compute ssh ${{ secrets.DIGITALOCEAN_DEVELOPMENT_DROPLET_ID }} --ssh-user deploy --ssh-command "pm2 restart all --update-env"
-      # - name: Write SSH keys
-      #   run: |
-      #     install -m 600 -D /dev/null ~/.ssh/id_rsa
-      #     echo "${{ secrets.DO_DEVELOPMENT_DROPLET_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-      #     host='${{ secrets.DO_DEVELOPMENT_DROPLET_HOST }}'
-      #     hosts="$(dig +short "$host" | grep -v '\.$' | sed -z 's|\n|,|g')$host"
-      #     ssh-keyscan -H "$hosts" > ~/.ssh/known_hosts
-
-      # - name: Build
-      #   run: doctl compute ssh ${{ secrets.DIGITALOCEAN_DEVELOPMENT_DROPLET_ID }} --ssh-user deploy --ssh-command "cd ~/app/server && rm -rf dist && npm run build"
-
-      # - name: Restart pm2
-      #   run: doctl compute ssh ${{ secrets.DIGITALOCEAN_DEVELOPMENT_DROPLET_ID }} --ssh-user deploy --ssh-command "pm2 restart all"
-
+        run: doctl compute ssh ${{ secrets.DO_DEVELOPMENT_DROPLET_ID }} --ssh-user deploy --ssh-command "pm2 restart all --update-env"
