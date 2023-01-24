@@ -1,3 +1,10 @@
+## [1.1.19](https://github.com/vainapp/back-end/compare/v1.1.18...v1.1.19) (2023-01-24)
+
+
+### Bug Fixes
+
+* update target branch in semantic release config ([973b09e](https://github.com/vainapp/back-end/commit/973b09ef611560cf76275ec8a0b57fca1ff5838f))
+
 ## [1.1.18](https://github.com/vainapp/back-end/compare/v1.1.17...v1.1.18) (2023-01-24)
 
 
