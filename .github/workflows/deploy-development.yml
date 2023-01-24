@@ -6,7 +6,18 @@ on:
       - develop
 
 jobs:
+  install-ssh-key:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install SSH key
+        uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.DIGITALOCEAN_DROPLET_DEVELOPMENT_SSH_KEY }}
+          name: id_rsa
+          known_hosts: ${{ secrets.DIGITALOCEAN_DROPLET_DEVELOPMENT_KNOWN_HOSTS }}
+
   build:
+    needs: install-ssh-key
     runs-on: ubuntu-latest
     steps:
       - name: Checkout files
@@ -24,24 +35,13 @@ jobs:
       - name: Build
         run: npm run build
 
-  install-ssh-key:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Install SSH key
-        uses: shimataro/ssh-key-action@v2
-        with:
-          key: ${{ secrets.DIGITALOCEAN_DROPLET_DEVELOPMENT_SSH_KEY }}
-          name: id_rsa
-          known_hosts: ${{ secrets.DIGITALOCEAN_DROPLET_DEVELOPMENT_KNOWN_HOSTS }}
-
   deploy:
-    needs: install-ssh-key
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - name: Checkout files
         uses: actions/checkout@v2
 
       - name: Deploy
-        run: rsync -r ./dist/ deploy@${{ secrets.DIGITALOCEAN_DROPLET_DEVELOPMENT_IPV4 }}/app/server
+        run: rsync -r ./dist/ deploy@${{ secrets.DIGITALOCEAN_DROPLET_DEVELOPMENT_IPV4 }}:/app/server
 
