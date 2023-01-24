@@ -1,3 +1,10 @@
+## [1.1.16](https://github.com/vainapp/back-end/compare/v1.1.15...v1.1.16) (2023-01-24)
+
+
+### Bug Fixes
+
+* fix the workflows order ([4ca06ef](https://github.com/vainapp/back-end/commit/4ca06ef610ff7b262679b18702818bdb03a3e298))
+
 ## [1.1.15](https://github.com/vainapp/back-end/compare/v1.1.14...v1.1.15) (2023-01-24)
 
 
