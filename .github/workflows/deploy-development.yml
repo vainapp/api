@@ -6,7 +6,26 @@ on:
       - develop
 
 jobs:
-  deploy:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout files
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+  install-ssh-key:
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - name: Write SSH keys
@@ -17,6 +36,10 @@ jobs:
           hosts="$(dig +short "$host" | grep -v '\.$' | sed -z 's|\n|,|g')$host"
           ssh-keyscan -H "$hosts" > ~/.ssh/known_hosts
 
+  deploy:
+    needs: install-ssh-key
+    runs-on: ubuntu-latest
+    steps:
       - name: Checkout files
         uses: actions/checkout@v2
 
@@ -25,9 +48,26 @@ jobs:
         with:
           token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
-      - name: Build
-        run: doctl compute ssh ${{ secrets.DIGITALOCEAN_DEVELOPMENT_DROPLET_ID }} --ssh-user deploy --ssh-command "cd ~/app/server && rm -rf dist && npm run build"
+      - name: Delete the old build
+        run: doctl compute ssh ${{ secrets.DIGITALOCEAN_DEVELOPMENT_DROPLET_ID }} --ssh-user deploy --ssh-command "cd ~/app/server && rm -rf dist"
+        # run: ssh deploy@${{ secrets.DO_DEVELOPMENT_DROPLET_HOST }} "rm -rf ~/app/server/dist"
+
+      - name: Upload the build to the server
+        run: rsync -r ./dist/ deploy@${{ secrets.DO_DEVELOPMENT_DROPLET_HOST }}:~/app/server/dist
 
       - name: Restart pm2
-        run: doctl compute ssh ${{ secrets.DIGITALOCEAN_DEVELOPMENT_DROPLET_ID }} --ssh-user deploy --ssh-command "pm2 restart all"
+        run: doctl compute ssh ${{ secrets.DIGITALOCEAN_DEVELOPMENT_DROPLET_ID }} --ssh-user deploy --ssh-command "pm2 restart all --update-env"
+      # - name: Write SSH keys
+      #   run: |
+      #     install -m 600 -D /dev/null ~/.ssh/id_rsa
+      #     echo "${{ secrets.DO_DEVELOPMENT_DROPLET_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+      #     host='${{ secrets.DO_DEVELOPMENT_DROPLET_HOST }}'
+      #     hosts="$(dig +short "$host" | grep -v '\.$' | sed -z 's|\n|,|g')$host"
+      #     ssh-keyscan -H "$hosts" > ~/.ssh/known_hosts
+
+      # - name: Build
+      #   run: doctl compute ssh ${{ secrets.DIGITALOCEAN_DEVELOPMENT_DROPLET_ID }} --ssh-user deploy --ssh-command "cd ~/app/server && rm -rf dist && npm run build"
+
+      # - name: Restart pm2
+      #   run: doctl compute ssh ${{ secrets.DIGITALOCEAN_DEVELOPMENT_DROPLET_ID }} --ssh-user deploy --ssh-command "pm2 restart all"
 
