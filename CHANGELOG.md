@@ -1,3 +1,11 @@
+## [1.1.15](https://github.com/vainapp/back-end/compare/v1.1.14...v1.1.15) (2023-01-24)
+
+
+### Bug Fixes
+
+* update the package.json after the release is published ([5f2caee](https://github.com/vainapp/back-end/commit/5f2caee894dd365f16bf19392286982401efbec8))
+* update the package.json after the release is published ([56902cf](https://github.com/vainapp/back-end/commit/56902cfc3beec9cf90b34737fec4924c5ac0030e))
+
 ## [1.1.14](https://github.com/vainapp/back-end/compare/v1.1.13...v1.1.14) (2023-01-24)
 
 
