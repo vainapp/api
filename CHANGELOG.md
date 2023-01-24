@@ -1,3 +1,10 @@
+## [1.1.17](https://github.com/vainapp/back-end/compare/v1.1.16...v1.1.17) (2023-01-24)
+
+
+### Bug Fixes
+
+* generate new build versions ([29721a0](https://github.com/vainapp/back-end/commit/29721a0b258aba4cd904db56a4f9b334234b441e))
+
 ## [1.1.16](https://github.com/vainapp/back-end/compare/v1.1.15...v1.1.16) (2023-01-24)
 
 
