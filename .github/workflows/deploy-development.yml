@@ -14,7 +14,7 @@ jobs:
         with:
           key: ${{ secrets.DIGITALOCEAN_DROPLET_DEVELOPMENT_SSH_KEY }}
           name: id_rsa
-          known_hosts: unnecessary
+          known_hosts: ${{ secrets.DIGITALOCEAN_DROPLET_DEVELOPMENT_KNOWN_HOSTS }}
 
   build:
     needs: install-ssh-key
