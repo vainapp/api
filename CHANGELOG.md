@@ -1,3 +1,139 @@
+## [1.1.18](https://github.com/vainapp/back-end/compare/v1.1.17...v1.1.18) (2023-01-24)
+
+
+### Bug Fixes
+
+* save pm2 processes after finishing the deploy ([06e3989](https://github.com/vainapp/back-end/commit/06e3989ab59790c3aa29c1d86e4b2de04329598d))
+
+## [1.1.17](https://github.com/vainapp/back-end/compare/v1.1.16...v1.1.17) (2023-01-24)
+
+
+### Bug Fixes
+
+* generate new build versions ([29721a0](https://github.com/vainapp/back-end/commit/29721a0b258aba4cd904db56a4f9b334234b441e))
+
+## [1.1.16](https://github.com/vainapp/back-end/compare/v1.1.15...v1.1.16) (2023-01-24)
+
+
+### Bug Fixes
+
+* fix the workflows order ([4ca06ef](https://github.com/vainapp/back-end/commit/4ca06ef610ff7b262679b18702818bdb03a3e298))
+
+## [1.1.15](https://github.com/vainapp/back-end/compare/v1.1.14...v1.1.15) (2023-01-24)
+
+
+### Bug Fixes
+
+* update the package.json after the release is published ([5f2caee](https://github.com/vainapp/back-end/commit/5f2caee894dd365f16bf19392286982401efbec8))
+* update the package.json after the release is published ([56902cf](https://github.com/vainapp/back-end/commit/56902cfc3beec9cf90b34737fec4924c5ac0030e))
+
+## [1.1.14](https://github.com/vainapp/back-end/compare/v1.1.13...v1.1.14) (2023-01-24)
+
+
+### Bug Fixes
+
+* run the tests when something is sent to the develop branch ([e9c5481](https://github.com/vainapp/back-end/commit/e9c5481456589371274ac2680fd4675d2266c228))
+
+## [1.1.13](https://github.com/vainapp/back-end/compare/v1.1.12...v1.1.13) (2023-01-24)
+
+
+### Bug Fixes
+
+* clear the yml file ([7caa460](https://github.com/vainapp/back-end/commit/7caa460c792316615a50a7787506bb68519386eb))
+* clear the yml file ([f2a2f22](https://github.com/vainapp/back-end/commit/f2a2f2245d971bbb42b39f2188cb3bc5b868075a))
+
+## [1.1.12](https://github.com/vainapp/back-end/compare/v1.1.11...v1.1.12) (2023-01-24)
+
+
+### Bug Fixes
+
+* move all the CI steps to one job ([e61b769](https://github.com/vainapp/back-end/commit/e61b7697aa2aad40cd2be38dc5bf44728d5b2060))
+
+## [1.1.11](https://github.com/vainapp/back-end/compare/v1.1.10...v1.1.11) (2023-01-24)
+
+
+### Bug Fixes
+
+* try to make do cicd work ([9475fe3](https://github.com/vainapp/back-end/commit/9475fe3f980cce5880718ffcc9f7b607f782e754))
+
+## [1.1.10](https://github.com/vainapp/back-end/compare/v1.1.9...v1.1.10) (2023-01-24)
+
+
+### Bug Fixes
+
+* try to make do cicd work ([4df8a14](https://github.com/vainapp/back-end/commit/4df8a14840fdbc26bde6c3f071ab1ba1c04e9678))
+
+## [1.1.9](https://github.com/vainapp/back-end/compare/v1.1.8...v1.1.9) (2023-01-24)
+
+
+### Bug Fixes
+
+* try to make do cicd work ([68b3aee](https://github.com/vainapp/back-end/commit/68b3aeed4c0e8335c48e02abfe17f25056f65712))
+
+## [1.1.8](https://github.com/vainapp/back-end/compare/v1.1.7...v1.1.8) (2023-01-24)
+
+
+### Bug Fixes
+
+* try to make do cicd work ([13b833a](https://github.com/vainapp/back-end/commit/13b833a3ecbc1820ddef0dec8d65b7c3675f8119))
+
+## [1.1.7](https://github.com/vainapp/back-end/compare/v1.1.6...v1.1.7) (2023-01-24)
+
+
+### Bug Fixes
+
+* fix do cicd ([06a41fa](https://github.com/vainapp/back-end/commit/06a41fa75bba8701d7048a4162923a911dd13b09))
+* fix do cicd ([f22fe40](https://github.com/vainapp/back-end/commit/f22fe4088167de94d0cc30ca7a21d43e43fa3551))
+
+## [1.1.6](https://github.com/vainapp/back-end/compare/v1.1.5...v1.1.6) (2023-01-24)
+
+
+### Bug Fixes
+
+* fix do cicd ([72f8c5b](https://github.com/vainapp/back-end/commit/72f8c5b2e1cc2f87db4737159b2cc9e96c0518f8))
+
+## [1.1.5](https://github.com/vainapp/back-end/compare/v1.1.4...v1.1.5) (2023-01-24)
+
+
+### Bug Fixes
+
+* fix do cicd ([b50048b](https://github.com/vainapp/back-end/commit/b50048b5a01dec1c0b4cb73f4558dfea196fcd6b))
+
+## [1.1.4](https://github.com/vainapp/back-end/compare/v1.1.3...v1.1.4) (2023-01-24)
+
+
+### Bug Fixes
+
+* fix do cicd ([54dfe43](https://github.com/vainapp/back-end/commit/54dfe438cd22167a51be4526f4451618757c7983))
+
+## [1.1.3](https://github.com/vainapp/back-end/compare/v1.1.2...v1.1.3) (2023-01-24)
+
+
+### Bug Fixes
+
+* fix do cicd ([b3a1cb6](https://github.com/vainapp/back-end/commit/b3a1cb6afc687abeffe9abbfbad570e052eb96f7))
+
+## [1.1.2](https://github.com/vainapp/back-end/compare/v1.1.1...v1.1.2) (2023-01-24)
+
+
+### Bug Fixes
+
+* fix do cicd ([d5640dd](https://github.com/vainapp/back-end/commit/d5640ddf75c7eda8fc184b856c2e3d5bda12ab5e))
+
+## [1.1.1](https://github.com/vainapp/back-end/compare/v1.1.0...v1.1.1) (2023-01-24)
+
+
+### Bug Fixes
+
+* fix do cicd ([33b283c](https://github.com/vainapp/back-end/commit/33b283c8e9f142e5e57077a510f8e295c4b42b9d))
+
+# [1.1.0](https://github.com/vainapp/back-end/compare/v1.0.2...v1.1.0) (2023-01-24)
+
+
+### Features
+
+* add deploy github action ([55562bf](https://github.com/vainapp/back-end/commit/55562bfc77bcb3933fb1dad4f42bffc82755f00c))
+
 ## [1.0.2](https://github.com/vainapp/back-end/compare/v1.0.1...v1.0.2) (2023-01-20)
 
 

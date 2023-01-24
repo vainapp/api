@@ -1,0 +1,57 @@
+name: Development deployment
+
+on:
+  workflow_run:
+    workflows: ["Semantic release"]
+    types:
+      - completed
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout files
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Write SSH keys
+        run: |
+          install -m 600 -D /dev/null ~/.ssh/id_rsa
+          echo "${{ secrets.DO_DEVELOPMENT_DROPLET_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          host='${{ secrets.DO_DEVELOPMENT_DROPLET_HOST }}'
+          hosts="$(dig +short "$host" | grep -v '\.$' | sed -z 's|\n|,|g')$host"
+          ssh-keyscan -H "$hosts" > ~/.ssh/known_hosts
+
+      - name: Install doctl
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DO_ACCESS_TOKEN }}
+
+      - name: Upload package.json
+        run: rsync -r ./package.json deploy@${{ secrets.DO_DEVELOPMENT_DROPLET_HOST }}:~/app/server
+
+      - name: Upload the build
+        run: rsync -r dist deploy@${{ secrets.DO_DEVELOPMENT_DROPLET_HOST }}:~/app/server
+
+      - name: Delete old PM2 processes
+        run: doctl compute ssh ${{ secrets.DO_DEVELOPMENT_DROPLET_ID }} --ssh-user deploy --ssh-command "pm2 delete all"
+
+      - name: Start API
+        run: doctl compute ssh ${{ secrets.DO_DEVELOPMENT_DROPLET_ID }} --ssh-user deploy --ssh-command "cd ~/app/server && pm2 start --name "server:build" dist/shared/infra/http/index.js"
+
+      - name: Start queue
+        run: doctl compute ssh ${{ secrets.DO_DEVELOPMENT_DROPLET_ID }} --ssh-user deploy --ssh-command "cd ~/app/server && pm2 start --name "queue:build" dist/shared/infra/http/queue.js"
+
+      - name: Save PM2 processes
+        run: doctl compute ssh ${{ secrets.DO_DEVELOPMENT_DROPLET_ID }} --ssh-user deploy --ssh-command "pm2 save"
