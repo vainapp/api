@@ -1,3 +1,10 @@
+## [1.1.8](https://github.com/vainapp/back-end/compare/v1.1.7...v1.1.8) (2023-01-24)
+
+
+### Bug Fixes
+
+* try to make do cicd work ([13b833a](https://github.com/vainapp/back-end/commit/13b833a3ecbc1820ddef0dec8d65b7c3675f8119))
+
 ## [1.1.7](https://github.com/vainapp/back-end/compare/v1.1.6...v1.1.7) (2023-01-24)
 
 
