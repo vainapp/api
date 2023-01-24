@@ -17,17 +17,17 @@ jobs:
           hosts="$(dig +short "$host" | grep -v '\.$' | sed -z 's|\n|,|g')$host"
           ssh-keyscan -H "$hosts" > ~/.ssh/known_hosts
 
-      # - name: Checkout files
-      #   uses: actions/checkout@v2
+      - name: Checkout files
+        uses: actions/checkout@v2
 
-      # - name: Install doctl
-      #   uses: digitalocean/action-doctl@v2
-      #   with:
-      #     token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+      - name: Install doctl
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
-      # - name: Build
-      #   run: doctl compute ssh ${{ secrets.DIGITALOCEAN_DEVELOPMENT_DROPLET_ID }} --ssh-user deploy --ssh-command "cd ~/app/server && rm -rf dist && npm run build"
+      - name: Build
+        run: doctl compute ssh ${{ secrets.DIGITALOCEAN_DEVELOPMENT_DROPLET_ID }} --ssh-user deploy --ssh-command "cd ~/app/server && rm -rf dist && npm run build"
 
-      # - name: Restart pm2
-      #   run: doctl compute ssh ${{ secrets.DIGITALOCEAN_DEVELOPMENT_DROPLET_ID }} --ssh-user deploy --ssh-command "pm2 restart all"
+      - name: Restart pm2
+        run: doctl compute ssh ${{ secrets.DIGITALOCEAN_DEVELOPMENT_DROPLET_ID }} --ssh-user deploy --ssh-command "pm2 restart all"
 
