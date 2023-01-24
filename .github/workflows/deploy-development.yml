@@ -25,6 +25,7 @@ jobs:
         run: npm run build
 
   deploy:
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - name: Install SSH key
@@ -32,7 +33,7 @@ jobs:
         with:
           key: ${{ secrets.DIGITALOCEAN_DROPLET_DEVELOPMENT_SSH_KEY }}
           name: id_rsa
-          known_hosts: ${{ secrets.KNOWN_HOSTS }}
+          known_hosts: ${{ secrets.DIGITALOCEAN_DROPLET_DEVELOPMENT_KNOWN_HOSTS }}
 
       - name: rsync over SSH
         run: rsync -r ./dist/ deploy@${{ secrets.DIGITALOCEAN_DROPLET_DEVELOPMENT_IPV4 }}/app/server
