@@ -1,3 +1,11 @@
+## [1.1.13](https://github.com/vainapp/back-end/compare/v1.1.12...v1.1.13) (2023-01-24)
+
+
+### Bug Fixes
+
+* clear the yml file ([7caa460](https://github.com/vainapp/back-end/commit/7caa460c792316615a50a7787506bb68519386eb))
+* clear the yml file ([f2a2f22](https://github.com/vainapp/back-end/commit/f2a2f2245d971bbb42b39f2188cb3bc5b868075a))
+
 ## [1.1.12](https://github.com/vainapp/back-end/compare/v1.1.11...v1.1.12) (2023-01-24)
 
 
