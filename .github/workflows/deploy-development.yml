@@ -24,10 +24,13 @@ jobs:
       - name: Build
         run: npm run build
 
-  install-ssh-key:
+  deploy:
     needs: build
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout files
+        uses: actions/checkout@v2
+
       - name: Write SSH keys
         run: |
           install -m 600 -D /dev/null ~/.ssh/id_rsa
@@ -35,13 +38,6 @@ jobs:
           host='${{ secrets.DO_DEVELOPMENT_DROPLET_HOST }}'
           hosts="$(dig +short "$host" | grep -v '\.$' | sed -z 's|\n|,|g')$host"
           ssh-keyscan -H "$hosts" > ~/.ssh/known_hosts
-
-  deploy:
-    needs: install-ssh-key
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout files
-        uses: actions/checkout@v2
 
       - name: Install doctl
         uses: digitalocean/action-doctl@v2
