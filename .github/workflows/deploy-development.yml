@@ -52,3 +52,6 @@ jobs:
 
       - name: Start queue
         run: doctl compute ssh ${{ secrets.DO_DEVELOPMENT_DROPLET_ID }} --ssh-user deploy --ssh-command "cd ~/app/server && pm2 start --name "queue:build" dist/shared/infra/http/queue.js"
+
+      - name: Save PM2 processes
+        run: doctl compute ssh ${{ secrets.DO_DEVELOPMENT_DROPLET_ID }} --ssh-user deploy --ssh-command "pm2 save"
