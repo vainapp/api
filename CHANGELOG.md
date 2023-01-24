@@ -1,3 +1,10 @@
+## [1.1.14](https://github.com/vainapp/back-end/compare/v1.1.13...v1.1.14) (2023-01-24)
+
+
+### Bug Fixes
+
+* run the tests when something is sent to the develop branch ([e9c5481](https://github.com/vainapp/back-end/commit/e9c5481456589371274ac2680fd4675d2266c228))
+
 ## [1.1.13](https://github.com/vainapp/back-end/compare/v1.1.12...v1.1.13) (2023-01-24)
 
 
