@@ -38,11 +38,17 @@ jobs:
         with:
           token: ${{ secrets.DO_ACCESS_TOKEN }}
 
-      - name: Delete the old build
-        run: doctl compute ssh ${{ secrets.DO_DEVELOPMENT_DROPLET_ID }} --ssh-user deploy --ssh-command "cd ~/app/server && rm -rf dist"
+      - name: Upload package.json
+        run: rsync -r ./package.json deploy@${{ secrets.DO_DEVELOPMENT_DROPLET_HOST }}:~/app/server
 
-      - name: Upload the build to the server
-        run: rsync -r ./dist/ deploy@${{ secrets.DO_DEVELOPMENT_DROPLET_HOST }}:~/app/server/dist
+      - name: Upload the build
+        run: rsync -r dist deploy@${{ secrets.DO_DEVELOPMENT_DROPLET_HOST }}:~/app/server
 
-      - name: Restart pm2
-        run: doctl compute ssh ${{ secrets.DO_DEVELOPMENT_DROPLET_ID }} --ssh-user deploy --ssh-command "pm2 restart all --update-env"
+      - name: Delete old PM2 processes
+        run: doctl compute ssh ${{ secrets.DO_DEVELOPMENT_DROPLET_ID }} --ssh-user deploy --ssh-command "pm2 delete all"
+
+      - name: Start API
+        run: doctl compute ssh ${{ secrets.DO_DEVELOPMENT_DROPLET_ID }} --ssh-user deploy --ssh-command "cd ~/app/server && pm2 start --name "server:build" dist/shared/infra/http/index.js"
+
+      - name: Start queue
+        run: doctl compute ssh ${{ secrets.DO_DEVELOPMENT_DROPLET_ID }} --ssh-user deploy --ssh-command "cd ~/app/server && pm2 start --name "queue:build" dist/shared/infra/http/queue.js"
