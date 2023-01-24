@@ -1,3 +1,10 @@
+## [1.1.5](https://github.com/vainapp/back-end/compare/v1.1.4...v1.1.5) (2023-01-24)
+
+
+### Bug Fixes
+
+* fix do cicd ([b50048b](https://github.com/vainapp/back-end/commit/b50048b5a01dec1c0b4cb73f4558dfea196fcd6b))
+
 ## [1.1.4](https://github.com/vainapp/back-end/compare/v1.1.3...v1.1.4) (2023-01-24)
 
 
