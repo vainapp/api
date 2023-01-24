@@ -1,3 +1,10 @@
+## [1.1.18](https://github.com/vainapp/back-end/compare/v1.1.17...v1.1.18) (2023-01-24)
+
+
+### Bug Fixes
+
+* save pm2 processes after finishing the deploy ([06e3989](https://github.com/vainapp/back-end/commit/06e3989ab59790c3aa29c1d86e4b2de04329598d))
+
 ## [1.1.17](https://github.com/vainapp/back-end/compare/v1.1.16...v1.1.17) (2023-01-24)
 
 
