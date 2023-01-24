@@ -1,3 +1,10 @@
+## [1.1.12](https://github.com/vainapp/back-end/compare/v1.1.11...v1.1.12) (2023-01-24)
+
+
+### Bug Fixes
+
+* move all the CI steps to one job ([e61b769](https://github.com/vainapp/back-end/commit/e61b7697aa2aad40cd2be38dc5bf44728d5b2060))
+
 ## [1.1.11](https://github.com/vainapp/back-end/compare/v1.1.10...v1.1.11) (2023-01-24)
 
 
