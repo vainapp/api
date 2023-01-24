@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/vainapp/back-end/compare/v1.0.2...v1.1.0) (2023-01-24)
+
+
+### Features
+
+* add deploy github action ([55562bf](https://github.com/vainapp/back-end/commit/55562bfc77bcb3933fb1dad4f42bffc82755f00c))
+
 ## [1.0.2](https://github.com/vainapp/back-end/compare/v1.0.1...v1.0.2) (2023-01-20)
 
 
