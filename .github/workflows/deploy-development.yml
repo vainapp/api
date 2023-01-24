@@ -1,0 +1,39 @@
+name: Development deployment
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout files
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install SSH key
+        uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.DIGITALOCEAN_DROPLET_DEVELOPMENT_SSH_KEY }}
+          name: id_rsa
+          known_hosts: ${{ secrets.KNOWN_HOSTS }}
+
+      - name: rsync over SSH
+        run: rsync -r ./dist/ deploy@${{ secrets.DIGITALOCEAN_DROPLET_DEVELOPMENT_IPV4 }}/app/server
+
