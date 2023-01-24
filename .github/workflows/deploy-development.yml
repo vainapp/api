@@ -6,44 +6,21 @@ on:
       - develop
 
 jobs:
-  install-ssh-key:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Install SSH key
-        uses: shimataro/ssh-key-action@v2
-        with:
-          key: ${{ secrets.DIGITALOCEAN_DROPLET_DEVELOPMENT_SSH_KEY }}
-          known_hosts: ${{ secrets.DIGITALOCEAN_DROPLET_DEVELOPMENT_KNOWN_HOSTS }}
-
-  build:
-    needs: install-ssh-key
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout files
-        uses: actions/checkout@v2
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: 16
-          cache: 'npm'
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Build
-        run: npm run build
-
   deploy:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - name: Print out the known_hosts
-        run: ssh-keyscan -t rsa 198.199.79.114
-
       - name: Checkout files
         uses: actions/checkout@v2
 
-      - name: Deploy
-        run: rsync -r ./dist/ deploy@${{ secrets.DIGITALOCEAN_DROPLET_DEVELOPMENT_IPV4 }}:~/app/server
+      - name: Install doctl
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+
+      - name: Build
+        run: doctl compute ssh ${{ secrets.DIGITALOCEAN_DEVELOPMENT_DROPLET_ID }} --ssh-user deploy --ssh-command "cd ~/app/server && rm -rf dist && npm run build"
+
+      - name: Restart pm2
+        run: doctl compute ssh ${{ secrets.DIGITALOCEAN_DEVELOPMENT_DROPLET_ID }} --ssh-user deploy --ssh-command "pm2 restart all"
 
