@@ -6,7 +6,7 @@ on:
       - develop
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout files
@@ -23,13 +23,6 @@ jobs:
 
       - name: Build
         run: npm run build
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout files
-        uses: actions/checkout@v2
 
       - name: Write SSH keys
         run: |
