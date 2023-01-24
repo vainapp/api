@@ -13,7 +13,6 @@ jobs:
         uses: shimataro/ssh-key-action@v2
         with:
           key: ${{ secrets.DIGITALOCEAN_DROPLET_DEVELOPMENT_SSH_KEY }}
-          name: id_rsa
           known_hosts: ${{ secrets.DIGITALOCEAN_DROPLET_DEVELOPMENT_KNOWN_HOSTS }}
 
   build:
@@ -39,9 +38,12 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
+      - name: Print out the known_hosts
+        run: ssh-keyscan -t rsa 198.199.79.114
+
       - name: Checkout files
         uses: actions/checkout@v2
 
       - name: Deploy
-        run: rsync -r ./dist/ deploy@${{ secrets.DIGITALOCEAN_DROPLET_DEVELOPMENT_IPV4 }}:/app/server
+        run: rsync -r ./dist/ deploy@${{ secrets.DIGITALOCEAN_DROPLET_DEVELOPMENT_IPV4 }}:~/app/server
 
