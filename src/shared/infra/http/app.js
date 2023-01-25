@@ -34,7 +34,9 @@ class App {
     this.server.use(
       '/api-docs',
       basicAuth({
-        users: { admin: process.env.API_DOCS_PASSWORD },
+        users: {
+          [process.env.API_DOCS_USERNAME]: process.env.API_DOCS_PASSWORD,
+        },
         challenge: true,
       }),
       swaggerUI.serve,
