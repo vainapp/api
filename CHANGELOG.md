@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/vainapp/back-end/compare/v1.1.19...v1.2.0) (2023-01-25)
+
+
+### Features
+
+* add API documentation ([#66](https://github.com/vainapp/back-end/issues/66)) ([5cc5b2a](https://github.com/vainapp/back-end/commit/5cc5b2a1c67e3ee8e2ec0abb4eb0da1a2e15ca6e))
+
 ## [1.1.19](https://github.com/vainapp/back-end/compare/v1.1.18...v1.1.19) (2023-01-24)
 
 
