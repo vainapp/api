@@ -1,3 +1,10 @@
+## [1.2.1](https://github.com/vainapp/back-end/compare/v1.2.0...v1.2.1) (2023-01-25)
+
+
+### Bug Fixes
+
+* upload the installed deps to server ([#68](https://github.com/vainapp/back-end/issues/68)) ([bcf2a61](https://github.com/vainapp/back-end/commit/bcf2a61e0035eeee27bd7c16e91f9196f7031477))
+
 # [1.2.0](https://github.com/vainapp/back-end/compare/v1.1.19...v1.2.0) (2023-01-25)
 
 
