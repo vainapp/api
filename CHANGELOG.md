@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/vainapp/back-end/compare/v1.2.1...v1.3.0) (2023-01-25)
+
+
+### Features
+
+* add dynamic swagger username ([#70](https://github.com/vainapp/back-end/issues/70)) ([a7aee04](https://github.com/vainapp/back-end/commit/a7aee04b94b78e23e23c302bd0c6fd38d22dffda))
+
 ## [1.2.1](https://github.com/vainapp/back-end/compare/v1.2.0...v1.2.1) (2023-01-25)
 
 
