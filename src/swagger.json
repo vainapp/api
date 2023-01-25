@@ -1,0 +1,405 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Vain API",
+    "description": "API responsible for the website, management system and app.",
+    "termsOfService": "https://dev.vainapp.com.br/terms-of-use",
+    "contact": {
+      "email": "oi@vainapp.com.br"
+    },
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://api-dev.vainapp.com.br",
+      "description": "Development server"
+    },
+    {
+      "url": "https://api.vainapp.com.br",
+      "description": "Production server"
+    }
+  ],
+  "paths": {
+    "/companies/pre-signup": {
+      "post": {
+        "summary": "Check company availability",
+        "description": "Check if the company is available and redirect to the correct sign-up step.",
+        "tags": ["Companies"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PreSignUpRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "The company is available."
+          },
+          "200": {
+            "description": "The company already has a sign-up in progress and the user should be redirected to the correct step.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/PreSignUpResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The email address provided is already taken."
+          },
+          "400": {
+            "description": "Body validation failed."
+          }
+        }
+      }
+    },
+    "/companies": {
+      "post": {
+        "summary": "Create company and generate an admin account to it",
+        "description": "Create a new company and generate an admin account to it so the user can access the management system.",
+        "tags": ["Companies"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SignUpRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The company was created and the user has received a verification email.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/SignUpResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The email address provided is already taken."
+          },
+          "400": {
+            "description": "Body validation failed."
+          }
+        }
+      }
+    },
+    "/companies/verify-email/:email_verification_link_id": {
+      "get": {
+        "summary": "Verify email address",
+        "description": "Verify the email address provided by the user.",
+        "tags": ["Companies"],
+        "parameters": [
+          {
+            "name": "email_verification_link_id",
+            "in": "path",
+            "description": "The email verification link ID.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "price_id",
+            "in": "query",
+            "description": "The price ID.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "302": {
+            "description": "The email address was verified and the user should be redirected to the phone number verification page."
+          },
+          "404": {
+            "description": "The email verification link ID is invalid or expired."
+          }
+        }
+      }
+    },
+    "/companies/verify-phone-number": {
+      "post": {
+        "summary": "Verify phone number",
+        "description": "Verify the phone number provided by the user.",
+        "tags": ["Companies"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VerifyPhoneNumberRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The phone number was verified."
+          },
+          "404": {
+            "description": "The SMS code is invalid or expired."
+          },
+          "400": {
+            "description": "Body validation failed."
+          }
+        }
+      }
+    },
+    "/companies/verify-email/resend": {
+      "post": {
+        "summary": "Resend email verification",
+        "description": "Resend the email verification email.",
+        "tags": ["Companies"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResendEmailVerificationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The email verification email was resent."
+          },
+          "403": {
+            "description": "The email address provided is already verified."
+          },
+          "400": {
+            "description": "Body validation failed."
+          },
+          "404": {
+            "description": "Email not found or the email verification link is invalid or expired."
+          }
+        }
+      }
+    },
+    "/companies/verify-phone-number/resend": {
+      "post": {
+        "summary": "Resend phone number verification",
+        "description": "Resend the phone number verification SMS.",
+        "tags": ["Companies"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResendPhoneNumberVerificationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The phone number verification SMS was resent."
+          },
+          "403": {
+            "description": "The phone number provided is already verified."
+          },
+          "400": {
+            "description": "Body validation failed."
+          },
+          "404": {
+            "description": "Account not found or the phone number SMS code is invalid or expired."
+          }
+        }
+      }
+    },
+    "/companies/payments/checkout-session": {
+      "post": {
+        "summary": "Create a checkout session",
+        "description": "Create a checkout session for the user to pay for the subscription.",
+        "tags": ["Companies"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCheckoutSessionRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The checkout session was created.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/CreateCheckoutSessionResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Body validation failed."
+          },
+          "403": {
+            "description": "Account is not verified or the user is not administrator."
+          },
+          "404": {
+            "description": "Company or employee not found."
+          }
+        }
+      }
+    },
+    "/health": {
+      "get": {
+        "summary": "Health check",
+        "description": "Check if the API is up and running.",
+        "tags": ["Health"],
+        "responses": {
+          "200": {
+            "description": "API is up and running."
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "PreSignUpRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "price_id": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      },
+      "PreSignUpResponse": {
+        "type": "object",
+        "properties": {
+          "verified": {
+            "type": "boolean"
+          },
+          "checkout_url": {
+            "type": "string",
+            "format": "url"
+          }
+        }
+      },
+      "SignUpRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "password": {
+            "type": "string",
+            "format": "password"
+          },
+          "password_confirmation": {
+            "type": "string",
+            "format": "password"
+          },
+          "company_name": {
+            "type": "string"
+          },
+          "phone_number": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "price_id": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      },
+      "SignUpResponse": {
+        "type": "object",
+        "properties": {
+          "company_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "employee_id": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      },
+      "VerifyPhoneNumberRequest": {
+        "type": "object",
+        "properties": {
+          "employee_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "code": {
+            "type": "string"
+          }
+        }
+      },
+      "ResendEmailVerificationRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "price_id": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      },
+      "ResendPhoneNumberVerificationRequest": {
+        "type": "object",
+        "properties": {
+          "employee_id": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      },
+      "CreateCheckoutSessionRequest": {
+        "type": "object",
+        "properties": {
+          "price_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "employee_id": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      },
+      "CreateCheckoutSessionResponse": {
+        "type": "object",
+        "properties": {
+          "checkout_url": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}

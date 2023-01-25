@@ -4,12 +4,15 @@ import * as Sentry from '@sentry/node'
 import cors from 'cors'
 import express from 'express'
 import 'express-async-errors'
+import basicAuth from 'express-basic-auth'
 import rateLimit from 'express-rate-limit'
 import { pick } from 'lodash'
 import morgan from 'morgan'
+import swaggerUI from 'swagger-ui-express'
 import Youch from 'youch'
 
 import sentryConfig from '../../../config/sentry'
+import swaggerDocs from '../../../swagger.json'
 import isProduction from '../../helpers/isProduction'
 
 import maybeMiddleware from './middlewares/maybe'
@@ -28,6 +31,15 @@ class App {
   }
 
   middlewares() {
+    this.server.use(
+      '/api-docs',
+      basicAuth({
+        users: { admin: process.env.API_DOCS_PASSWORD },
+        challenge: true,
+      }),
+      swaggerUI.serve,
+      swaggerUI.setup(swaggerDocs)
+    )
     this.server.use(Sentry.Handlers.requestHandler())
     this.server.use(Sentry.Handlers.tracingHandler())
     this.server.use(cors())
