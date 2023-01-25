@@ -41,6 +41,9 @@ jobs:
       - name: Upload package.json
         run: rsync -r ./package.json deploy@${{ secrets.DO_DEVELOPMENT_DROPLET_HOST }}:~/app/server
 
+      - name: Upload the installed dependencies
+        run: rsync -r node_modules deploy@${{ secrets.DO_DEVELOPMENT_DROPLET_HOST }}:~/app/server
+
       - name: Upload the build
         run: rsync -r dist deploy@${{ secrets.DO_DEVELOPMENT_DROPLET_HOST }}:~/app/server
 
