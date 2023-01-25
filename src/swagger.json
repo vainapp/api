@@ -3,11 +3,11 @@
   "info": {
     "title": "Vain API",
     "description": "API responsible for the website, management system and app.",
-    "termsOfService": "https://dev.vainapp.com.br/terms-of-use",
+    "termsOfService": "https://vainapp.com.br/terms-of-use",
     "contact": {
       "email": "oi@vainapp.com.br"
     },
-    "version": "1.0.0"
+    "version": "development-version"
   },
   "servers": [
     {
