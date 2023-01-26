@@ -1,3 +1,10 @@
+# [1.4.0](https://github.com/vainapp/back-end/compare/v1.3.0...v1.4.0) (2023-01-26)
+
+
+### Features
+
+* upload images to the CDN ([#73](https://github.com/vainapp/back-end/issues/73)) ([dd80456](https://github.com/vainapp/back-end/commit/dd80456543bbb4b4e55e5b3e2a9d3f2da1041d41))
+
 # [1.3.0](https://github.com/vainapp/back-end/compare/v1.2.1...v1.3.0) (2023-01-25)
 
 
