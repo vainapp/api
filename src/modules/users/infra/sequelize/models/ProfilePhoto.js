@@ -6,6 +6,7 @@ import * as Sentry from '@sentry/node'
 import Sequelize, { Model } from 'sequelize'
 
 import AWS from '../../../../../config/aws'
+import { CDN_URL } from '../../../../../shared/constants/files'
 
 class ProfilePhoto extends Model {
   static init(sequelize) {
@@ -43,7 +44,11 @@ class ProfilePhoto extends Model {
     )
 
     this.addHook('beforeSave', async (profilePhoto) => {
-      if (!profilePhoto.url) {
+      // using AWS S3
+      if (profilePhoto.url) {
+        profilePhoto.url = `${CDN_URL}/${profilePhoto.key}`
+      } else {
+        // using local storage
         profilePhoto.url = `${process.env.API_URL}/files/${profilePhoto.key}`
       }
     })

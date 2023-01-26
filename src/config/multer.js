@@ -31,9 +31,7 @@ const storageTypes = {
   s3: multerS3({
     s3: new AWS.S3(),
     bucket: process.env.BUCKET_NAME,
-    path: 'uploads',
     contentType: multerS3.AUTO_CONTENT_TYPE,
-    acl: 'public-read',
     key: (_, file, cb) => {
       crypto.randomBytes(16, (err, hash) => {
         if (err) {
@@ -41,7 +39,7 @@ const storageTypes = {
         }
 
         const fileName = `${hash.toString('hex')}-${file.originalname}`
-        cb(null, fileName)
+        cb(null, `uploads/${fileName}`)
       })
     },
   }),
