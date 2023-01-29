@@ -1,3 +1,10 @@
+# [1.6.0](https://github.com/vainapp/back-end/compare/v1.5.0...v1.6.0) (2023-01-29)
+
+
+### Features
+
+* finish the `/users/*` docs ([#77](https://github.com/vainapp/back-end/issues/77)) ([85ff45c](https://github.com/vainapp/back-end/commit/85ff45cc1c8d1c0b8c17d8ee658d7738efa1ad63))
+
 # [1.5.0](https://github.com/vainapp/back-end/compare/v1.4.0...v1.5.0) (2023-01-29)
 
 
