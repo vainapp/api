@@ -166,7 +166,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/ResendEmailVerificationRequest"
+                "$ref": "#/components/schemas/UserResendEmailVerificationRequest"
               }
             }
           }
@@ -301,6 +301,120 @@
           }
         }
       }
+    },
+    "/users/verify-email/:email_verification_link_id": {
+      "get": {
+        "summary": "Verify email address",
+        "description": "Verify the email address provided by the user.",
+        "tags": ["Users"],
+        "parameters": [
+          {
+            "name": "email_verification_link_id",
+            "in": "path",
+            "description": "The email verification link ID.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "302": {
+            "description": "The email address was verified."
+          },
+          "404": {
+            "description": "The email verification link ID is invalid or expired."
+          }
+        }
+      }
+    },
+    "/users/verify-phone-number": {
+      "post": {
+        "summary": "Verify phone number",
+        "description": "Verify the phone number provided by the user.",
+        "tags": ["Users"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserVerifyPhoneNumberRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The phone number was verified."
+          },
+          "404": {
+            "description": "The SMS code is invalid or expired."
+          },
+          "400": {
+            "description": "Body validation failed."
+          }
+        }
+      }
+    },
+    "/users/verify-email/resend": {
+      "post": {
+        "summary": "Resend email verification",
+        "description": "Resend the email verification email.",
+        "tags": ["Users"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResendEmailVerificationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The email verification email was resent."
+          },
+          "403": {
+            "description": "The email address provided is already verified."
+          },
+          "400": {
+            "description": "Body validation failed."
+          },
+          "404": {
+            "description": "Email not found or the email verification link is invalid or expired."
+          }
+        }
+      }
+    },
+    "/users/verify-phone-number/resend": {
+      "post": {
+        "summary": "Resend phone number verification",
+        "description": "Resend the phone number verification SMS.",
+        "tags": ["Users"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserResendPhoneNumberVerificationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The phone number verification SMS was resent."
+          },
+          "403": {
+            "description": "The phone number provided is already verified."
+          },
+          "400": {
+            "description": "Body validation failed."
+          },
+          "404": {
+            "description": "Account not found or the phone number SMS code is invalid or expired."
+          }
+        }
+      }
     }
   },
   "components": {
@@ -398,12 +512,30 @@
           }
         }
       },
+      "UserResendEmailVerificationRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email"
+          }
+        }
+      },
       "ResendPhoneNumberVerificationRequest": {
         "type": "object",
         "properties": {
           "employee_id": {
             "type": "string",
             "format": "uuid"
+          }
+        }
+      },
+      "UserResendPhoneNumberVerificationRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email"
           }
         }
       },
@@ -490,6 +622,18 @@
           "email": {
             "type": "string",
             "format": "email"
+          }
+        }
+      },
+      "UserVerifyPhoneNumberRequest": {
+        "type": "object",
+        "properties": {
+          "user_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "code": {
+            "type": "string"
           }
         }
       }
