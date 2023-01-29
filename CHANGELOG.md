@@ -1,3 +1,15 @@
+# [1.7.0](https://github.com/vainapp/back-end/compare/v1.6.0...v1.7.0) (2023-01-29)
+
+
+### Bug Fixes
+
+* fix conflicts ([66477fc](https://github.com/vainapp/back-end/commit/66477fc587a9afd4ec7dce4999eca92608fc8248))
+
+
+### Features
+
+* **api-docs:** add sign up user endpoint docs ([8e1524b](https://github.com/vainapp/back-end/commit/8e1524be025230e7b0a114a76aa60e0b314ec602))
+
 # [1.6.0](https://github.com/vainapp/back-end/compare/v1.5.0...v1.6.0) (2023-01-29)
 
 
