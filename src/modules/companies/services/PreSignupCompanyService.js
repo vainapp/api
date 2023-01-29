@@ -3,12 +3,12 @@ import querystring from 'node:querystring'
 import { ForbiddenError } from '../../../shared/errors'
 import buildDirectEmailParams from '../../../shared/helpers/buildDirectEmailParams'
 import EmailVerificationLink from '../../../shared/infra/sequelize/models/EmailVerificationLink'
+import Employee from '../../../shared/infra/sequelize/models/Employee'
+import EmployeeRole from '../../../shared/infra/sequelize/models/EmployeeRole'
 import SendEmailJob from '../../../shared/jobs/SendEmail'
 import Queue from '../../../shared/lib/Queue'
 import { generateCheckoutSession } from '../../../shared/lib/Stripe'
 import Company from '../infra/sequelize/models/Company'
-import Employee from '../infra/sequelize/models/Employee'
-import EmployeeRole from '../infra/sequelize/models/EmployeeRole'
 
 class PreSignupCompanyService {
   async execute({ email, price_id }) {

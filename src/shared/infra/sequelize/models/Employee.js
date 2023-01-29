@@ -1,6 +1,6 @@
 import Sequelize from 'sequelize'
 
-import AuthenticableEntity from '../../../../../shared/infra/sequelize/models/AuthenticableEntity'
+import AuthenticableEntity from './AuthenticableEntity'
 
 class Employee extends AuthenticableEntity {
   static init(sequelize) {

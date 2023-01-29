@@ -1,9 +1,9 @@
 import { ForbiddenError } from '../../../shared/errors'
 import NotFoundError from '../../../shared/errors/NotFound'
+import Employee from '../../../shared/infra/sequelize/models/Employee'
 import PhoneNumberVerificationCode from '../../../shared/infra/sequelize/models/PhoneNumberVerificationCode'
 import SendSMSJob from '../../../shared/jobs/SendSMS'
 import Queue from '../../../shared/lib/Queue'
-import Employee from '../infra/sequelize/models/Employee'
 
 class StorePhoneNumberVerificationCodeService {
   async execute({ employee_id }) {

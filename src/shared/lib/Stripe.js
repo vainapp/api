@@ -1,10 +1,10 @@
 import Stripe from 'stripe'
 
 import Company from '../../modules/companies/infra/sequelize/models/Company'
-import Employee from '../../modules/companies/infra/sequelize/models/Employee'
-import EmployeeRole from '../../modules/companies/infra/sequelize/models/EmployeeRole'
 import { TRIAL_DURATION } from '../constants/trial'
 import NotFoundError from '../errors/NotFound'
+import Employee from '../infra/sequelize/models/Employee'
+import EmployeeRole from '../infra/sequelize/models/EmployeeRole'
 
 const stripe = new Stripe(process.env.STRIPE_API_KEY, {
   apiVersion: '2022-08-01',

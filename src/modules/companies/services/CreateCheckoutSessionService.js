@@ -1,8 +1,8 @@
 import { ForbiddenError, NotFoundError } from '../../../shared/errors'
+import Employee from '../../../shared/infra/sequelize/models/Employee'
+import EmployeeRole from '../../../shared/infra/sequelize/models/EmployeeRole'
 import { generateCheckoutSession } from '../../../shared/lib/Stripe'
 import Company from '../infra/sequelize/models/Company'
-import Employee from '../infra/sequelize/models/Employee'
-import EmployeeRole from '../infra/sequelize/models/EmployeeRole'
 
 class CreateCheckoutSessionService {
   async execute({ price_id, employee_id }) {
