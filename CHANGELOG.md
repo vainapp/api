@@ -1,3 +1,10 @@
+# [1.5.0](https://github.com/vainapp/back-end/compare/v1.4.0...v1.5.0) (2023-01-29)
+
+
+### Features
+
+* **api-docs:** improve `/users` docs ([#76](https://github.com/vainapp/back-end/issues/76)) ([3adb8ad](https://github.com/vainapp/back-end/commit/3adb8ad4696700201e98896fb1b504a2a72faf39))
+
 # [1.4.0](https://github.com/vainapp/back-end/compare/v1.3.0...v1.4.0) (2023-01-26)
 
 
