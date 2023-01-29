@@ -415,6 +415,76 @@
           }
         }
       }
+    },
+    "/users/profile-photo": {
+      "post": {
+        "summary": "Upload profile photo",
+        "description": "Upload a profile photo.",
+        "tags": ["Users"],
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The profile photo was uploaded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/UserProfilePhotoResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Body validation failed."
+          },
+          "404": {
+            "description": "Account not found."
+          }
+        }
+      }
+    },
+    "/users/profile-photo/:profile_photo_id": {
+      "delete": {
+        "summary": "Delete profile photo",
+        "description": "Delete the profile photo.",
+        "tags": ["Users"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "profile_photo_id",
+            "in": "path",
+            "description": "The profile photo ID.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The profile photo was deleted."
+          },
+          "404": {
+            "description": "Profile picture not found."
+          }
+        }
+      }
     }
   },
   "components": {
@@ -634,6 +704,40 @@
           },
           "code": {
             "type": "string"
+          }
+        }
+      },
+      "UserProfilePhotoResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "user_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "size": {
+            "type": "number"
+          },
+          "key": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string",
+            "format": "url"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time"
           }
         }
       }
