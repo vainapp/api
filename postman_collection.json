@@ -1,0 +1,725 @@
+{
+	"info": {
+		"_postman_id": "fc0b0c96-8398-4d90-b3cf-8a75ce1a85a4",
+		"name": "Vain API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "8000421"
+	},
+	"item": [
+		{
+			"name": "/companies",
+			"item": [
+				{
+					"name": "/companies",
+					"item": [
+						{
+							"name": "/companies/pre-signup",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\": \"jopcmelo@gmail.com\",\n    \"price_id\": \"price_1M9WhUL35qcZeCtUo5Jz8ySL\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/companies/pre-signup",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"companies",
+										"pre-signup"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/companies",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\": \"jopcmelo+test@gmail.com\",\n    \"password\": \"123456\",\n    \"password_confirmation\": \"123456\",\n    \"company_name\": \"Barbearia X\",\n    \"phone_number\": \"5511963005532\",\n    \"name\": \"João Melo Admin\",\n    \"price_id\": \"price_1M9WhUL35qcZeCtUo5Jz8ySL\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/companies",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"companies"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/companies/verify-email/:email_verification_link_id",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/companies/verify-email/:email_verification_link_id?price_id=price_1M9WhUL35qcZeCtUo5Jz8ySL",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"companies",
+										"verify-email",
+										":email_verification_link_id"
+									],
+									"query": [
+										{
+											"key": "price_id",
+											"value": "price_1M9WhUL35qcZeCtUo5Jz8ySL"
+										}
+									],
+									"variable": [
+										{
+											"key": "email_verification_link_id",
+											"value": "c8e76d36-1eae-460a-b496-a23c3b1ca0f2"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/companies/verify-phone-number",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"employee_id\": \"473c1d4f-d61b-4b3e-a356-935fdcc98f9e\",\n    \"code\": \"1058\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/companies/verify-phone-number",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"companies",
+										"verify-phone-number"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/companies/verify-email/resend",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\": \"jopcmelo@gmail.com\",\n    \"price_id\": \"price_1M9WhUL35qcZeCtUo5Jz8ySL\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/companies/verify-email/resend",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"companies",
+										"verify-email",
+										"resend"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/companies/verify-phone-number/resend",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"employee_id\": \"7e3b1141-74dd-4ca3-8823-c3d43be16a6c\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/companies/verify-phone-number/resend",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"companies",
+										"verify-phone-number",
+										"resend"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "/companies/payments",
+					"item": [
+						{
+							"name": "/companies/payments/checkout-session",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"employee_id\": \"7e3b1141-74dd-4ca3-8823-c3d43be16a6c\",\n    \"price_id\": \"price_1M9WhUL35qcZeCtUo5Jz8ySL\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/companies/payments/checkout-session",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"companies",
+										"payments",
+										"checkout-session"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/companies/payments/stripe-webhook",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"id\": \"evt_3MOrC5L35qcZeCtU1ArrCqGl\",\n  \"object\": \"event\",\n  \"api_version\": \"2022-08-01\",\n  \"created\": 1673393126,\n  \"data\": {\n    \"object\": {\n      \"id\": \"pi_3MOrC5L35qcZeCtU1nn9Uym0\",\n      \"object\": \"payment_intent\",\n      \"amount\": 6000,\n      \"amount_capturable\": 0,\n      \"amount_details\": {\n        \"tip\": {\n        }\n      },\n      \"amount_received\": 6000,\n      \"application\": null,\n      \"application_fee_amount\": null,\n      \"automatic_payment_methods\": null,\n      \"canceled_at\": null,\n      \"cancellation_reason\": null,\n      \"capture_method\": \"automatic\",\n      \"charges\": {\n        \"object\": \"list\",\n        \"data\": [\n          {\n            \"id\": \"ch_3MOrC5L35qcZeCtU1c4x9Sg0\",\n            \"object\": \"charge\",\n            \"amount\": 6000,\n            \"amount_captured\": 6000,\n            \"amount_refunded\": 0,\n            \"application\": null,\n            \"application_fee\": null,\n            \"application_fee_amount\": null,\n            \"balance_transaction\": \"txn_3MOrC5L35qcZeCtU1uFRsu0A\",\n            \"billing_details\": {\n              \"address\": {\n                \"city\": null,\n                \"country\": \"BR\",\n                \"line1\": null,\n                \"line2\": null,\n                \"postal_code\": null,\n                \"state\": null\n              },\n              \"email\": \"jopcmelo@gmail.com\",\n              \"name\": \"Stripe Credit Card\",\n              \"phone\": null\n            },\n            \"calculated_statement_descriptor\": \"Stripe\",\n            \"captured\": true,\n            \"created\": 1673393126,\n            \"currency\": \"brl\",\n            \"customer\": \"cus_N99UWOGPgbBHgb\",\n            \"description\": \"Subscription creation\",\n            \"destination\": null,\n            \"dispute\": null,\n            \"disputed\": false,\n            \"failure_balance_transaction\": null,\n            \"failure_code\": null,\n            \"failure_message\": null,\n            \"fraud_details\": {\n            },\n            \"invoice\": \"in_1MOrC5L35qcZeCtUVpYIbZkr\",\n            \"livemode\": false,\n            \"metadata\": {\n            },\n            \"on_behalf_of\": null,\n            \"order\": null,\n            \"outcome\": {\n              \"network_status\": \"approved_by_network\",\n              \"reason\": null,\n              \"risk_level\": \"normal\",\n              \"risk_score\": 55,\n              \"seller_message\": \"Payment complete.\",\n              \"type\": \"authorized\"\n            },\n            \"paid\": true,\n            \"payment_intent\": \"pi_3MOrC5L35qcZeCtU1nn9Uym0\",\n            \"payment_method\": \"pm_1MOrC4L35qcZeCtUJBF62A5g\",\n            \"payment_method_details\": {\n              \"card\": {\n                \"brand\": \"visa\",\n                \"checks\": {\n                  \"address_line1_check\": null,\n                  \"address_postal_code_check\": null,\n                  \"cvc_check\": \"pass\"\n                },\n                \"country\": \"US\",\n                \"exp_month\": 1,\n                \"exp_year\": 2050,\n                \"fingerprint\": \"Vk4wgnyhWVDkNUQq\",\n                \"funding\": \"credit\",\n                \"installments\": null,\n                \"last4\": \"4242\",\n                \"mandate\": null,\n                \"network\": \"visa\",\n                \"network_token\": {\n                  \"used\": false\n                },\n                \"three_d_secure\": null,\n                \"wallet\": null\n              },\n              \"type\": \"card\"\n            },\n            \"receipt_email\": null,\n            \"receipt_number\": null,\n            \"receipt_url\": \"https://pay.stripe.com/receipts/invoices/CAcaFwoVYWNjdF8xTHo3UVpMMzVxY1plQ3RVKOjn950GMga02vSielg6LBaPJv6NgXJYjS5gz7Wka5_OYjgU-w-vvoCu07xLvFN8-P3fe2WVS2lmVZqE?s=ap\",\n            \"refunded\": false,\n            \"refunds\": {\n              \"object\": \"list\",\n              \"data\": [\n              ],\n              \"has_more\": false,\n              \"total_count\": 0,\n              \"url\": \"/v1/charges/ch_3MOrC5L35qcZeCtU1c4x9Sg0/refunds\"\n            },\n            \"review\": null,\n            \"shipping\": null,\n            \"source\": null,\n            \"source_transfer\": null,\n            \"statement_descriptor\": null,\n            \"statement_descriptor_suffix\": null,\n            \"status\": \"succeeded\",\n            \"transfer_data\": null,\n            \"transfer_group\": null\n          }\n        ],\n        \"has_more\": false,\n        \"total_count\": 1,\n        \"url\": \"/v1/charges?payment_intent=pi_3MOrC5L35qcZeCtU1nn9Uym0\"\n      },\n      \"client_secret\": \"pi_3MOrC5L35qcZeCtU1nn9Uym0_secret_QJYijGvmmk0n8Q5FHaopyiy1e\",\n      \"confirmation_method\": \"automatic\",\n      \"created\": 1673393125,\n      \"currency\": \"brl\",\n      \"customer\": \"cus_N99UWOGPgbBHgb\",\n      \"description\": \"Subscription creation\",\n      \"invoice\": \"in_1MOrC5L35qcZeCtUVpYIbZkr\",\n      \"last_payment_error\": null,\n      \"livemode\": false,\n      \"metadata\": {\n      },\n      \"next_action\": null,\n      \"on_behalf_of\": null,\n      \"payment_method\": \"pm_1MOrC4L35qcZeCtUJBF62A5g\",\n      \"payment_method_options\": {\n        \"boleto\": {\n          \"expires_after_days\": 3\n        },\n        \"card\": {\n          \"installments\": null,\n          \"mandate_options\": null,\n          \"network\": null,\n          \"request_three_d_secure\": \"automatic\",\n          \"setup_future_usage\": \"off_session\"\n        }\n      },\n      \"payment_method_types\": [\n        \"boleto\",\n        \"card\"\n      ],\n      \"processing\": null,\n      \"receipt_email\": null,\n      \"review\": null,\n      \"setup_future_usage\": \"off_session\",\n      \"shipping\": null,\n      \"source\": null,\n      \"statement_descriptor\": null,\n      \"statement_descriptor_suffix\": null,\n      \"status\": \"succeeded\",\n      \"transfer_data\": null,\n      \"transfer_group\": null\n    }\n  },\n  \"livemode\": false,\n  \"pending_webhooks\": 3,\n  \"request\": {\n    \"id\": \"req_HyZmwc1F1v3a1P\",\n    \"idempotency_key\": \"01be25c7-c122-48ed-b7b3-9d24b0c03564\"\n  },\n  \"type\": \"payment_intent.succeeded\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/companies/payments/stripe-webhook",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"companies",
+										"payments",
+										"stripe-webhook"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "/users",
+			"item": [
+				{
+					"name": "/users",
+					"item": [
+						{
+							"name": "/users/me",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/users/me",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"users",
+										"me"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/users",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"João Pedro da Cruz Melo\",\n    \"email\": \"jopcmelo@gmail.com\",\n    \"password\": \"1234567\",\n    \"password_confirmation\": \"1234567\",\n    \"genre\": \"male\",\n    \"phone_number\": \"5511963005537\",\n    \"address\": {\n        \"street\": \"Rua Caetano Pero Neto\",\n        \"number\": \"141\",\n        \"district\": \"Jardim Porteira Grande\",\n        \"city\": \"São Paulo\",\n        \"state\": \"São Paulo\",\n        \"zip_code\": \"03917050\",\n        \"country\": \"Brasil\"\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/users",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"users"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/users/verify-email/:email_verification_link_id",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"user_id\": \"\",\n    \"code\": \"\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/users/verify-email/:email_verification_link_id",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"users",
+										"verify-email",
+										":email_verification_link_id"
+									],
+									"variable": [
+										{
+											"key": "email_verification_link_id",
+											"value": null
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/users/verify-email/resend",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\": \"juan.cbserrano@gmail.com\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/users/verify-email/resend",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"users",
+										"verify-email",
+										"resend"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/users/verify-phone-number/resend",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\": \"jopcmelo@gmail.com\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/users/verify-phone-number/resend",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"users",
+										"verify-phone-number",
+										"resend"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/users/verify-phone-number",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"user_id\": \"21bb70cd-e275-4f3c-907b-b11a1de712a8\",\n    \"code\": \"6886\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/users/verify-phone-number",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"users",
+										"verify-phone-number"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/users/profile-photo",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "file",
+											"type": "file",
+											"src": "/Users/joaomelo/Pictures/sea_horizon_art_129961_3840x2160.jpg"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{base_url}}/users/profile-photo",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"users",
+										"profile-photo"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/users/change-password",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"current_password\": \"123456\",\n    \"new_password\": \"1234567\",\n    \"new_password_confirmation\": \"1234567\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/users/change-password",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"users",
+										"change-password"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/users/profile-photo/:profile_photo_id",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/users/profile-photo/:profile_photo_id",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"users",
+										"profile-photo",
+										":profile_photo_id"
+									],
+									"variable": [
+										{
+											"key": "profile_photo_id",
+											"value": "8530aac7-b3d4-48b2-8bb9-b6c165c479e7"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "/users/passwords",
+					"item": [
+						{
+							"name": "/users/passwords/forgot",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\": \"jopcmelo@gmail.com\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/users/passwords/forgot",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"users",
+										"passwords",
+										"forgot"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/users/passwords//verify",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\": \"jopcmelo@gmail.com\",\n    \"code\": \"7122\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/users/passwords/verify",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"users",
+										"passwords",
+										"verify"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/users/passwords/reset",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"token\": \"60a79604-0804-4381-8e74-f895b5b7cb36\",\n    \"password\": \"123456\",\n    \"password_confirmation\": \"123456\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/users/passwords/reset",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"users",
+										"passwords",
+										"reset"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "/users/sessions",
+					"item": [
+						{
+							"name": "/users/sessions",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\": \"jopcmelo@gmail.com\",\n    \"password\": \"1234567\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/users/sessions",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"users",
+										"sessions"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/users/sessions/refresh",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"refresh_token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2NzI5NTk5NTMsImV4cCI6MTY3NTU1MTk1MywiYXVkIjoiUmVmcmVzaFRva2VuIiwic3ViIjoiZmM1MzNiNzYtYTNjNC00NGFkLWJkYjAtZDc5OTg5Y2ZiMjY2In0.GEyivVglLUD8aXH60b7RwzqqQHcciFp0rZU9fpsaUuI\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/users/sessions/refresh",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"users",
+										"sessions",
+										"refresh"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "/health",
+			"item": [
+				{
+					"name": "/health",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/health",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"health"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

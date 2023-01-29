@@ -166,7 +166,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/ResendEmailVerificationRequest"
+                "$ref": "#/components/schemas/UserResendEmailVerificationRequest"
               }
             }
           }
@@ -301,10 +301,495 @@
           }
         }
       }
+    },
+    "/users/verify-email/:email_verification_link_id": {
+      "get": {
+        "summary": "Verify email address",
+        "description": "Verify the email address provided by the user.",
+        "tags": ["Users"],
+        "parameters": [
+          {
+            "name": "email_verification_link_id",
+            "in": "path",
+            "description": "The email verification link ID.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "302": {
+            "description": "The email address was verified."
+          },
+          "404": {
+            "description": "The email verification link ID is invalid or expired."
+          }
+        }
+      }
+    },
+    "/users/verify-phone-number": {
+      "post": {
+        "summary": "Verify phone number",
+        "description": "Verify the phone number provided by the user.",
+        "tags": ["Users"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserVerifyPhoneNumberRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The phone number was verified."
+          },
+          "404": {
+            "description": "The SMS code is invalid or expired."
+          },
+          "400": {
+            "description": "Body validation failed."
+          }
+        }
+      }
+    },
+    "/users/verify-email/resend": {
+      "post": {
+        "summary": "Resend email verification",
+        "description": "Resend the email verification email.",
+        "tags": ["Users"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResendEmailVerificationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The email verification email was resent."
+          },
+          "403": {
+            "description": "The email address provided is already verified."
+          },
+          "400": {
+            "description": "Body validation failed."
+          },
+          "404": {
+            "description": "Email not found or the email verification link is invalid or expired."
+          }
+        }
+      }
+    },
+    "/users/verify-phone-number/resend": {
+      "post": {
+        "summary": "Resend phone number verification",
+        "description": "Resend the phone number verification SMS.",
+        "tags": ["Users"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserResendPhoneNumberVerificationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The phone number verification SMS was resent."
+          },
+          "403": {
+            "description": "The phone number provided is already verified."
+          },
+          "400": {
+            "description": "Body validation failed."
+          },
+          "404": {
+            "description": "Account not found or the phone number SMS code is invalid or expired."
+          }
+        }
+      }
+    },
+    "/users/profile-photo": {
+      "post": {
+        "summary": "Upload profile photo",
+        "description": "Upload a profile photo.",
+        "tags": ["Users"],
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The profile photo was uploaded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/UserProfilePhotoResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Body validation failed."
+          },
+          "404": {
+            "description": "Account not found."
+          }
+        }
+      }
+    },
+    "/users/profile-photo/:profile_photo_id": {
+      "delete": {
+        "summary": "Delete profile photo",
+        "description": "Delete the profile photo.",
+        "tags": ["Users"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "profile_photo_id",
+            "in": "path",
+            "description": "The profile photo ID.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The profile photo was deleted."
+          },
+          "404": {
+            "description": "Profile picture not found."
+          }
+        }
+      }
+    },
+    "/users/change-password": {
+      "put": {
+        "summary": "Change password",
+        "description": "Change the password.",
+        "tags": ["Users"],
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserChangePasswordRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The password was changed."
+          },
+          "400": {
+            "description": "Body validation failed."
+          },
+          "403": {
+            "description": "The old password is incorrect."
+          }
+        }
+      }
+    },
+    "/users/me": {
+      "get": {
+        "summary": "Get user",
+        "description": "Get the user.",
+        "tags": ["Users"],
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "The user was retrieved.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/UserResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/passwords/forgot": {
+      "post": {
+        "summary": "Forgot password",
+        "description": "Send a forgot password email.",
+        "tags": ["Users"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserForgotPasswordRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The forgot password email was sent."
+          },
+          "400": {
+            "description": "Body validation failed."
+          },
+          "404": {
+            "description": "User not found."
+          }
+        }
+      }
+    },
+    "/users/passwords/verify": {
+      "post": {
+        "summary": "Verify forgot password",
+        "description": "Verify the forgot password token.",
+        "tags": ["Users"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserVerifyForgotPasswordRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The forgot password token was verified.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/UserVerifyForgotPasswordResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Body validation failed."
+          },
+          "404": {
+            "description": "User not found or the forgot password token is invalid or expired."
+          }
+        }
+      }
+    },
+    "/users/passwords/reset": {
+      "post": {
+        "summary": "Reset password",
+        "description": "Reset the password.",
+        "tags": ["Users"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserResetPasswordRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The password was reset."
+          },
+          "400": {
+            "description": "Body validation failed."
+          },
+          "404": {
+            "description": "User not found or the forgot password token is invalid or expired."
+          }
+        }
+      }
+    },
+    "/users/sessions": {
+      "post": {
+        "summary": "Create session",
+        "description": "Create a session.",
+        "tags": ["Users"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserCreateSessionRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The session was created.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/UserCreateSessionResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Body validation failed."
+          },
+          "403": {
+            "description": "The email or password is incorrect."
+          }
+        }
+      }
+    },
+    "/users/sessions/refresh": {
+      "post": {
+        "summary": "Refresh session",
+        "description": "Refresh a session.",
+        "tags": ["Users"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserRefreshSessionRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The session was refreshed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/UserCreateSessionResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Body validation failed."
+          },
+          "403": {
+            "description": "The refresh token is invalid or expired."
+          }
+        }
+      }
     }
   },
   "components": {
     "schemas": {
+      "UserRefreshSessionRequest": {
+        "type": "object",
+        "properties": {
+          "refresh_token": {
+            "type": "string"
+          }
+        }
+      },
+      "UserCreateSessionResponse": {
+        "type": "object",
+        "properties": {
+          "user": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "name": {
+                "type": "string"
+              },
+              "email": {
+                "type": "string",
+                "format": "email"
+              },
+              "phone_number": {
+                "type": "string"
+              }
+            }
+          },
+          "access_token": {
+            "type": "string"
+          },
+          "refresh_token": {
+            "type": "string"
+          }
+        }
+      },
+      "UserCreateSessionRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "password": {
+            "type": "string"
+          }
+        }
+      },
+      "UserResetPasswordRequest": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "password_confirmation": {
+            "type": "string"
+          }
+        }
+      },
+      "UserVerifyForgotPasswordRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "code": {
+            "type": "string"
+          }
+        }
+      },
+      "UserVerifyForgotPasswordResponse": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string"
+          }
+        }
+      },
+      "UserForgotPasswordRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email"
+          }
+        }
+      },
       "PreSignUpRequest": {
         "type": "object",
         "properties": {
@@ -385,6 +870,101 @@
           }
         }
       },
+      "UserResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "email_verified": {
+            "type": "boolean"
+          },
+          "phone_number": {
+            "type": "string"
+          },
+          "phone_number_verified": {
+            "type": "boolean"
+          },
+          "name": {
+            "type": "string"
+          },
+          "genre": {
+            "type": "string"
+          },
+          "addresses": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "street": {
+                  "type": "string"
+                },
+                "number": {
+                  "type": "string"
+                },
+                "complement": {
+                  "type": "string"
+                },
+                "district": {
+                  "type": "string"
+                },
+                "city": {
+                  "type": "string"
+                },
+                "state": {
+                  "type": "string"
+                },
+                "zip_code": {
+                  "type": "string"
+                },
+                "country": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "profile_photo": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "url": {
+                "type": "string",
+                "format": "url"
+              }
+            }
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "UserChangePasswordRequest": {
+        "type": "object",
+        "properties": {
+          "current_password": {
+            "type": "string"
+          },
+          "new_password": {
+            "type": "string"
+          },
+          "new_password_confirmation": {
+            "type": "string"
+          }
+        }
+      },
       "ResendEmailVerificationRequest": {
         "type": "object",
         "properties": {
@@ -398,12 +978,30 @@
           }
         }
       },
+      "UserResendEmailVerificationRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email"
+          }
+        }
+      },
       "ResendPhoneNumberVerificationRequest": {
         "type": "object",
         "properties": {
           "employee_id": {
             "type": "string",
             "format": "uuid"
+          }
+        }
+      },
+      "UserResendPhoneNumberVerificationRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email"
           }
         }
       },
@@ -464,6 +1062,9 @@
               "district": {
                 "type": "string"
               },
+              "complement": {
+                "type": "string"
+              },
               "city": {
                 "type": "string"
               },
@@ -490,6 +1091,52 @@
           "email": {
             "type": "string",
             "format": "email"
+          }
+        }
+      },
+      "UserVerifyPhoneNumberRequest": {
+        "type": "object",
+        "properties": {
+          "user_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "code": {
+            "type": "string"
+          }
+        }
+      },
+      "UserProfilePhotoResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "user_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "size": {
+            "type": "number"
+          },
+          "key": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string",
+            "format": "url"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time"
           }
         }
       }
