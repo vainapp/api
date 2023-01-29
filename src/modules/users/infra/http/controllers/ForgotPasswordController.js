@@ -6,9 +6,9 @@ class ForgotPasswordController {
   async store(request, response) {
     const { email } = request.body
 
-    const result = await StoreForgotPasswordService.execute({ email })
+    await StoreForgotPasswordService.execute({ email })
 
-    return response.json(result)
+    return response.status(204).send()
   }
 
   async show(request, response) {
@@ -22,13 +22,13 @@ class ForgotPasswordController {
   async update(request, response) {
     const { token, password, password_confirmation } = request.body
 
-    const result = await UpdateForgotPasswordService.execute({
+    await UpdateForgotPasswordService.execute({
       forgot_password_code_id: token,
       password,
       password_confirmation,
     })
 
-    return response.json(result)
+    return response.status(204).send()
   }
 }
 
