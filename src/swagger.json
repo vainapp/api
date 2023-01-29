@@ -166,7 +166,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/ResendEmailVerificationRequest"
+                "$ref": "#/components/schemas/UserResendEmailVerificationRequest"
               }
             }
           }
@@ -263,6 +263,225 @@
         "responses": {
           "200": {
             "description": "API is up and running."
+          }
+        }
+      }
+    },
+    "/users": {
+      "post": {
+        "summary": "User account creation",
+        "description": "Create a user account and send an email verification.",
+        "tags": ["Users"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserSignUpRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The user account was created and the email verification was sent.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/UserSignUpResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Body validation failed."
+          },
+          "403": {
+            "description": "This email address is already in use."
+          }
+        }
+      }
+    },
+    "/users/verify-email/:email_verification_link_id": {
+      "get": {
+        "summary": "Verify email address",
+        "description": "Verify the email address provided by the user.",
+        "tags": ["Users"],
+        "parameters": [
+          {
+            "name": "email_verification_link_id",
+            "in": "path",
+            "description": "The email verification link ID.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "302": {
+            "description": "The email address was verified."
+          },
+          "404": {
+            "description": "The email verification link ID is invalid or expired."
+          }
+        }
+      }
+    },
+    "/users/verify-phone-number": {
+      "post": {
+        "summary": "Verify phone number",
+        "description": "Verify the phone number provided by the user.",
+        "tags": ["Users"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserVerifyPhoneNumberRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The phone number was verified."
+          },
+          "404": {
+            "description": "The SMS code is invalid or expired."
+          },
+          "400": {
+            "description": "Body validation failed."
+          }
+        }
+      }
+    },
+    "/users/verify-email/resend": {
+      "post": {
+        "summary": "Resend email verification",
+        "description": "Resend the email verification email.",
+        "tags": ["Users"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResendEmailVerificationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The email verification email was resent."
+          },
+          "403": {
+            "description": "The email address provided is already verified."
+          },
+          "400": {
+            "description": "Body validation failed."
+          },
+          "404": {
+            "description": "Email not found or the email verification link is invalid or expired."
+          }
+        }
+      }
+    },
+    "/users/verify-phone-number/resend": {
+      "post": {
+        "summary": "Resend phone number verification",
+        "description": "Resend the phone number verification SMS.",
+        "tags": ["Users"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserResendPhoneNumberVerificationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The phone number verification SMS was resent."
+          },
+          "403": {
+            "description": "The phone number provided is already verified."
+          },
+          "400": {
+            "description": "Body validation failed."
+          },
+          "404": {
+            "description": "Account not found or the phone number SMS code is invalid or expired."
+          }
+        }
+      }
+    },
+    "/users/profile-photo": {
+      "post": {
+        "summary": "Upload profile photo",
+        "description": "Upload a profile photo.",
+        "tags": ["Users"],
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The profile photo was uploaded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/UserProfilePhotoResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Body validation failed."
+          },
+          "404": {
+            "description": "Account not found."
+          }
+        }
+      }
+    },
+    "/users/profile-photo/:profile_photo_id": {
+      "delete": {
+        "summary": "Delete profile photo",
+        "description": "Delete the profile photo.",
+        "tags": ["Users"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "profile_photo_id",
+            "in": "path",
+            "description": "The profile photo ID.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The profile photo was deleted."
+          },
+          "404": {
+            "description": "Profile picture not found."
           }
         }
       }
@@ -363,12 +582,30 @@
           }
         }
       },
+      "UserResendEmailVerificationRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email"
+          }
+        }
+      },
       "ResendPhoneNumberVerificationRequest": {
         "type": "object",
         "properties": {
           "employee_id": {
             "type": "string",
             "format": "uuid"
+          }
+        }
+      },
+      "UserResendPhoneNumberVerificationRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email"
           }
         }
       },
@@ -390,6 +627,117 @@
         "properties": {
           "checkout_url": {
             "type": "string"
+          }
+        }
+      },
+      "UserSignUpRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "password": {
+            "type": "string",
+            "format": "password"
+          },
+          "password_confirmation": {
+            "type": "string",
+            "format": "password"
+          },
+          "genre": {
+            "type": "string"
+          },
+          "phone_number": {
+            "type": "string"
+          },
+          "address": {
+            "type": "object",
+            "properties": {
+              "street": {
+                "type": "string"
+              },
+              "number": {
+                "type": "string"
+              },
+              "district": {
+                "type": "string"
+              },
+              "city": {
+                "type": "string"
+              },
+              "state": {
+                "type": "string"
+              },
+              "zip_code": {
+                "type": "string"
+              },
+              "country": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "UserSignUpResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          }
+        }
+      },
+      "UserVerifyPhoneNumberRequest": {
+        "type": "object",
+        "properties": {
+          "user_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "code": {
+            "type": "string"
+          }
+        }
+      },
+      "UserProfilePhotoResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "user_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "size": {
+            "type": "number"
+          },
+          "key": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string",
+            "format": "url"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time"
           }
         }
       }
