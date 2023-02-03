@@ -8,53 +8,57 @@ on:
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    name: Deploy to the development environment
+    runs-on: ubuntu-20.04
+    strategy:
+      matrix:
+        node-version: [16.x]
     steps:
       - name: Checkout files
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v2
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v2
         with:
-          node-version: 16
-          cache: 'npm'
+          version: 7
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'pnpm'
 
       - name: Install dependencies
-        run: npm ci
+        run: pnpm install
 
       - name: Build
-        run: npm run build
+        run: pnpm run build
 
       - name: Write SSH keys
         run: |
           install -m 600 -D /dev/null ~/.ssh/id_rsa
-          echo "${{ secrets.DO_DEVELOPMENT_DROPLET_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-          host='${{ secrets.DO_DEVELOPMENT_DROPLET_HOST }}'
+          echo "${{ secrets.HOSTINGER_DEVELOPMENT_SSH_KEY }}" > ~/.ssh/id_rsa
+          host='${{ secrets.HOSTINGER_DEVELOPMENT_IPV4 }}'
           hosts="$(dig +short "$host" | grep -v '\.$' | sed -z 's|\n|,|g')$host"
           ssh-keyscan -H "$hosts" > ~/.ssh/known_hosts
 
-      - name: Install doctl
-        uses: digitalocean/action-doctl@v2
-        with:
-          token: ${{ secrets.DO_ACCESS_TOKEN }}
-
       - name: Upload package.json
-        run: rsync -r ./package.json deploy@${{ secrets.DO_DEVELOPMENT_DROPLET_HOST }}:~/app/server
+        run: rsync -r ./package.json deploy@${{ secrets.HOSTINGER_DEVELOPMENT_IPV4 }}:~/app/server
 
       - name: Upload the installed dependencies
-        run: rsync -r node_modules deploy@${{ secrets.DO_DEVELOPMENT_DROPLET_HOST }}:~/app/server
+        run: rsync -r node_modules deploy@${{ secrets.HOSTINGER_DEVELOPMENT_IPV4 }}:~/app/server
 
       - name: Upload the build
-        run: rsync -r dist deploy@${{ secrets.DO_DEVELOPMENT_DROPLET_HOST }}:~/app/server
+        run: rsync -r dist deploy@${{ secrets.HOSTINGER_DEVELOPMENT_IPV4 }}:~/app/server
 
       - name: Delete old PM2 processes
-        run: doctl compute ssh ${{ secrets.DO_DEVELOPMENT_DROPLET_ID }} --ssh-user deploy --ssh-command "pm2 delete all"
+        run: ssh deploy@${{ secrets.HOSTINGER_DEVELOPMENT_IPV4 }} "pm2 delete all"
 
       - name: Start API
-        run: doctl compute ssh ${{ secrets.DO_DEVELOPMENT_DROPLET_ID }} --ssh-user deploy --ssh-command "cd ~/app/server && pm2 start --name "server:build" dist/shared/infra/http/index.js"
+        run: ssh deploy@${{ secrets.HOSTINGER_DEVELOPMENT_IPV4 }} "cd ~/app/server && pm2 start --name "server:build" dist/shared/infra/http/index.js"
 
       - name: Start queue
-        run: doctl compute ssh ${{ secrets.DO_DEVELOPMENT_DROPLET_ID }} --ssh-user deploy --ssh-command "cd ~/app/server && pm2 start --name "queue:build" dist/shared/infra/http/queue.js"
+        run: ssh deploy@${{ secrets.HOSTINGER_DEVELOPMENT_IPV4 }} "cd ~/app/server && pm2 start --name "queue:build" dist/shared/infra/http/queue.js"
 
       - name: Save PM2 processes
-        run: doctl compute ssh ${{ secrets.DO_DEVELOPMENT_DROPLET_ID }} --ssh-user deploy --ssh-command "pm2 save"
+        run: ssh deploy@${{ secrets.HOSTINGER_DEVELOPMENT_IPV4 }} "pm2 save"
