@@ -1,3 +1,10 @@
+## [1.7.1](https://github.com/vainapp/back-end/compare/v1.7.0...v1.7.1) (2023-02-03)
+
+
+### Bug Fixes
+
+* update README using Version 7.26.3 (compiled to binary; bundled Node.js v14.19.2) ([3db66f8](https://github.com/vainapp/back-end/commit/3db66f8c0cef2e1f8ab0a274b8af362d3acb684c))
+
 # [1.7.0](https://github.com/vainapp/back-end/compare/v1.6.0...v1.7.0) (2023-01-29)
 
 
