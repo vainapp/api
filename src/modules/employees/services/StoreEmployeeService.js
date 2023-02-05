@@ -5,11 +5,11 @@ import buildDirectEmailParams from '../../../shared/helpers/buildDirectEmailPara
 import EmailVerificationLink from '../../../shared/infra/sequelize/models/EmailVerificationLink'
 import Employee from '../../../shared/infra/sequelize/models/Employee'
 import EmployeeRole from '../../../shared/infra/sequelize/models/EmployeeRole'
-import Franchise from '../../../shared/infra/sequelize/models/Franchise'
 import FranchiseEmployee from '../../../shared/infra/sequelize/models/FranchiseEmployee'
 import SendEmailJob from '../../../shared/jobs/SendEmail'
 import Queue from '../../../shared/lib/Queue'
 import Company from '../../companies/infra/sequelize/models/Company'
+import Franchise from '../../companies/infra/sequelize/models/Franchise'
 
 class StoreEmployeeService {
   async execute({
