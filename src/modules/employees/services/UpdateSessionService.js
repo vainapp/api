@@ -58,7 +58,7 @@ class UpdateSessionService {
     )
 
     return {
-      user: {
+      employee: {
         id,
         name,
         email,

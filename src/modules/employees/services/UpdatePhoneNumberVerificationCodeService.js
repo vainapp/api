@@ -1,7 +1,6 @@
 import NotFoundError from '../../../shared/errors/NotFound'
 import Employee from '../../../shared/infra/sequelize/models/Employee'
 import PhoneNumberVerificationCode from '../../../shared/infra/sequelize/models/PhoneNumberVerificationCode'
-import { findOrCreateCustomer } from '../../../shared/lib/Stripe'
 
 class UpdatePhoneNumberVerificationCodeService {
   async execute({ employee_id, code }) {
@@ -30,11 +29,9 @@ class UpdatePhoneNumberVerificationCodeService {
       verified: true,
     })
 
-    const updatedEmployee = await employee.update({
+    await employee.update({
       phone_number_verified: true,
     })
-
-    await findOrCreateCustomer(updatedEmployee)
   }
 }
 

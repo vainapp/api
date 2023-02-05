@@ -299,7 +299,9 @@ describe('GET /companies/verify-email/:email_verification_link_id', () => {
 
     await request(app)
       .get(
-        `/companies/verify-email/${emailVerificationLink.id}?price_id=${faker.datatype.uuid}`
+        `/companies/verify-email/${
+          emailVerificationLink.id
+        }?price_id=${faker.datatype.uuid()}`
       )
       .expect(404)
   })
