@@ -23,7 +23,7 @@ environment running
 
 Install the dependencies
 
-    npm install
+    pnpm install
 
 Start the databases with Docker
 
@@ -33,15 +33,15 @@ Clone `.env.example` to `.development.env` and ask [@joaopcm](https://github.com
 
 Run the database migrations
 
-    npm run sequelize-cli db:migrate --url postgresql://postgres:postgres@localhost:5432/grupoc
+    pnpm run sequelize-cli db:migrate --url postgresql://postgres:postgres@localhost:5432/grupoc
 
 Start the API
 
-    npm run server:dev
+    pnpm run server:dev
 
 Start the queue
 
-    npm run queue:dev
+    pnpm run queue:dev
 
 After following these steps, you should be able to access the API at
 `http://localhost:3333`
@@ -76,7 +76,7 @@ https://user-images.githubusercontent.com/58827242/214584318-9ddd3fbf-baf6-48d8-
 
 We use [Sequelize](https://sequelize.org/) to manage our database migrations. To create a new migration, run the following command:
 
-    npm run sequelize-cli migration:generate --name <migration name here>
+    pnpm sequelize-cli migration:generate --name <migration name here>
 
 ## Deployment
 

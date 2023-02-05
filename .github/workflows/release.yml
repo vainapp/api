@@ -6,13 +6,14 @@ on:
 
 jobs:
   release:
+    name: Generate a semantic release
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+      - name: Checkout files
+        uses: actions/checkout@v3
 
-      - name: Semantic Release
+      - name: Generate a semantic release
         uses: cycjimmy/semantic-release-action@v2
         id: semantic
         with:
