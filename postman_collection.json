@@ -720,6 +720,222 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "/employees",
+			"item": [
+				{
+					"name": "/employees",
+					"item": [
+						{
+							"name": "/employees",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"João Melo\",\n    \"email\": \"jopcmelo@gmail.com\",\n    \"password\": \"123456\",\n    \"password_confirmation\": \"123456\",\n    \"phone_number\": \"5511963005537\",\n    \"roles\": [\"ADMIN\", \"MANAGER\", \"EMPLOYEE\"],\n    \"franchises_ids\": [\"1234\"]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/employees",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"employees"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/employees/verify-email/:email_verification_link_id",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/employees/verify-email/:email_verification_link_id",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"employees",
+										"verify-email",
+										":email_verification_link_id"
+									],
+									"variable": [
+										{
+											"key": "email_verification_link_id",
+											"value": "c8e76d36-1eae-460a-b496-a23c3b1ca0f2"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/employees/verify-phone-number",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"employee_id\": \"473c1d4f-d61b-4b3e-a356-935fdcc98f9e\",\n    \"code\": \"1058\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/employees/verify-phone-number",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"employees",
+										"verify-phone-number"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/employees/verify-email/resend",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\": \"jopcmelo@gmail.com\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/employees/verify-email/resend",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"employees",
+										"verify-email",
+										"resend"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/employees/verify-phone-number/resend",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"employee_id\": \"7e3b1141-74dd-4ca3-8823-c3d43be16a6c\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/employees/verify-phone-number/resend",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"employees",
+										"verify-phone-number",
+										"resend"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "/employees/sessions",
+					"item": [
+						{
+							"name": "/employees/sessions",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\": \"jopcmelo@gmail.com\",\n    \"password\": \"4ut3nt1c4R#JpCm1\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/employees/sessions",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"employees",
+										"sessions"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/employees/sessions/refresh",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"refresh_token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2NzU2MjQ1NTEsImV4cCI6MTY3ODIxNjU1MSwiYXVkIjoiUmVmcmVzaFRva2VuIiwic3ViIjoiMGUzYzQyZGQtMGU1NS00ODBkLTk3MzEtNGM1ZWM3ODhlYzQ1In0.JvsqVkBKAqQDTFZzJXRle4jVqbpy-OOnF2F2TdC-jOI\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/employees/sessions/refresh",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"employees",
+										"sessions",
+										"refresh"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
 		}
 	]
 }
