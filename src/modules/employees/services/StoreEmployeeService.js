@@ -102,7 +102,7 @@ class StoreEmployeeService {
       template: 'EMPLOYEE_VERIFY_EMAIL',
       templateData: {
         name: employee.name,
-        link: `${process.env.APP_WEB_URL}/verify-email/${link.id}`,
+        link: `${process.env.API_URL}/employees/verify-email/${link.id}`,
       },
     })
 
