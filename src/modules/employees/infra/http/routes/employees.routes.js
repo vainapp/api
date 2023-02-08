@@ -4,6 +4,7 @@ import validatorMiddleware from '../../../../../shared/infra/http/middlewares/va
 import EmailVerificationLinkController from '../controllers/EmailVerificationLinkController'
 import EmployeeController from '../controllers/EmployeeController'
 import PhoneNumberVerificationCodeController from '../controllers/PhoneNumberVerificationCodeController'
+import authentication from '../middlewares/authentication'
 import employeeStoreSchema from '../validators/employeeStoreValidator'
 import phoneNumberVerificationCodeUpdateSchema from '../validators/phoneNumberVerificationCodeUpdateValidator'
 import resendEmailVerificationSchema from '../validators/resendEmailVerificationValidator'
@@ -14,6 +15,7 @@ const employeesRouter = Router()
 employeesRouter.post(
   '/',
   validatorMiddleware(employeeStoreSchema),
+  authentication(['ADMIN', 'MANAGER']),
   EmployeeController.store
 )
 
