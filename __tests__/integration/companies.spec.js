@@ -4,6 +4,7 @@ import faker from '@faker-js/faker'
 import request from 'supertest'
 
 import Company from '../../src/modules/companies/infra/sequelize/models/Company'
+import { help } from '../../src/shared/constants/emails'
 import buildDirectEmailParams from '../../src/shared/helpers/buildDirectEmailParams'
 import formatDate from '../../src/shared/helpers/formatDate'
 import app from '../../src/shared/infra/http/app'
@@ -1129,7 +1130,9 @@ describe('POST /companies/payments/stripe-webhook', () => {
       template: 'COMPANY_CUSTOMER_SUBSCRIPTION_TRIAL_WILL_END',
       templateData: {
         name: employee.name,
-        description: mock.data.object.description,
+        action_url: process.env.DASHBOARD_WEB_URL,
+        close_account_url: `mailto:${help}?subject=Encerrar conta da Vain`,
+        feedback_url: `mailto:${help}?subject=Feedback da Vain`,
       },
     })
   })

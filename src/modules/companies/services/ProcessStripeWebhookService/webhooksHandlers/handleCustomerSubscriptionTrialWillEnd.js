@@ -1,3 +1,4 @@
+import { help } from '../../../../../shared/constants/emails'
 import { NotFoundError } from '../../../../../shared/errors'
 import buildDirectEmailParams from '../../../../../shared/helpers/buildDirectEmailParams'
 import Employee from '../../../../../shared/infra/sequelize/models/Employee'
@@ -7,7 +8,7 @@ import Company from '../../../infra/sequelize/models/Company'
 
 export const handleCustomerSubscriptionTrialWillEnd = async (payload) => {
   const { object: subscription } = payload.data
-  const { customer: customer_id, description } = subscription
+  const { customer: customer_id } = subscription
 
   const company = await Company.findOne({
     where: {
@@ -30,7 +31,9 @@ export const handleCustomerSubscriptionTrialWillEnd = async (payload) => {
     template: 'COMPANY_CUSTOMER_SUBSCRIPTION_TRIAL_WILL_END',
     templateData: {
       name: admin.name,
-      description,
+      action_url: process.env.DASHBOARD_WEB_URL,
+      close_account_url: `mailto:${help}?subject=Encerrar conta da Vain`,
+      feedback_url: `mailto:${help}?subject=Feedback da Vain`,
     },
   })
   await Queue.add(SendEmailJob.key, subscriptionTrialWillEndParams)
