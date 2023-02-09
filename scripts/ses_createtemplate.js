@@ -8,16 +8,16 @@ AWS.config.update({ region: 'us-east-1' })
 // Create createTemplate params
 let params = {
   Template: {
-    TemplateName: 'COMPANY_CUSTOMER_SUBSCRIPTION_TRIAL_WILL_END' /* required */,
+    TemplateName: 'EMPLOYEE_VERIFY_EMAIL' /* required */,
     HtmlPart: fs
       .readFileSync(
-        'src/modules/companies/views/COMPANY_CUSTOMER_SUBSCRIPTION_TRIAL_WILL_END/COMPANY_CUSTOMER_SUBSCRIPTION_TRIAL_WILL_END.html'
+        'src/modules/employees/views/EMPLOYEE_VERIFY_EMAIL/EMPLOYEE_VERIFY_EMAIL.html'
       )
       .toString(),
-    SubjectPart: 'O seu período de teste está acabando',
+    SubjectPart: 'Verifique sua conta',
     TextPart: fs
       .readFileSync(
-        'src/modules/companies/views/COMPANY_CUSTOMER_SUBSCRIPTION_TRIAL_WILL_END/COMPANY_CUSTOMER_SUBSCRIPTION_TRIAL_WILL_END.txt'
+        'src/modules/employees/views/EMPLOYEE_VERIFY_EMAIL/EMPLOYEE_VERIFY_EMAIL.txt'
       )
       .toString(),
   },
