@@ -1,3 +1,10 @@
+# [1.8.0](https://github.com/vainapp/back-end/compare/v1.7.1...v1.8.0) (2023-02-09)
+
+
+### Features
+
+* **employee-authentication:** change the structure and share models … ([#84](https://github.com/vainapp/back-end/issues/84)) ([3ff457e](https://github.com/vainapp/back-end/commit/3ff457ec35ce14f5b564fd97d59c80f3b7946d39))
+
 ## [1.7.1](https://github.com/vainapp/back-end/compare/v1.7.0...v1.7.1) (2023-02-03)
 
 
