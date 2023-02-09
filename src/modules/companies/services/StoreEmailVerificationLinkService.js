@@ -4,9 +4,9 @@ import { ForbiddenError } from '../../../shared/errors'
 import NotFoundError from '../../../shared/errors/NotFound'
 import buildDirectEmailParams from '../../../shared/helpers/buildDirectEmailParams'
 import EmailVerificationLink from '../../../shared/infra/sequelize/models/EmailVerificationLink'
+import Employee from '../../../shared/infra/sequelize/models/Employee'
 import SendEmailJob from '../../../shared/jobs/SendEmail'
 import Queue from '../../../shared/lib/Queue'
-import Employee from '../infra/sequelize/models/Employee'
 
 class StoreEmailVerificationLinkService {
   async execute({ email, price_id }) {

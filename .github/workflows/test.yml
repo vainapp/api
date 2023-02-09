@@ -22,7 +22,7 @@ jobs:
         image: postgres
         env:
           POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: grupoc
+          POSTGRES_DB: vain
         options: >-
           --health-cmd pg_isready
           --health-interval 10s

@@ -4,12 +4,12 @@ import faker from '@faker-js/faker'
 import request from 'supertest'
 
 import Company from '../../src/modules/companies/infra/sequelize/models/Company'
-import Employee from '../../src/modules/companies/infra/sequelize/models/Employee'
-import EmployeeRole from '../../src/modules/companies/infra/sequelize/models/EmployeeRole'
 import buildDirectEmailParams from '../../src/shared/helpers/buildDirectEmailParams'
 import formatDate from '../../src/shared/helpers/formatDate'
 import app from '../../src/shared/infra/http/app'
 import EmailVerificationLink from '../../src/shared/infra/sequelize/models/EmailVerificationLink'
+import Employee from '../../src/shared/infra/sequelize/models/Employee'
+import EmployeeRole from '../../src/shared/infra/sequelize/models/EmployeeRole'
 import PhoneNumberVerificationCode from '../../src/shared/infra/sequelize/models/PhoneNumberVerificationCode'
 import * as stripe from '../../src/shared/lib/Stripe'
 import factory from '../factories'
@@ -299,7 +299,9 @@ describe('GET /companies/verify-email/:email_verification_link_id', () => {
 
     await request(app)
       .get(
-        `/companies/verify-email/${emailVerificationLink.id}?price_id=${faker.datatype.uuid}`
+        `/companies/verify-email/${
+          emailVerificationLink.id
+        }?price_id=${faker.datatype.uuid()}`
       )
       .expect(404)
   })

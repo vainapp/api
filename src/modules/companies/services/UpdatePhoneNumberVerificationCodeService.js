@@ -1,7 +1,7 @@
 import NotFoundError from '../../../shared/errors/NotFound'
+import Employee from '../../../shared/infra/sequelize/models/Employee'
 import PhoneNumberVerificationCode from '../../../shared/infra/sequelize/models/PhoneNumberVerificationCode'
 import { findOrCreateCustomer } from '../../../shared/lib/Stripe'
-import Employee from '../infra/sequelize/models/Employee'
 
 class UpdatePhoneNumberVerificationCodeService {
   async execute({ employee_id, code }) {

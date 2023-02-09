@@ -1,6 +1,6 @@
 import Sequelize from 'sequelize'
 
-import AuthenticableEntity from '../../../../../shared/infra/sequelize/models/AuthenticableEntity'
+import AuthenticableEntity from './AuthenticableEntity'
 
 class Employee extends AuthenticableEntity {
   static init(sequelize) {
@@ -49,6 +49,10 @@ class Employee extends AuthenticableEntity {
     )
 
     this.addHook('beforeSave', async (employee) => {
+      await this.beforeSaveLogic(employee)
+    })
+
+    this.addHook('beforeUpdate', async (employee) => {
       await this.beforeSaveLogic(employee)
     })
 

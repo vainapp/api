@@ -24,6 +24,7 @@ module.exports = {
     'src/**/users/services/**/*.js',
     'src/**/companies/services/**/*.js',
     'src/**/health/services/**/*.js',
+    'src/**/employees/services/**/*.js',
   ],
 
   // The directory where Jest should output its coverage files

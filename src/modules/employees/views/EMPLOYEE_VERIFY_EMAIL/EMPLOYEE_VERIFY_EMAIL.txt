@@ -1,0 +1,12 @@
+Olá, {{name}}!
+
+Você foi convidado para criar uma conta na Vain!
+
+Geramos uma senha de primeiro acesso para você configurar a sua conta. Sua senha é:
+{{password}}
+
+Para começar a usar a plataforma, você só precisa validar o seu endereço de e-mail clicando no link a seguir:
+{{link}}
+
+Atenciosamente,
+Equipe Vain.

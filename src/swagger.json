@@ -693,6 +693,228 @@
           }
         }
       }
+    },
+    "/employees/verify-email/:email_verification_link_id": {
+      "get": {
+        "summary": "Verify email address",
+        "description": "Verify the email address provided by the user.",
+        "tags": ["Employees"],
+        "parameters": [
+          {
+            "name": "email_verification_link_id",
+            "in": "path",
+            "description": "The email verification link ID.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "302": {
+            "description": "The email address was verified and the user should be redirected to the phone number verification page."
+          },
+          "404": {
+            "description": "The email verification link ID is invalid or expired."
+          }
+        }
+      }
+    },
+    "/employees/verify-phone-number": {
+      "post": {
+        "summary": "Verify phone number",
+        "description": "Verify the phone number provided by the user.",
+        "tags": ["Employees"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VerifyPhoneNumberRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The phone number was verified."
+          },
+          "404": {
+            "description": "The SMS code is invalid or expired."
+          },
+          "400": {
+            "description": "Body validation failed."
+          }
+        }
+      }
+    },
+    "/employees/verify-email/resend": {
+      "post": {
+        "summary": "Resend email verification",
+        "description": "Resend the email verification email.",
+        "tags": ["Employees"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserResendEmailVerificationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The email verification email was resent."
+          },
+          "403": {
+            "description": "The email address provided is already verified."
+          },
+          "400": {
+            "description": "Body validation failed."
+          },
+          "404": {
+            "description": "Email not found or the email verification link is invalid or expired."
+          }
+        }
+      }
+    },
+    "/employees/verify-phone-number/resend": {
+      "post": {
+        "summary": "Resend phone number verification",
+        "description": "Resend the phone number verification SMS.",
+        "tags": ["Employees"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResendPhoneNumberVerificationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The phone number verification SMS was resent."
+          },
+          "403": {
+            "description": "The phone number provided is already verified."
+          },
+          "400": {
+            "description": "Body validation failed."
+          },
+          "404": {
+            "description": "Account not found or the phone number SMS code is invalid or expired."
+          }
+        }
+      }
+    },
+    "/employees/sessions": {
+      "post": {
+        "summary": "Create session",
+        "description": "Create a session.",
+        "tags": ["Employees"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserCreateSessionRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The session was created.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/EmployeeCreateSessionResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Body validation failed."
+          },
+          "403": {
+            "description": "The email or password is incorrect."
+          }
+        }
+      }
+    },
+    "/employees/sessions/refresh": {
+      "post": {
+        "summary": "Refresh session",
+        "description": "Refresh a session.",
+        "tags": ["Employees"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserRefreshSessionRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The session was refreshed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/EmployeeCreateSessionResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Body validation failed."
+          },
+          "403": {
+            "description": "The refresh token is invalid or expired."
+          }
+        }
+      }
+    },
+    "/employees": {
+      "post": {
+        "summary": "Create employee",
+        "description": "Create an employee.",
+        "tags": ["Employees"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmployeeCreateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The employee was created.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/EmployeeCreateResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Body validation failed."
+          },
+          "401": {
+            "description": "Missing a valid access token."
+          },
+          "403": {
+            "description": "The email or phone number is already in use, or the user does not have enough permissions, or the operation could not be done."
+          }
+        }
+      }
     }
   },
   "components": {
@@ -700,6 +922,79 @@
       "UserRefreshSessionRequest": {
         "type": "object",
         "properties": {
+          "refresh_token": {
+            "type": "string"
+          }
+        }
+      },
+      "EmployeeCreateResponse": {
+        "type": "object",
+        "properties": {
+          "employee_id": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      },
+      "EmployeeCreateRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "phone_number": {
+            "type": "string"
+          },
+          "roles": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "franchises_ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        }
+      },
+      "EmployeeCreateSessionResponse": {
+        "type": "object",
+        "properties": {
+          "employee": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "name": {
+                "type": "string"
+              },
+              "email": {
+                "type": "string",
+                "format": "email"
+              },
+              "phone_number": {
+                "type": "string"
+              },
+              "roles": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "access_token": {
+            "type": "string"
+          },
           "refresh_token": {
             "type": "string"
           }

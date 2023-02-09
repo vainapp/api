@@ -1,10 +1,10 @@
 import { NotFoundError } from '../../../../../shared/errors'
 import buildDirectEmailParams from '../../../../../shared/helpers/buildDirectEmailParams'
 import formatDate from '../../../../../shared/helpers/formatDate'
+import Employee from '../../../../../shared/infra/sequelize/models/Employee'
 import SendEmailJob from '../../../../../shared/jobs/SendEmail'
 import Queue from '../../../../../shared/lib/Queue'
 import Company from '../../../infra/sequelize/models/Company'
-import Employee from '../../../infra/sequelize/models/Employee'
 
 export const handleCustomerSubscriptionDeleted = async (payload) => {
   const { object: subscription } = payload.data

@@ -2,10 +2,10 @@ import BadRequestError from '../../../shared/errors/BadRequest'
 import NotFoundError from '../../../shared/errors/NotFound'
 import generateRandomCode from '../../../shared/helpers/generateRandomCode'
 import EmailVerificationLink from '../../../shared/infra/sequelize/models/EmailVerificationLink'
+import Employee from '../../../shared/infra/sequelize/models/Employee'
 import PhoneNumberVerificationCode from '../../../shared/infra/sequelize/models/PhoneNumberVerificationCode'
 import SendSMSJob from '../../../shared/jobs/SendSMS'
 import Queue from '../../../shared/lib/Queue'
-import Employee from '../infra/sequelize/models/Employee'
 
 class UpdateEmailVerificationLinkService {
   async execute({ id, price_id }) {

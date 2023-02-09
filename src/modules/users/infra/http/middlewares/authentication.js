@@ -26,6 +26,13 @@ export default async (request, _, nextCallback) => {
     throw new ForbiddenError('Não autorizado')
   }
 
+  /**
+   * TODO
+   * Create a method called `findByPkAndCacheIt` that will
+   * check if the user is already in the cache, if it is,
+   * return it, if it isn't, fetch it from the database,
+   * save it in the cache and return it.
+   */
   const user = await User.findByPk(request.user.id)
 
   if (!user || !user.verified) {
