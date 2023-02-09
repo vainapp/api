@@ -2,15 +2,7 @@ import StoreEmployeeService from '../../../services/StoreEmployeeService'
 
 class EmployeeController {
   async store(request, response) {
-    const {
-      name,
-      email,
-      phone_number,
-      password,
-      password_confirmation,
-      roles,
-      franchises_ids,
-    } = request.body
+    const { name, email, phone_number, roles, franchises_ids } = request.body
 
     const admin_employee_id = request.employee.id
 
@@ -18,8 +10,6 @@ class EmployeeController {
       name,
       email,
       phone_number,
-      password,
-      password_confirmation,
       roles,
       franchises_ids,
       admin_employee_id,

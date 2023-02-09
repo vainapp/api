@@ -2,6 +2,7 @@ import { NotFoundError } from '../../../shared/errors'
 import BadRequestError from '../../../shared/errors/BadRequest'
 import ForbiddenError from '../../../shared/errors/Forbidden'
 import buildDirectEmailParams from '../../../shared/helpers/buildDirectEmailParams'
+import generateRandomPassword from '../../../shared/helpers/generateRandomPassword'
 import EmailVerificationLink from '../../../shared/infra/sequelize/models/EmailVerificationLink'
 import Employee from '../../../shared/infra/sequelize/models/Employee'
 import EmployeeRole from '../../../shared/infra/sequelize/models/EmployeeRole'
@@ -16,16 +17,10 @@ class StoreEmployeeService {
     name,
     email,
     phone_number,
-    password,
-    password_confirmation,
     roles,
     franchises_ids,
     admin_employee_id,
   }) {
-    if (password !== password_confirmation) {
-      throw new BadRequestError('As senhas precisam ser iguais')
-    }
-
     const existingEmployee = await Employee.findOne({
       where: { email },
     })
@@ -33,22 +28,6 @@ class StoreEmployeeService {
     if (existingEmployee) {
       throw new ForbiddenError('Este endereço de e-mail já está cadastrado')
     }
-
-    const employee = await Employee.create({
-      name,
-      email,
-      phone_number,
-      password,
-    })
-
-    await Promise.all(
-      roles.map((role) =>
-        EmployeeRole.create({
-          employee_id: employee.id,
-          role,
-        })
-      )
-    )
 
     /**
      * TODO: how to handle this?
@@ -69,12 +48,30 @@ class StoreEmployeeService {
       throw new ForbiddenError('Empresa não possui assinatura ativa')
     }
 
+    const password = generateRandomPassword()
+
+    const employee = await Employee.create({
+      name,
+      email,
+      phone_number,
+      password,
+    })
+
+    await Promise.all(
+      roles.map((role) =>
+        EmployeeRole.create({
+          employee_id: employee.id,
+          role,
+        })
+      )
+    )
+
     await Promise.all(
       franchises_ids.map(async (franchise_id) => {
         const exists = await Franchise.findOne({
           where: {
             id: franchise_id,
-            company_id: admin_employee_id,
+            company_id: company.id,
           },
         })
 
@@ -103,6 +100,7 @@ class StoreEmployeeService {
       templateData: {
         name: employee.name,
         link: `${process.env.API_URL}/employees/verify-email/${link.id}`,
+        password,
       },
     })
 

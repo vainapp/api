@@ -33,7 +33,7 @@ Clone `.env.example` to `.development.env` and ask [@joaopcm](https://github.com
 
 Run the database migrations
 
-    pnpm run sequelize-cli db:migrate --url postgresql://postgres:postgres@localhost:5432/grupoc
+    pnpm sequelize-cli db:migrate --url postgresql://postgres:postgres@localhost:5432/vain
 
 Start the API
 

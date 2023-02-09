@@ -9,7 +9,7 @@ services:
     volumes:
       - postgresql_test:/var/lib/postgresql/data
     environment:
-      - POSTGRES_DB=grupoc
+      - POSTGRES_DB=vain
       - POSTGRES_PASSWORD=postgres
 
   redis:

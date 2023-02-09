@@ -472,6 +472,86 @@ describe('POST /employees/sessions/refresh', () => {
   })
 })
 
+/**
+ * TODO: Implement more tests for this route
+ */
 describe('POST /employees', () => {
-  // TODO add tests for this
+  it('should not allow to create a employee if the user is not an admin or a manager', async () => {
+    const employee = await factory.create('Employee')
+
+    const { body } = await request(app).post('/employees/sessions').send({
+      email: employee.email,
+      password: employee.password,
+    })
+
+    await request(app)
+      .post('/employees')
+      .set('Authorization', `Bearer ${body.access_token}`)
+      .send({
+        name: faker.name.findName(),
+        email: faker.internet.email(),
+        phone_number: faker.phone.phoneNumber(),
+        roles: [faker.helpers.arrayElement(['ADMIN', 'MANAGER'])],
+        franchises_ids: [faker.datatype.uuid()],
+      })
+      .expect(403)
+  })
+
+  it('should not allow to create a employee if the user is an admin or a manager but not verified', async () => {
+    const employee = await factory.create('Employee', {
+      email_verified: false,
+      phone_number_verified: false,
+    })
+
+    await factory.create('EmployeeRole', {
+      employee_id: employee.id,
+      role: 'ADMIN',
+    })
+
+    const { body } = await request(app).post('/employees/sessions').send({
+      email: employee.email,
+      password: employee.password,
+    })
+
+    await request(app)
+      .post('/employees')
+      .set('Authorization', `Bearer ${body.access_token}`)
+      .send({
+        name: faker.name.findName(),
+        email: faker.internet.email(),
+        phone_number: faker.phone.phoneNumber(),
+        roles: [faker.helpers.arrayElement(['ADMIN', 'MANAGER'])],
+        franchises_ids: [faker.datatype.uuid()],
+      })
+      .expect(403)
+  })
+
+  it('should not allow to create a employee if the email is already in use', async () => {
+    const employee = await factory.create('Employee', {
+      email_verified: true,
+      phone_number_verified: true,
+    })
+
+    await factory.create('EmployeeRole', {
+      employee_id: employee.id,
+      role: 'ADMIN',
+    })
+
+    const { body } = await request(app).post('/employees/sessions').send({
+      email: employee.email,
+      password: employee.password,
+    })
+
+    await request(app)
+      .post('/employees')
+      .set('Authorization', `Bearer ${body.access_token}`)
+      .send({
+        name: faker.name.findName(),
+        email: employee.email,
+        phone_number: faker.phone.phoneNumber(),
+        roles: [faker.helpers.arrayElement(['ADMIN', 'MANAGER'])],
+        franchises_ids: [faker.datatype.uuid()],
+      })
+      .expect(403)
+  })
 })
