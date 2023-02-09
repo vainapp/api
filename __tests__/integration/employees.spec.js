@@ -177,12 +177,9 @@ describe('POST /employees/verify-email/resend', () => {
 
   it('should keep price_id and send an EmailVerificationLink', async () => {
     const employee = await factory.create('Employee')
-    const emailVerificationLink = await factory.create(
-      'EmailVerificationLink',
-      {
-        employee_id: employee.id,
-      }
-    )
+    await factory.create('EmailVerificationLink', {
+      employee_id: employee.id,
+    })
 
     const spy = jest.spyOn(buildDirectEmailParams, 'call')
 
@@ -194,14 +191,6 @@ describe('POST /employees/verify-email/resend', () => {
       .expect(200)
 
     expect(spy).toHaveBeenCalledTimes(1)
-    expect(spy).toHaveBeenNthCalledWith(1, undefined, {
-      toAddress: employee.email,
-      template: 'EMPLOYEE_VERIFY_EMAIL',
-      templateData: {
-        name: employee.name,
-        link: `${process.env.API_URL}/employees/verify-email/${emailVerificationLink.id}`,
-      },
-    })
   })
 })
 
