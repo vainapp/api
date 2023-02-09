@@ -7,3 +7,28 @@ Para começar a usar a plataforma, você só precisa validar o seu endereço de 
 
 Atenciosamente,
 Equipe Vain.
+
+Obrigado por usar a Vain! Juntamos algumas informações que vão te ajudar a configurar sua conta.
+
+[Vain] ( https://vainapp.com.br )
+
+******************
+Oi, {{name}}!
+******************
+
+Obrigado por usar a Vain! Estamos muito felizes em ter você conosco. Para aproveitar ao máximo a Vain, faça o seguinte:
+
+Verifique sua conta ( {{ link }} )
+
+e você tiver alguma dúvida, entre em contato com a nossa equipe de suporte ( {{support_email}} ). (Vamos responder na velocidade da luz.).
+
+Obrigado,
+equipe Vain
+
+Se você tiver problemas com o botão acima, copie e cole o URL abaixo em seu navegador da web.
+
+{{link}}
+
+Vain
+Guarulhos
+São Paulo, Brasil
