@@ -730,11 +730,21 @@
 						{
 							"name": "/employees",
 							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{employee_access_token}}",
+											"type": "string"
+										}
+									]
+								},
 								"method": "POST",
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"name\": \"João Melo\",\n    \"email\": \"jopcmelo@gmail.com\",\n    \"password\": \"123456\",\n    \"password_confirmation\": \"123456\",\n    \"phone_number\": \"5511963005537\",\n    \"roles\": [\"ADMIN\", \"MANAGER\", \"EMPLOYEE\"],\n    \"franchises_ids\": [\"1234\"]\n}",
+									"raw": "{\n    \"name\": \"João Melo\",\n    \"email\": \"jopcmelo+employee@gmail.com\",\n    \"phone_number\": \"5511963005538\",\n    \"roles\": [\"EMPLOYEE\"],\n    \"franchises_ids\": [\"f4c9863d-9f10-4aba-b4d0-91900683e23c\"]\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -885,7 +895,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"email\": \"jopcmelo@gmail.com\",\n    \"password\": \"4ut3nt1c4R#JpCm1\"\n}",
+									"raw": "{\n    \"email\": \"jopcmelo+admin@gmail.com\",\n    \"password\": \"4ut3nt1c4R#JpCm1\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
