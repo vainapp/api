@@ -94,11 +94,11 @@ class StoreEmployeeService {
       employee_id: employee.id,
     })
 
-    const emailParams = buildDirectEmailParams({
-      toAddress: employee.email,
+    const emailParams = await buildDirectEmailParams({
+      toAddress: email,
       template: 'EMPLOYEE_VERIFY_EMAIL',
       templateData: {
-        name: employee.name,
+        name,
         link: `${process.env.API_URL}/employees/verify-email/${link.id}`,
         password,
       },

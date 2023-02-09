@@ -1,6 +1,7 @@
 import { ForbiddenError } from '../../../shared/errors'
 import NotFoundError from '../../../shared/errors/NotFound'
 import buildDirectEmailParams from '../../../shared/helpers/buildDirectEmailParams'
+import generateRandomPassword from '../../../shared/helpers/generateRandomPassword'
 import EmailVerificationLink from '../../../shared/infra/sequelize/models/EmailVerificationLink'
 import Employee from '../../../shared/infra/sequelize/models/Employee'
 import SendEmailJob from '../../../shared/jobs/SendEmail'
@@ -28,12 +29,19 @@ class StoreEmailVerificationLinkService {
       throw new NotFoundError('Link de verificação de e-mail não encontrado')
     }
 
+    const password = generateRandomPassword()
+
+    await employee.update({
+      password,
+    })
+
     const verificationEmailParams = await buildDirectEmailParams({
       toAddress: email,
       template: 'EMPLOYEE_VERIFY_EMAIL',
       templateData: {
         name: employee.name,
         link: `${process.env.API_URL}/employees/verify-email/${emailVerificationLink.id}`,
+        password,
       },
     })
 

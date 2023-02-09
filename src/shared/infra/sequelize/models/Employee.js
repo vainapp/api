@@ -52,6 +52,10 @@ class Employee extends AuthenticableEntity {
       await this.beforeSaveLogic(employee)
     })
 
+    this.addHook('beforeUpdate', async (employee) => {
+      await this.beforeSaveLogic(employee)
+    })
+
     return this
   }
 
