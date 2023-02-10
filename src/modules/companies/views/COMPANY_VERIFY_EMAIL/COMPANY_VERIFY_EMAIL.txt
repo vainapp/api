@@ -1,13 +1,5 @@
 Olá, {{name}}!
 
-Você acaba de criar uma conta na Vain! Esse é um ótimo passo!
-
-Para começar a usar a plataforma, você só precisa validar o seu endereço de e-mail clicando no link a seguir:
-{{action_url}}
-
-Atenciosamente,
-Equipe Vain.
-
 Obrigado por usar a Vain! Juntamos algumas informações que vão te ajudar a configurar sua conta.
 
 [Vain] ( https://vainapp.com.br )
@@ -20,14 +12,10 @@ Obrigado por usar a Vain! Estamos muito felizes em ter você conosco. Para aprov
 
 Verifique sua conta ( {{action_url}} )
 
-e você tiver alguma dúvida, entre em contato com a nossa equipe de suporte ( {{support_email}} ). (Vamos responder na velocidade da luz.).
+Se você tiver alguma dúvida, entre em contato com a nossa equipe de suporte ( {{support_email}} ). (Vamos responder na velocidade da luz.).
 
 Obrigado,
 equipe da Vain
-
-Se você tiver problemas com o botão acima, copie e cole o URL abaixo em seu navegador da web.
-
-{{action_url}}
 
 Vain
 Guarulhos

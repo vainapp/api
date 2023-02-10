@@ -80,7 +80,7 @@ class StoreUserService {
       template: 'USER_VERIFY_EMAIL',
       templateData: {
         name,
-        link: `${process.env.API_URL}/users/verify-email/${
+        action_url: `${process.env.API_URL}/users/verify-email/${
           (existingLink || newLink).id
         }`,
       },
