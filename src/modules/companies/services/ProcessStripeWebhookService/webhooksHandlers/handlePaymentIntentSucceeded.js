@@ -48,7 +48,7 @@ export const handlePaymentIntentSucceeded = async (payload) => {
       description,
       payment_intent_id: payment_intent.id,
       date: formatDate(new Date()),
-      billing_url: '',
+      billing_url: process.env.STRIPE_BILLING_PORTAL_URL,
     },
   })
   await Queue.add(SendEmailJob.key, confirmationEmailParams)
