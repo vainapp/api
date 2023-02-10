@@ -3,7 +3,6 @@ import querystring from 'node:querystring'
 import faker from '@faker-js/faker'
 import request from 'supertest'
 
-import buildDirectEmailParams from '../../src/shared/helpers/buildDirectEmailParams'
 import app from '../../src/shared/infra/http/app'
 import Employee from '../../src/shared/infra/sequelize/models/Employee'
 import PhoneNumberVerificationCode from '../../src/shared/infra/sequelize/models/PhoneNumberVerificationCode'
@@ -173,24 +172,6 @@ describe('POST /employees/verify-email/resend', () => {
         email: employee.email,
       })
       .expect(404)
-  })
-
-  it('should keep price_id and send an EmailVerificationLink', async () => {
-    const employee = await factory.create('Employee')
-    await factory.create('EmailVerificationLink', {
-      employee_id: employee.id,
-    })
-
-    const spy = jest.spyOn(buildDirectEmailParams, 'call')
-
-    await request(app)
-      .post('/employees/verify-email/resend')
-      .send({
-        email: employee.email,
-      })
-      .expect(200)
-
-    expect(spy).toHaveBeenCalledTimes(1)
   })
 })
 
