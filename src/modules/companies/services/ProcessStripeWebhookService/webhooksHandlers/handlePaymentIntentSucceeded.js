@@ -51,5 +51,8 @@ export const handlePaymentIntentSucceeded = async (payload) => {
       billing_url: process.env.STRIPE_BILLING_PORTAL_URL,
     },
   })
+
+  console.log('confirmationEmailParams', confirmationEmailParams)
+
   await Queue.add(SendEmailJob.key, confirmationEmailParams)
 }
