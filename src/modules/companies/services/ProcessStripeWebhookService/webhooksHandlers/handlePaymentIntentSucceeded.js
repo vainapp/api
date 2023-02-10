@@ -52,7 +52,5 @@ export const handlePaymentIntentSucceeded = async (payload) => {
     },
   })
 
-  console.log('confirmationEmailParams', confirmationEmailParams)
-
   await Queue.add(SendEmailJob.key, confirmationEmailParams)
 }
