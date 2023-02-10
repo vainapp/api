@@ -818,6 +818,8 @@ describe('POST /companies/payments/stripe-webhook', () => {
           name: employee.name,
           description: chargeMock.invoice.lines.data[0].description,
           payment_intent_id: mock.data.object.id,
+          date: formatDate(new Date()),
+          billing_url: '',
         },
       })
     })
@@ -889,6 +891,8 @@ describe('POST /companies/payments/stripe-webhook', () => {
           name: employee.name,
           description: mock.data.object.lines.data[0].description,
           payment_intent_id: mock.data.object.id,
+          date: formatDate(new Date()),
+          billing_url: '',
         },
       })
     })

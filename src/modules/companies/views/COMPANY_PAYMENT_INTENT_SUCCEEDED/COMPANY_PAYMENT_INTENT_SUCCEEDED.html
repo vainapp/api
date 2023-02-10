@@ -1,32 +1,111 @@
-<!DOCTYPE html>
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <title>Pagamento confirmado!</title>
-    {{meta}} {{css}}
+    {{meta}}
+    <title></title>
+    {{css}}
   </head>
   <body>
-    <table class="body-wrap">
+    <span class="preheader">Este é um recibo para sua compra.</span>
+    <table
+      class="email-wrapper"
+      width="100%"
+      cellpadding="0"
+      cellspacing="0"
+      role="presentation"
+    >
       <tr>
-        <td class="container">
-          <table>
+        <td align="center">
+          <table
+            class="email-content"
+            width="100%"
+            cellpadding="0"
+            cellspacing="0"
+            role="presentation"
+          >
             {{header}}
+            <!-- Email Body -->
             <tr>
-              <td class="content">
-                <h2>Olá, {{name}}!</h2>
-                <p>
-                  Já identificamos o seu pagamento! Segue as informações de confirmação:
-                </p>
-                <p>
-                  {{description}}
-                </p>
-                <p>ID da transação: {{payment_intent_id}}</p>
-                {{signature}}
+              <td
+                class="email-body"
+                width="570"
+                cellpadding="0"
+                cellspacing="0"
+              >
+                <table
+                  class="email-body_inner"
+                  align="center"
+                  width="570"
+                  cellpadding="0"
+                  cellspacing="0"
+                  role="presentation"
+                >
+                  <!-- Body content -->
+                  <tr>
+                    <td class="content-cell">
+                      <div class="f-fallback">
+                        <h1>Oi, {{name}},</h1>
+                        <p>
+                          Obrigado por usar a Vain. Este email é o recibo para
+                          sua compra.
+                        </p>
+                        <p>
+                          Precisa
+                          <a href="{{billing_url}}"
+                            >atualizar suas informações de pagamento</a
+                          >?
+                        </p>
+                        <table
+                          class="purchase"
+                          width="100%"
+                          cellpadding="0"
+                          cellspacing="0"
+                          role="presentation"
+                        >
+                          <tr>
+                            <td>
+                              <h3>{{payment_intent_id}}</h3>
+                            </td>
+                            <td>
+                              <h3 class="align-right">{{date}}</h3>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td width="100%" class="purchase_item">
+                              <span class="f-fallback">{{description}}</span>
+                            </td>
+                          </tr>
+                        </table>
+                        <p>
+                          Se você tiver alguma dúvida sobre este recibo, basta
+                          responder a este email ou entrar em contato com nossa
+                          <a href="mailto:{{support_email}}">equipe de suporte</a>.
+                        </p>
+                        {{signature}}
+                        <!-- Sub copy -->
+                        <table class="body-sub" role="presentation">
+                          <tr>
+                            <td>
+                              <p class="f-fallback sub">
+                                Mudou recentemente? Tem um novo cartão de
+                                crédito? Você pode
+                                <a href="{{billing_url}}"
+                                  >atualizar suas informações de pagamento</a
+                                >.
+                              </p>
+                            </td>
+                          </tr>
+                        </table>
+                      </div>
+                    </td>
+                  </tr>
+                </table>
               </td>
             </tr>
+            {{footer}}
           </table>
         </td>
       </tr>
-      {{footer}}
     </table>
   </body>
 </html>
