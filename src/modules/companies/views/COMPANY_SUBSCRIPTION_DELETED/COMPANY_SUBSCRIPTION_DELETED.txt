@@ -1,8 +1,18 @@
-Olá, {{name}}!
+Sua assinatura foi cancelada com sucesso. Vamos sentir sua falta!
+
+[Vain] ( https://vainapp.com.br )
+
+************
+Oi, {{name}},
+************
 
 Sua assinatura foi cancelada com sucesso. Vamos sentir sua falta!
 
 Sua assinatura será válida até {{subscription_active_until}}.
 
-Atenciosamente,
-Equipe Vain.
+Obrigado,
+equipe da Vain
+
+Vain
+Guarulhos
+São Paulo, Brasil
