@@ -10,6 +10,8 @@ Sua assinatura foi cancelada com sucesso. Vamos sentir sua falta!
 
 Sua assinatura será válida até {{subscription_active_until}}.
 
+Por questões de segurança, se você não solicitou o cancelamento, entre em contato com o suporte ( {{support_email}} ).
+
 Obrigado,
 equipe da Vain
 
