@@ -1,12 +1,28 @@
-Olá, {{name}}!
+{{invitee_sender_name}} te convidou para usar a Vain para colaborar com a {{invite_sender_organization_name}}.
 
-Você foi convidado para criar uma conta na Vain!
+[Vain] ( https://vainapp.com.br )
 
-Geramos uma senha de primeiro acesso para você configurar a sua conta. Sua senha é:
-{{password}}
+*************
+Oi, {{name}}!
+*************
 
-Para começar a usar a plataforma, você só precisa validar o seu endereço de e-mail clicando no link a seguir:
-{{link}}
+{{invitee_sender_name}} te convidou para usar a Vain para colaborar com a {{invite_sender_organization_name}}. Use o link abaixo para configurar sua conta e começar:
 
-Atenciosamente,
-Equipe Vain.
+Verifique sua conta ( {{ action_url }} )
+
+Por referência, aqui estão suas informações de login:
+
+Página de login: {{login_url}}
+
+Endereço de e-mail: {{email}}
+
+Senha: {{password}}
+
+Se você tiver alguma dúvida, entre em contato com a nossa equipe de suporte( {{support_email}} ). (Vamos responder na velocidade da luz.).
+
+Obrigado,
+equipe da Vain
+
+Vain
+Guarulhos
+São Paulo, Brasil

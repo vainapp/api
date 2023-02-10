@@ -45,7 +45,7 @@ export const handleInvoicePaymentFailed = async (payload) => {
     templateData: {
       name: admin.name,
       description,
-      checkout_url,
+      action_url: checkout_url,
     },
   })
   await Queue.add(SendEmailJob.key, paymentFailureParams)

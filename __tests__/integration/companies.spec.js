@@ -4,6 +4,7 @@ import faker from '@faker-js/faker'
 import request from 'supertest'
 
 import Company from '../../src/modules/companies/infra/sequelize/models/Company'
+import { help } from '../../src/shared/constants/emails'
 import buildDirectEmailParams from '../../src/shared/helpers/buildDirectEmailParams'
 import formatDate from '../../src/shared/helpers/formatDate'
 import app from '../../src/shared/infra/http/app'
@@ -576,7 +577,7 @@ describe('POST /companies/verify-email/resend', () => {
       template: 'COMPANY_VERIFY_EMAIL',
       templateData: {
         name: employee.name,
-        link: `${process.env.API_URL}/companies/verify-email/${
+        action_url: `${process.env.API_URL}/companies/verify-email/${
           emailVerificationLink.id
         }?${querystring.stringify({ price_id })}`,
       },
@@ -817,6 +818,8 @@ describe('POST /companies/payments/stripe-webhook', () => {
           name: employee.name,
           description: chargeMock.invoice.lines.data[0].description,
           payment_intent_id: mock.data.object.id,
+          date: formatDate(new Date()),
+          billing_url: process.env.STRIPE_BILLING_PORTAL_URL,
         },
       })
     })
@@ -888,6 +891,8 @@ describe('POST /companies/payments/stripe-webhook', () => {
           name: employee.name,
           description: mock.data.object.lines.data[0].description,
           payment_intent_id: mock.data.object.id,
+          date: formatDate(new Date()),
+          billing_url: process.env.STRIPE_BILLING_PORTAL_URL,
         },
       })
     })
@@ -1078,7 +1083,7 @@ describe('POST /companies/payments/stripe-webhook', () => {
         templateData: {
           name: employee.name,
           description: mock.data.object.lines.data[0].description,
-          checkout_url: url,
+          action_url: url,
         },
       })
     })
@@ -1129,7 +1134,9 @@ describe('POST /companies/payments/stripe-webhook', () => {
       template: 'COMPANY_CUSTOMER_SUBSCRIPTION_TRIAL_WILL_END',
       templateData: {
         name: employee.name,
-        description: mock.data.object.description,
+        action_url: process.env.DASHBOARD_WEB_URL,
+        close_account_url: `mailto:${help}?subject=Encerrar conta da Vain`,
+        feedback_url: `mailto:${help}?subject=Feedback da Vain`,
       },
     })
   })

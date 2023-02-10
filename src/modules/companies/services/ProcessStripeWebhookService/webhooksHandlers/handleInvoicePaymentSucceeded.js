@@ -1,5 +1,6 @@
 import { NotFoundError } from '../../../../../shared/errors'
 import buildDirectEmailParams from '../../../../../shared/helpers/buildDirectEmailParams'
+import formatDate from '../../../../../shared/helpers/formatDate'
 import Employee from '../../../../../shared/infra/sequelize/models/Employee'
 import SendEmailJob from '../../../../../shared/jobs/SendEmail'
 import Queue from '../../../../../shared/lib/Queue'
@@ -48,6 +49,8 @@ export const handleInvoicePaymentSucceeded = async (payload) => {
       name: admin.name,
       description,
       payment_intent_id: invoice.id,
+      date: formatDate(new Date()),
+      billing_url: process.env.STRIPE_BILLING_PORTAL_URL,
     },
   })
   await Queue.add(SendEmailJob.key, confirmationEmailParams)

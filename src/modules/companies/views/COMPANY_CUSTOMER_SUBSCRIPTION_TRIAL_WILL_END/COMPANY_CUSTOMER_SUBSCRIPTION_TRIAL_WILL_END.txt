@@ -1,7 +1,28 @@
-Olá, {{name}}!
+O seu período de teste da Vain está prestes a terminar. Tem algo que podemos fazer para ajudar?
 
-O seu período de teste do plano {{description}} acaba em 3 dias! Após esses 3 dias, iremos realizar
-uma tentativa de pagamento automática para que você possa continuar com o seu acesso à plataforma.
+[Vain] ( https://vainapp.com.br )
 
-Atenciosamente,
-Equipe Vain.
+****************************************
+O seu período de teste da Vain termina em 3 dias
+****************************************
+
+Obrigado por experimentar a Vain. Adicionou muitos dados, por isso aqui estão algumas opções para considerar continuar conosco.
+
+Atualize a sua conta ( {{ action_url }} )
+
+Se não estiver pronto para atualizar para uma conta paga, tem algumas outras opções disponíveis para você…
+
+Compartilhe sua opinião ( {{ feedback_url }} ) - Se a Vain não for o que você estava procurando, nos diga o que você estava procurando e podemos sugerir algumas alternativas que possam ser uma melhor opção.
+
+Encerre a sua conta ( {{ close_account_url }} ) - Você pode encerrar sua conta e excluir seus dados. Ou, não faça nada e automaticamente encerraremos sua conta e excluiremos seus dados em 90 dias. Mas não se preocupe, enviaremos outro e-mail antes disso acontecer.
+
+Independente da sua escolha, queremos agradecer por experimentar a Vain. Sabemos que é um investimento do seu tempo e agradecemos por nos dar uma chance.
+
+Obrigado,
+equipe da Vain
+
+OBS: Se você tiver alguma dúvida ou precisar de ajuda, não hesite em entrar em contato. Você pode responder a este e-mail.
+
+Vain
+Guarulhos
+São Paulo, Brasil

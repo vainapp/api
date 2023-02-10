@@ -94,13 +94,19 @@ class StoreEmployeeService {
       employee_id: employee.id,
     })
 
+    const admin = await Employee.findByPk(admin_employee_id)
+
     const emailParams = await buildDirectEmailParams({
       toAddress: email,
       template: 'EMPLOYEE_VERIFY_EMAIL',
       templateData: {
         name,
-        link: `${process.env.API_URL}/employees/verify-email/${link.id}`,
+        email,
         password,
+        invitee_sender_name: admin.name,
+        invite_sender_organization_name: company.name,
+        action_url: `${process.env.API_URL}/employees/verify-email/${link.id}`,
+        login_url: process.env.DASHBOARD_WEB_URL,
       },
     })
 

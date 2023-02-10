@@ -35,7 +35,7 @@ class StoreEmailVerificationLinkService {
       template: 'COMPANY_VERIFY_EMAIL',
       templateData: {
         name: employee.name,
-        link: `${process.env.API_URL}/companies/verify-email/${
+        action_url: `${process.env.API_URL}/companies/verify-email/${
           emailVerificationLink.id
         }?${querystring.stringify({ price_id })}`,
       },

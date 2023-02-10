@@ -1,9 +1,30 @@
-Olá, {{name}}!
+Este é um recibo para sua compra.
 
-Já identificamos o seu pagamento! Segue as informações de confirmação:
+[Vain] ( https://vainapp.com.br )
+
+************
+Oi, {{name}},
+************
+
+Obrigado por usar a Vain. Este email é o recibo para sua compra.
+
+Precisa atualizar suas informações de pagamento? ( {{billing_url}} )
+
+{{payment_intent_id}}
+--------------
+
+{{date}}
+--------
+
 {{description}}
 
-ID da transação: {{payment_intent_id}}
+Se você tiver alguma dúvida sobre este recibo, basta responder a este email ou entrar em contato com nossa equipe de suporte ( {{support_email}} ).
 
-Atenciosamente,
-Equipe Vain.
+Obrigado,
+equipe da Vain
+
+Mudou recentemente? Tem um novo cartão de crédito? Você pode atualizar suas informações de pagamento ( {{billing_url}} ).
+
+Vain
+Guarulhos
+São Paulo, Brasil

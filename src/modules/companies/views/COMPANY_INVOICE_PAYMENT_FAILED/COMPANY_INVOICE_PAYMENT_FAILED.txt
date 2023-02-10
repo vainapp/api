@@ -1,9 +1,32 @@
-Olá, {{name}}!
+Não foi possível processar o seu último pagamento. Vamos corrigir isso!
 
-Não foi possível renovar sua assinatura ({{description}}) pois houve uma falha no pagamento.
+[Vain] ( https://vainapp.com.br )
 
-Evite ficar sem acesso à plataforma adicionando um novo método de pagamento clicando no link a seguir:
-{{checkout_url}}
+************
+Oi, {{name}},
+************
 
-Atenciosamente,
-Equipe Vain.
+Não conseguimos processar o seu último pagamento de {{description}} para a sua assinatura da Vain.
+
+Por favor, verifique se o seu cartão de crédito está atualizado para garantir que a sua assinatura continue ativa.
+
+Verifique e atualize suas informações de pagamento → ( {{ action_url }} )
+
+-------------------------
+Por que o pagamento falhou?
+-------------------------
+
+Na maioria dos casos, um pagamento pode falhar porque:
+
+* O cartão expirou
+* Os fundos são insuficientes
+* O pagamento requer autenticação adicional antes que possamos processá-lo
+
+Se você tiver alguma dúvida ou precisar de nossa ajuda, você pode entrar em contato com nosso suporte em {{support_email}} ou simplesmente responder a este e-mail.
+
+Obrigado,
+equipe da Vain
+
+Vain
+Guarulhos
+São Paulo, Brasil

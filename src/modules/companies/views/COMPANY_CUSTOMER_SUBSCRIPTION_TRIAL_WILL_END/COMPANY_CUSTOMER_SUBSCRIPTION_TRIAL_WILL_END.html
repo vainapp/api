@@ -1,29 +1,175 @@
-<!DOCTYPE html>
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <title>O seu período de teste está acabando</title>
-    {{meta}} {{css}}
+    {{meta}}
+    <title></title>
+    {{css}}
   </head>
   <body>
-    <table class="body-wrap">
+    <span class="preheader"
+      >O seu período de teste da Vain está prestes a terminar. Tem algo que
+      podemos fazer para ajudar?
+    </span>
+    <table
+      class="email-wrapper"
+      width="100%"
+      cellpadding="0"
+      cellspacing="0"
+      role="presentation"
+    >
       <tr>
-        <td class="container">
-          <table>
+        <td align="center">
+          <table
+            class="email-content"
+            width="100%"
+            cellpadding="0"
+            cellspacing="0"
+            role="presentation"
+          >
             {{header}}
+            <!-- Email Body -->
             <tr>
-              <td class="content">
-                <h2>Olá, {{name}}!</h2>
-                <p>
-                  O seu período de teste do plano {{description}} acaba em 3 dias! Após esses 3 dias, iremos realizar
-                  uma tentativa de pagamento automática para que você possa continuar com o seu acesso à plataforma.
-                </p>
-                {{signature}}
+              <td
+                class="email-body"
+                width="570"
+                cellpadding="0"
+                cellspacing="0"
+              >
+                <table
+                  class="email-body_inner"
+                  align="center"
+                  width="570"
+                  cellpadding="0"
+                  cellspacing="0"
+                  role="presentation"
+                >
+                  <!-- Body content -->
+                  <tr>
+                    <td class="content-cell">
+                      <div class="f-fallback">
+                        <h1>
+                          O seu período de teste da Vain termina em 3 dias
+                        </h1>
+                        <p>
+                          Obrigado por experimentar a Vain. Adicionou muitos
+                          dados, por isso aqui estão algumas opções para
+                          considerar continuar conosco.
+                        </p>
+                        <!-- Action -->
+                        <table
+                          class="body-action"
+                          align="center"
+                          width="100%"
+                          cellpadding="0"
+                          cellspacing="0"
+                          role="presentation"
+                        >
+                          <tr>
+                            <td align="center">
+                              <!-- Border based button
+           https://litmus.com/blog/a-guide-to-bulletproof-buttons-in-email-design -->
+                              <table
+                                width="100%"
+                                border="0"
+                                cellspacing="0"
+                                cellpadding="0"
+                                role="presentation"
+                              >
+                                <tr>
+                                  <td align="center">
+                                    <a
+                                      href="{{action_url}}"
+                                      class="f-fallback button button--green"
+                                      target="_blank"
+                                      >Atualize a sua conta</a
+                                    >
+                                  </td>
+                                </tr>
+                              </table>
+                            </td>
+                          </tr>
+                        </table>
+                        <p>
+                          Se não estiver pronto para atualizar para uma conta
+                          paga, tem algumas outras opções disponíveis para
+                          você&hellip;
+                        </p>
+                        <table
+                          class="attributes"
+                          width="100%"
+                          cellpadding="0"
+                          cellspacing="0"
+                          role="presentation"
+                        >
+                          <tr>
+                            <td class="attributes_content">
+                              <table
+                                width="100%"
+                                cellpadding="0"
+                                cellspacing="0"
+                                role="presentation"
+                              >
+                                <tr>
+                                  <td class="attributes_item">
+                                    <div class="f-fallback">
+                                      <strong
+                                        ><a href="{{feedback_url}}"
+                                          >Compartilhe sua opinião</a
+                                        ></strong
+                                      >
+                                      - Se a Vain não for o que você estava
+                                      procurando, nos diga o que você estava
+                                      procurando e podemos sugerir algumas
+                                      alternativas que possam ser uma melhor
+                                      opção.
+                                      <br />
+                                      <br />
+                                    </div>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td class="attributes_item">
+                                    <div class="f-fallback">
+                                      <strong
+                                        ><a href="{{close_account_url}}"
+                                          >Encerre a sua conta</a
+                                        ></strong
+                                      >
+                                      - Você pode encerrar sua conta e excluir
+                                      seus dados. Ou, não faça nada e
+                                      automaticamente encerraremos sua conta e
+                                      excluiremos seus dados em 90 dias. Mas não
+                                      se preocupe, enviaremos outro e-mail antes
+                                      disso acontecer.
+                                    </div>
+                                  </td>
+                                </tr>
+                              </table>
+                            </td>
+                          </tr>
+                        </table>
+                        <p>
+                          Independente da sua escolha, queremos agradecer por
+                          experimentar a Vain. Sabemos que é um investimento do
+                          seu tempo e agradecemos por nos dar uma chance.
+                        </p>
+                        <p>Obrigado,<br />equipe da Vain</p>
+                        <p>
+                          <strong>OBS:</strong>
+                          Se você tiver alguma dúvida ou precisar de ajuda, não
+                          hesite em entrar em contato. Você pode responder a
+                          este e-mail.
+                        </p>
+                      </div>
+                    </td>
+                  </tr>
+                </table>
               </td>
             </tr>
+            {{footer}}
           </table>
         </td>
       </tr>
-      {{footer}}
     </table>
   </body>
 </html>

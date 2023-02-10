@@ -33,7 +33,7 @@ class StoreEmailVerificationLinkService {
       template: 'USER_VERIFY_EMAIL',
       templateData: {
         name: user.name,
-        link: `${process.env.API_URL}/users/verify-email/${emailVerificationLink.id}`,
+        action_url: `${process.env.API_URL}/users/verify-email/${emailVerificationLink.id}`,
       },
     })
 

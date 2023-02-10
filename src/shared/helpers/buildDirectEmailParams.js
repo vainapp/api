@@ -27,6 +27,7 @@ async function buildDirectEmailParams({
       header: await getContent(path.join(templateFolder, 'header.html')),
       signature: await getContent(path.join(templateFolder, 'signature.html')),
       footer: await getContent(path.join(templateFolder, 'footer.html')),
+      support_email: help,
     },
     replyToAddresses,
   }

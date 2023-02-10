@@ -49,7 +49,7 @@ class PreSignupCompanyService {
         template: 'COMPANY_VERIFY_EMAIL',
         templateData: {
           name: existingEmployee.name,
-          link: `${process.env.API_URL}/companies/verify-email/${
+          action_url: `${process.env.API_URL}/companies/verify-email/${
             (existingLink || newLink).id
           }?${querystring.stringify({ price_id })}`,
         },
