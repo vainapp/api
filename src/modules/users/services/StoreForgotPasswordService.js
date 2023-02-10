@@ -1,4 +1,3 @@
-import { help } from '../../../shared/constants/emails'
 import NotFoundError from '../../../shared/errors/NotFound'
 import buildDirectEmailParams from '../../../shared/helpers/buildDirectEmailParams'
 import SendEmailJob from '../../../shared/jobs/SendEmail'
@@ -41,7 +40,6 @@ class StoreForgotPasswordService {
       templateData: {
         name: user.name,
         code,
-        helpEmailAddress: help,
       },
     })
 
