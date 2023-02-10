@@ -6,6 +6,8 @@ import EmailVerificationLink from '../../../shared/infra/sequelize/models/EmailV
 import Employee from '../../../shared/infra/sequelize/models/Employee'
 import SendEmailJob from '../../../shared/jobs/SendEmail'
 import Queue from '../../../shared/lib/Queue'
+import Company from '../../companies/infra/sequelize/models/Company'
+import Franchise from '../../companies/infra/sequelize/models/Franchise'
 
 class StoreEmailVerificationLinkService {
   async execute({ email }) {
@@ -35,13 +37,25 @@ class StoreEmailVerificationLinkService {
       password,
     })
 
+    const franchise = await Franchise.findOne({
+      where: {
+        employee_id: employee.id,
+      },
+    })
+    const company = await Company.findByPk(franchise.company_id)
+    const admin = await Employee.findByPk(company.admin_id)
+
     const verificationEmailParams = await buildDirectEmailParams({
       toAddress: email,
       template: 'EMPLOYEE_VERIFY_EMAIL',
       templateData: {
         name: employee.name,
-        link: `${process.env.API_URL}/employees/verify-email/${emailVerificationLink.id}`,
+        email,
         password,
+        invitee_sender_name: admin.name,
+        invite_sender_organization_name: company.name,
+        action_url: `${process.env.API_URL}/employees/verify-email/${emailVerificationLink.id}`,
+        login_url: process.env.DASHBOARD_WEB_URL,
       },
     })
 

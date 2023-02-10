@@ -1,59 +1,167 @@
-<!DOCTYPE html>
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <title>Verifique sua conta</title>
-    {{meta}} {{css}}
+    {{meta}}
+    <title></title>
+    {{css}}
   </head>
   <body>
-    <table class="body-wrap">
+    <span class="preheader"
+      >{{invitee_sender_name}} te convidou para usar a Vain para colaborar com a
+      {{invite_sender_organization_name}}.
+    </span>
+    <table
+      class="email-wrapper"
+      width="100%"
+      cellpadding="0"
+      cellspacing="0"
+      role="presentation"
+    >
       <tr>
-        <td class="container">
-          <table>
+        <td align="center">
+          <table
+            class="email-content"
+            width="100%"
+            cellpadding="0"
+            cellspacing="0"
+            role="presentation"
+          >
             {{header}}
+            <!-- Email Body -->
             <tr>
-              <td class="content">
-                <h2>Olá, {{name}}!</h2>
-                <p>Você foi convidado para criar uma conta na Vain!</p>
-                <p>
-                  Geramos uma senha de primeiro acesso para você configurar a
-                  sua conta. Sua senha é: <strong>{{password}}</strong>
-                </p>
-                <p>
-                  Para começar a usar a plataforma, você só precisa validar o
-                  seu endereço de e-mail clicando no link a seguir ou no botão
-                  abaixo :)
-                </p>
-                <table>
+              <td
+                class="email-body"
+                width="570"
+                cellpadding="0"
+                cellspacing="0"
+              >
+                <table
+                  class="email-body_inner"
+                  align="center"
+                  width="570"
+                  cellpadding="0"
+                  cellspacing="0"
+                  role="presentation"
+                >
+                  <!-- Body content -->
                   <tr>
-                    <td align="center">
-                      <span style="color: #ffffff; font-weight: 300">
-                        <a
-                          class="button"
-                          style="
-                            color: #ffffff;
-                            text-align: center;
-                            text-decoration: none;
-                          "
-                          href="{{link}}"
-                          >Validar minha conta</a
+                    <td class="content-cell">
+                      <div class="f-fallback">
+                        <h1>Oi, {{name}}!</h1>
+                        <p>
+                          {{invitee_sender_name}} te convidou para usar a Vain
+                          para colaborar com a
+                          {{invite_sender_organization_name}}. Use o botão
+                          abaixo para configurar sua conta e começar:
+                        </p>
+                        <!-- Action -->
+                        <table
+                          class="body-action"
+                          align="center"
+                          width="100%"
+                          cellpadding="0"
+                          cellspacing="0"
+                          role="presentation"
                         >
-                      </span>
+                          <tr>
+                            <td align="center">
+                              <!-- Border based button
+           https://litmus.com/blog/a-guide-to-bulletproof-buttons-in-email-design -->
+                              <table
+                                width="100%"
+                                border="0"
+                                cellspacing="0"
+                                cellpadding="0"
+                                role="presentation"
+                              >
+                                <tr>
+                                  <td align="center">
+                                    <a
+                                      href="{{action_url}}"
+                                      class="f-fallback button"
+                                      target="_blank"
+                                      >Verifique sua conta</a
+                                    >
+                                  </td>
+                                </tr>
+                              </table>
+                            </td>
+                          </tr>
+                        </table>
+                        <p>
+                          Por referência, aqui estão suas informações de login:
+                        </p>
+                        <table
+                          class="attributes"
+                          width="100%"
+                          cellpadding="0"
+                          cellspacing="0"
+                          role="presentation"
+                        >
+                          <tr>
+                            <td class="attributes_content">
+                              <table
+                                width="100%"
+                                cellpadding="0"
+                                cellspacing="0"
+                                role="presentation"
+                              >
+                                <tr>
+                                  <td class="attributes_item">
+                                    <span class="f-fallback">
+                                      <strong>Página de login:</strong>
+                                      {{login_url}}
+                                    </span>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td class="attributes_item">
+                                    <span class="f-fallback">
+                                      <strong>Endereço de e-mail:</strong>
+                                      {{email}}
+                                    </span>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td class="attributes_item">
+                                    <span class="f-fallback">
+                                      <strong>Senha:</strong> {{password}}
+                                    </span>
+                                  </td>
+                                </tr>
+                              </table>
+                            </td>
+                          </tr>
+                        </table>
+                        <p>
+                          Se você tiver alguma dúvida, entre em contato com a
+                          <a href="mailto:{{support_email}}"
+                            >nossa equipe de suporte</a
+                          >. (Vamos responder na velocidade da luz.).
+                        </p>
+                        {{signature}}
+                        <!-- Sub copy -->
+                        <table class="body-sub" role="presentation">
+                          <tr>
+                            <td>
+                              <p class="f-fallback sub">
+                                Se você tiver problemas com o botão acima, copie
+                                e cole o URL abaixo em seu navegador da web.
+                              </p>
+                              <p class="f-fallback sub">{{action_url}}</p>
+                            </td>
+                          </tr>
+                        </table>
+                      </div>
                     </td>
                   </tr>
                 </table>
-                <br />
-                <p>
-                  Caso não consiga pressionar o botão acima, pode usar este
-                  link:
-                </p>
-                <a href="{{link}}">{{link}}</a><br /><br />
-                {{signature}}
               </td>
             </tr>
+            {{footer}}
           </table>
         </td>
       </tr>
-      {{footer}}
     </table>
   </body>
 </html>
