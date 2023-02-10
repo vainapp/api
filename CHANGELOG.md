@@ -1,3 +1,10 @@
+# [1.9.0](https://github.com/vainapp/back-end/compare/v1.8.0...v1.9.0) (2023-02-10)
+
+
+### Features
+
+* **email-template:** update the  template ([#86](https://github.com/vainapp/back-end/issues/86)) ([ebc89b7](https://github.com/vainapp/back-end/commit/ebc89b767bd76a1c51c4a53ddc43d13a945faf03))
+
 # [1.8.0](https://github.com/vainapp/back-end/compare/v1.7.1...v1.8.0) (2023-02-09)
 
 
