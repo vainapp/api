@@ -1,57 +1,155 @@
-<!DOCTYPE html>
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <title>Falha no pagamento</title>
-    {{meta}} {{css}}
+    {{meta}}
+    <title></title>
+    {{css}}
   </head>
   <body>
-    <table class="body-wrap">
+    <span class="preheader"
+      >Não foi possível processar o seu último pagamento. Vamos corrigir isso!
+    </span>
+    <table
+      class="email-wrapper"
+      width="100%"
+      cellpadding="0"
+      cellspacing="0"
+      role="presentation"
+    >
       <tr>
-        <td class="container">
-          <table>
+        <td align="center">
+          <table
+            class="email-content"
+            width="100%"
+            cellpadding="0"
+            cellspacing="0"
+            role="presentation"
+          >
             {{header}}
+            <!-- Email Body -->
             <tr>
-              <td class="content">
-                <h2>Olá, {{name}}!</h2>
-                <p>
-                  Não foi possível renovar sua assinatura ({{description}}) pois
-                  houve uma falha no pagamento.
-                </p>
-                <p>
-                  Evite ficar sem acesso à plataforma adicionando um novo método
-                  de pagamento clicando no botão a seguir:
-                </p>
-                <table>
+              <td
+                class="email-body"
+                width="570"
+                cellpadding="0"
+                cellspacing="0"
+              >
+                <table
+                  class="email-body_inner"
+                  align="center"
+                  width="570"
+                  cellpadding="0"
+                  cellspacing="0"
+                  role="presentation"
+                >
+                  <!-- Body content -->
                   <tr>
-                    <td align="center">
-                      <span style="color: #ffffff; font-weight: 300">
-                        <a
-                          class="button"
-                          style="
-                            color: #ffffff;
-                            text-align: center;
-                            text-decoration: none;
-                          "
-                          href="{{checkout_url}}"
-                          >Resolver</a
+                    <td class="content-cell">
+                      <div class="f-fallback">
+                        <h1>Oi, {{name}},</h1>
+                        <p>
+                          Não conseguimos processar o seu último pagamento de
+                          {{description}} para a sua assinatura da Vain.
+                        </p>
+                        <p>
+                          Por favor, verifique se o seu cartão de crédito está
+                          atualizado para garantir que a sua assinatura continue
+                          ativa.
+                        </p>
+                        <!-- Action -->
+                        <table
+                          class="body-action"
+                          align="center"
+                          width="100%"
+                          cellpadding="0"
+                          cellspacing="0"
+                          role="presentation"
                         >
-                      </span>
+                          <tr>
+                            <td align="center">
+                              <!-- Border based button
+           https://litmus.com/blog/a-guide-to-bulletproof-buttons-in-email-design -->
+                              <table
+                                width="100%"
+                                border="0"
+                                cellspacing="0"
+                                cellpadding="0"
+                                role="presentation"
+                              >
+                                <tr>
+                                  <td align="center">
+                                    <a
+                                      href="{{action_url}}"
+                                      class="f-fallback button button--green"
+                                      target="_blank"
+                                      >Verifique e atualize suas informações de
+                                      pagamento →</a
+                                    >
+                                  </td>
+                                </tr>
+                              </table>
+                            </td>
+                          </tr>
+                        </table>
+                        <table
+                          class="attributes"
+                          width="100%"
+                          cellpadding="0"
+                          cellspacing="0"
+                          role="presentation"
+                        >
+                          <tr>
+                            <td class="attributes_content">
+                              <table
+                                width="100%"
+                                cellpadding="0"
+                                cellspacing="0"
+                                role="presentation"
+                              >
+                                <tr>
+                                  <td class="attributes_item">
+                                    <div class="f-fallback">
+                                      <h2>Por que o pagamento falhou?</h2>
+                                      <p>
+                                        Na maioria dos casos, um pagamento pode
+                                        falhar porque:
+                                      </p>
+                                      <ul>
+                                        <li>O cartão expirou</li>
+                                        <li>Os fundos são insuficientes</li>
+                                        <li>
+                                          O pagamento requer autenticação
+                                          adicional antes que possamos
+                                          processá-lo
+                                        </li>
+                                      </ul>
+                                    </div>
+                                  </td>
+                                </tr>
+                              </table>
+                            </td>
+                          </tr>
+                        </table>
+                        <p>
+                          Se você tiver alguma dúvida ou precisar de nossa
+                          ajuda, você pode entrar em contato com nosso suporte
+                          em
+                          <a href="mailto:{{support_email}}"
+                            >{{support_email}}</a
+                          >
+                          ou simplesmente responder a este e-mail.
+                        </p>
+                        {{signature}}
+                      </div>
                     </td>
                   </tr>
                 </table>
-                <br />
-                <p>
-                  Caso não consiga pressionar o botão acima, pode usar este
-                  link:
-                </p>
-                <a href="{{checkout_url}}">{{checkout_url}}</a><br /><br />
-                {{signature}}
               </td>
             </tr>
+            {{footer}}
           </table>
         </td>
       </tr>
-      {{footer}}
     </table>
   </body>
 </html>
