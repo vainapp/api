@@ -644,8 +644,16 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "$ref": "#/components/schemas/UserCreateSessionResponse"
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "$ref": "#/components/schemas/UserCreateSessionResponse"
+                    },
+                    {
+                      "type": "object",
+                      "$ref": "#/components/schemas/UserCreateSessionResponseStepsVerification"
+                    }
+                  ]
                 }
               }
             }
@@ -997,6 +1005,14 @@
           },
           "refresh_token": {
             "type": "string"
+          }
+        }
+      },
+      "UserCreateSessionResponseStepsVerification": {
+        "type": "object",
+        "properties": {
+          "needs_verification": {
+            "type": "boolean"
           }
         }
       },
