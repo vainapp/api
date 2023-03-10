@@ -1,3 +1,10 @@
+# [1.10.0](https://github.com/vainapp/back-end/compare/v1.9.0...v1.10.0) (2023-03-10)
+
+
+### Features
+
+* resend verifications steps for unverified app users ([#92](https://github.com/vainapp/back-end/issues/92)) ([c84da9b](https://github.com/vainapp/back-end/commit/c84da9b6041c04c2cf671bc800616a78d0dffe36))
+
 # [1.9.0](https://github.com/vainapp/back-end/compare/v1.8.0...v1.9.0) (2023-02-10)
 
 
