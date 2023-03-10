@@ -640,16 +640,19 @@ describe('PUT /users/change-password', () => {
 })
 
 describe('POST /users/sessions', () => {
-  it('should not allow an unverified user to sign-in', async () => {
+  it('should resend the verifications steps when trying to authenticate with an unverified user', async () => {
     const user = await factory.create('User')
 
-    await request(app)
+    const response = await request(app)
       .post('/users/sessions')
       .send({
         email: user.email,
         password: user.password,
       })
-      .expect(403)
+      .expect(200)
+
+    expect(response.body).toHaveProperty('needs_verification')
+    expect(response.body.needs_verification).toBe(true)
   })
 
   it('should not allow a verified user to sign-in with invalid credentials', async () => {
