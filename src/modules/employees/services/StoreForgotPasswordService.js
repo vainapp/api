@@ -1,19 +1,19 @@
 import NotFoundError from '../../../shared/errors/NotFound'
 import buildDirectEmailParams from '../../../shared/helpers/buildDirectEmailParams'
+import Employee from '../../../shared/infra/sequelize/models/Employee'
 import ForgotPasswordCode from '../../../shared/infra/sequelize/models/ForgotPasswordCode'
 import SendEmailJob from '../../../shared/jobs/SendEmail'
 import Queue from '../../../shared/lib/Queue'
-import User from '../infra/sequelize/models/User'
 
 class StoreForgotPasswordService {
   async execute({ email }) {
-    const user = await User.findOne({
+    const employee = await Employee.findOne({
       where: {
         email,
       },
     })
 
-    if (!user || !user.verified) {
+    if (!employee || !employee.verified) {
       throw new NotFoundError(
         'Este endereço de e-mail não está vinculado à uma conta verificada'
       )
@@ -21,7 +21,7 @@ class StoreForgotPasswordService {
 
     const forgotPasswordCode = await ForgotPasswordCode.findOne({
       where: {
-        user_id: user.id,
+        employee_id: employee.id,
         active: true,
       },
     })
@@ -31,14 +31,14 @@ class StoreForgotPasswordService {
     }
 
     const { code } = await ForgotPasswordCode.create({
-      user_id: user.id,
+      employee_id: employee.id,
     })
 
     const forgotPasswordParams = await buildDirectEmailParams({
-      toAddress: user.email,
+      toAddress: employee.email,
       template: 'USER_FORGOT_PASSWORD',
       templateData: {
-        name: user.name,
+        name: employee.name,
         code,
       },
     })

@@ -11,10 +11,11 @@ for notes on deploying the project on a live system.
 ### Prerequisites
 
 Requirements for the software and other tools to build, test and push
+
 - [Node.js](https://nodejs.org/en/)
 - [NPM](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
 - [Docker & Docker Compose](https://www.notion.so/Instalando-Docker-6290d9994b0b4555a153576a1d97bee2)
-- [Sequelize CLI intalled globally](https://www.npmjs.com/package/sequelize-cli)
+- [Sequelize CLI installed globally](https://www.npmjs.com/package/sequelize-cli)
 
 ### Installing
 
@@ -70,7 +71,7 @@ https://user-images.githubusercontent.com/58827242/214584318-9ddd3fbf-baf6-48d8-
 >
 > If you're running the tests locally, you'll need to update the `.env.test` file replacing all the environment variables ending with `_HOST` to `localhost`. For example, `DB_HOST=redis` should be `DB_HOST=localhost`.
 >
-> **REMEBER TO CHANGE IT BACK BEFORE COMMITING**
+> **REMEMBER TO CHANGE IT BACK BEFORE COMMITING**
 
 ## Creating migrations
 
@@ -91,6 +92,7 @@ Our deployment is done automatically through our CI/CD infrastructure using GitH
 Understand how our Git flow works.
 
 ### Developing new features
+
 ```mermaid
 gitGraph
    commit
@@ -115,6 +117,7 @@ gitGraph
 ```
 
 ### Fixing bugs
+
 ```mermaid
 gitGraph
    commit

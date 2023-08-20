@@ -1,22 +1,22 @@
 import NotFoundError from '../../../shared/errors/NotFound'
+import Employee from '../../../shared/infra/sequelize/models/Employee'
 import ForgotPasswordCode from '../../../shared/infra/sequelize/models/ForgotPasswordCode'
-import User from '../infra/sequelize/models/User'
 
 class ShowForgotPasswordService {
   async execute({ email, code }) {
-    const user = await User.findOne({
+    const employee = await Employee.findOne({
       where: {
         email,
       },
     })
 
-    if (!user || !user.verified) {
+    if (!employee || !employee.verified) {
       throw new NotFoundError('Código de recuperação de senha inválido')
     }
 
     const forgotPasswordCode = await ForgotPasswordCode.findOne({
       where: {
-        user_id: user.id,
+        employee_id: employee.id,
         code,
         active: true,
       },

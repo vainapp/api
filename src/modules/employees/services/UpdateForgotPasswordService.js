@@ -1,7 +1,7 @@
 import BadRequestError from '../../../shared/errors/BadRequest'
 import NotFoundError from '../../../shared/errors/NotFound'
+import Employee from '../../../shared/infra/sequelize/models/Employee'
 import ForgotPasswordCode from '../../../shared/infra/sequelize/models/ForgotPasswordCode'
-import User from '../infra/sequelize/models/User'
 
 class UpdateForgotPasswordService {
   async execute({ forgot_password_code_id, password, password_confirmation }) {
@@ -20,20 +20,20 @@ class UpdateForgotPasswordService {
       throw new BadRequestError('As senhas precisam ser iguais')
     }
 
-    const { user_id } = forgotPasswordCode
+    const { employee_id } = forgotPasswordCode
 
-    const user = await User.findOne({
+    const employee = await Employee.findOne({
       where: {
-        id: user_id,
+        id: employee_id,
       },
     })
 
-    if (!user || !user.verified) {
+    if (!employee || !employee.verified) {
       throw new NotFoundError('Conta não encontrada')
     }
 
     await forgotPasswordCode.update({ active: false })
-    await user.update({ password })
+    await employee.update({ password })
   }
 }
 
