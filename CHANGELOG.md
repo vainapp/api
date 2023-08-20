@@ -1,3 +1,10 @@
+## [1.10.1](https://github.com/vainapp/back-end/compare/v1.10.0...v1.10.1) (2023-08-20)
+
+
+### Bug Fixes
+
+* fix lock file ([37b0aa9](https://github.com/vainapp/back-end/commit/37b0aa94691a5987a67ebeb34d58a4e3ec716226))
+
 # [1.10.0](https://github.com/vainapp/back-end/compare/v1.9.0...v1.10.0) (2023-03-10)
 
 
