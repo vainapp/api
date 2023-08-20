@@ -1,3 +1,10 @@
+## [1.10.3](https://github.com/vainapp/back-end/compare/v1.10.2...v1.10.3) (2023-08-20)
+
+
+### Bug Fixes
+
+* rollback the deployment script ([f1cc27a](https://github.com/vainapp/back-end/commit/f1cc27abb792eaa2830c0ba18ade7ded3089245e))
+
 ## [1.10.2](https://github.com/vainapp/back-end/compare/v1.10.1...v1.10.2) (2023-08-20)
 
 
