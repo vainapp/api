@@ -4,7 +4,10 @@ import faker from '@faker-js/faker'
 import request from 'supertest'
 
 import app from '../../src/shared/infra/http/app'
+import EmailVerificationLink from '../../src/shared/infra/sequelize/models/EmailVerificationLink'
 import Employee from '../../src/shared/infra/sequelize/models/Employee'
+import EmployeeRole from '../../src/shared/infra/sequelize/models/EmployeeRole'
+import FranchiseEmployee from '../../src/shared/infra/sequelize/models/FranchiseEmployee'
 import PhoneNumberVerificationCode from '../../src/shared/infra/sequelize/models/PhoneNumberVerificationCode'
 import factory from '../factories'
 import {
@@ -442,9 +445,6 @@ describe('POST /employees/sessions/refresh', () => {
   })
 })
 
-/**
- * TODO: Implement more tests for this route
- */
 describe('POST /employees', () => {
   it('should not allow to create a employee if the user is not an admin or a manager', async () => {
     const employee = await factory.create('Employee')
@@ -523,5 +523,165 @@ describe('POST /employees', () => {
         franchises_ids: [faker.datatype.uuid()],
       })
       .expect(403)
+  })
+
+  it('should not allow to create an employee if the admin_id does not have a company assigned to it', async () => {
+    const employee = await factory.create('Employee', {
+      email_verified: true,
+      phone_number_verified: true,
+    })
+
+    await factory.create('EmployeeRole', {
+      employee_id: employee.id,
+      role: 'ADMIN',
+    })
+
+    const { body } = await request(app).post('/employees/sessions').send({
+      email: employee.email,
+      password: employee.password,
+    })
+
+    await request(app)
+      .post('/employees')
+      .set('Authorization', `Bearer ${body.access_token}`)
+      .send({
+        name: faker.name.findName(),
+        email: faker.internet.email(),
+        phone_number: faker.phone.phoneNumber(),
+        roles: [faker.helpers.arrayElement(['ADMIN', 'MANAGER'])],
+        franchises_ids: [faker.datatype.uuid()],
+      })
+      .expect(404)
+  })
+
+  it('should not allow to create an employee if the company does not have an active subscription', async () => {
+    const employee = await factory.create('Employee', {
+      email_verified: true,
+      phone_number_verified: true,
+    })
+
+    await factory.create('EmployeeRole', {
+      employee_id: employee.id,
+      role: 'ADMIN',
+    })
+
+    const { body } = await request(app).post('/employees/sessions').send({
+      email: employee.email,
+      password: employee.password,
+    })
+
+    await factory.create('Company', {
+      admin_id: employee.id,
+      subscription_active_until: new Date().setMonth(new Date().getMonth() - 1),
+    })
+
+    await request(app)
+      .post('/employees')
+      .set('Authorization', `Bearer ${body.access_token}`)
+      .send({
+        name: faker.name.findName(),
+        email: faker.internet.email(),
+        phone_number: faker.phone.phoneNumber(),
+        roles: [faker.helpers.arrayElement(['ADMIN', 'MANAGER'])],
+        franchises_ids: [faker.datatype.uuid()],
+      })
+      .expect(403)
+  })
+
+  it('should not allow to create an employee if the franchises are not valid', async () => {
+    const employee = await factory.create('Employee', {
+      email_verified: true,
+      phone_number_verified: true,
+    })
+
+    await factory.create('EmployeeRole', {
+      employee_id: employee.id,
+      role: 'ADMIN',
+    })
+
+    await factory.create('Company', {
+      admin_id: employee.id,
+      subscription_active_until: new Date().setMonth(new Date().getMonth() + 1),
+    })
+
+    const { body } = await request(app).post('/employees/sessions').send({
+      email: employee.email,
+      password: employee.password,
+    })
+
+    await request(app)
+      .post('/employees')
+      .set('Authorization', `Bearer ${body.access_token}`)
+      .send({
+        name: faker.name.findName(),
+        email: faker.internet.email(),
+        phone_number: faker.phone.phoneNumber(),
+        roles: [faker.helpers.arrayElement(['ADMIN', 'MANAGER'])],
+        franchises_ids: [faker.datatype.uuid()],
+      })
+      .expect(404)
+  })
+
+  it('should create an employee with all the correct data', async () => {
+    const employee = await factory.create('Employee', {
+      email_verified: true,
+      phone_number_verified: true,
+    })
+
+    await factory.create('EmployeeRole', {
+      employee_id: employee.id,
+      role: 'ADMIN',
+    })
+
+    const company = await factory.create('Company', {
+      admin_id: employee.id,
+      subscription_active_until: new Date().setMonth(new Date().getMonth() + 1),
+    })
+
+    const franchise = await factory.create('Franchise', {
+      role: 'ADMIN',
+      employee_id: employee.id,
+      company_id: company.id,
+    })
+
+    const { body } = await request(app).post('/employees/sessions').send({
+      email: employee.email,
+      password: employee.password,
+    })
+
+    const response = await request(app)
+      .post('/employees')
+      .set('Authorization', `Bearer ${body.access_token}`)
+      .send({
+        name: faker.name.findName(),
+        email: faker.internet.email(),
+        phone_number: faker.phone.phoneNumber(),
+        roles: [faker.helpers.arrayElement(['ADMIN', 'MANAGER'])],
+        franchises_ids: [franchise.id],
+      })
+
+    const employeeRole = await EmployeeRole.findOne({
+      where: {
+        employee_id: response.body.employee_id,
+      },
+    })
+
+    const franchiseEmployee = await FranchiseEmployee.findOne({
+      where: {
+        employee_id: response.body.employee_id,
+        franchise_id: franchise.id,
+      },
+    })
+
+    const emailVerificationLink = await EmailVerificationLink.findOne({
+      where: {
+        employee_id: response.body.employee_id,
+      },
+    })
+
+    expect(response.body).toHaveProperty('employee_id')
+    expect(employeeRole).toBeTruthy()
+    expect(franchiseEmployee).toBeTruthy()
+    expect(emailVerificationLink).toBeTruthy()
   })
 })

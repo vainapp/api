@@ -69,9 +69,9 @@ https://user-images.githubusercontent.com/58827242/214584318-9ddd3fbf-baf6-48d8-
 
 > 🚧 **Pay attention**
 >
-> If you're running the tests locally, you'll need to update the `.env.test` file replacing all the environment variables ending with `_HOST` to `localhost`. For example, `DB_HOST=redis` should be `DB_HOST=localhost`.
+> If you're running the tests locally, you'll need to update the `.test.env` file replacing all the environment variables ending with `_HOST` to `localhost`. For example, `DB_HOST=redis` should be `DB_HOST=localhost`.
 >
-> **REMEMBER TO CHANGE IT BACK BEFORE COMMITING**
+> **REMEMBER TO CHANGE IT BACK BEFORE PUSHING A NEW COMMIT**
 
 ## Creating migrations
 

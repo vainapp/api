@@ -1,5 +1,4 @@
 import { NotFoundError } from '../../../shared/errors'
-import BadRequestError from '../../../shared/errors/BadRequest'
 import ForbiddenError from '../../../shared/errors/Forbidden'
 import buildDirectEmailParams from '../../../shared/helpers/buildDirectEmailParams'
 import generateRandomPassword from '../../../shared/helpers/generateRandomPassword'
@@ -76,7 +75,7 @@ class StoreEmployeeService {
         })
 
         if (!exists) {
-          throw new BadRequestError('Uma ou mais franquias não são válidas')
+          throw new NotFoundError('Uma ou mais franquias não são válidas')
         }
       })
     )

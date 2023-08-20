@@ -88,6 +88,7 @@ factory.define('EmployeeRole', EmployeeRole, {
 })
 
 factory.define('Franchise', Franchise, {
+  name: faker.name.findName(),
   role: faker.helpers.arrayElement(['ADMIN', 'MANAGER', 'EMPLOYEE']),
   employee_id: factory.assoc('Employee', 'id'),
   company_id: factory.assoc('Company', 'id'),
