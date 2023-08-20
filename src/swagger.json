@@ -923,6 +923,95 @@
           }
         }
       }
+    },
+    "/employees/passwords/forgot": {
+      "post": {
+        "summary": "Forgot password",
+        "description": "Send a forgot password email.",
+        "tags": ["Employees"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmployeeForgotPasswordRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The forgot password email was sent."
+          },
+          "400": {
+            "description": "Body validation failed."
+          },
+          "404": {
+            "description": "Employee not found."
+          }
+        }
+      }
+    },
+    "/employees/passwords/verify": {
+      "post": {
+        "summary": "Verify forgot password",
+        "description": "Verify the forgot password token.",
+        "tags": ["Employees"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmployeeVerifyForgotPasswordRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The forgot password token was verified.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/UserVerifyForgotPasswordResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Body validation failed."
+          },
+          "404": {
+            "description": "Employee not found or the forgot password token is invalid or expired."
+          }
+        }
+      }
+    },
+    "/employees/passwords/reset": {
+      "post": {
+        "summary": "Reset password",
+        "description": "Reset the password.",
+        "tags": ["Employees"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmployeeResetPasswordRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The password was reset."
+          },
+          "400": {
+            "description": "Body validation failed."
+          },
+          "404": {
+            "description": "Employee not found or the forgot password token is invalid or expired."
+          }
+        }
+      }
     }
   },
   "components": {
@@ -1072,7 +1161,33 @@
           }
         }
       },
+      "EmployeeResetPasswordRequest": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "password_confirmation": {
+            "type": "string"
+          }
+        }
+      },
       "UserVerifyForgotPasswordRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "code": {
+            "type": "string"
+          }
+        }
+      },
+      "EmployeeVerifyForgotPasswordRequest": {
         "type": "object",
         "properties": {
           "email": {
@@ -1093,6 +1208,15 @@
         }
       },
       "UserForgotPasswordRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email"
+          }
+        }
+      },
+      "EmployeeForgotPasswordRequest": {
         "type": "object",
         "properties": {
           "email": {
