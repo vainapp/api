@@ -26,6 +26,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
+          cache: 'pnpm'
 
       - name: Install dependencies
         run: pnpm install
@@ -41,8 +42,8 @@ jobs:
           hosts="$(dig +short "$host" | grep -v '\.$' | sed -z 's|\n|,|g')$host"
           ssh-keyscan -H "$hosts" > ~/.ssh/known_hosts
 
-      - name: Upload package.json and pnpm-lock.yaml
-        run: rsync -r ./package.json ./pnpm-lock.yaml deploy@${{ secrets.HOSTINGER_DEVELOPMENT_IPV4 }}:~/app/server
+      - name: Upload package.json
+        run: rsync -r ./package.json deploy@${{ secrets.HOSTINGER_DEVELOPMENT_IPV4 }}:~/app/server
 
       - name: Upload the installed dependencies
         run: rsync -r node_modules deploy@${{ secrets.HOSTINGER_DEVELOPMENT_IPV4 }}:~/app/server
