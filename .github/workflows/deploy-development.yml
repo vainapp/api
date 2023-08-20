@@ -2,7 +2,7 @@ name: Development deployment
 
 on:
   workflow_run:
-    workflows: ["Semantic release"]
+    workflows: ['Semantic release']
     types:
       - completed
 
@@ -42,8 +42,8 @@ jobs:
           hosts="$(dig +short "$host" | grep -v '\.$' | sed -z 's|\n|,|g')$host"
           ssh-keyscan -H "$hosts" > ~/.ssh/known_hosts
 
-      - name: Upload package.json
-        run: rsync -r ./package.json deploy@${{ secrets.HOSTINGER_DEVELOPMENT_IPV4 }}:~/app/server
+      - name: Upload package.json and pnpm-lock.yaml
+        run: rsync -r ./package.json ./pnpm-lock.yaml deploy@${{ secrets.HOSTINGER_DEVELOPMENT_IPV4 }}:~/app/server
 
       - name: Upload the installed dependencies
         run: rsync -r node_modules deploy@${{ secrets.HOSTINGER_DEVELOPMENT_IPV4 }}:~/app/server
