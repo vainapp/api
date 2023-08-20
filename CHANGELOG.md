@@ -1,3 +1,10 @@
+## [1.10.2](https://github.com/vainapp/back-end/compare/v1.10.1...v1.10.2) (2023-08-20)
+
+
+### Bug Fixes
+
+* delete settings from lockfile ([c13aa96](https://github.com/vainapp/back-end/commit/c13aa96f78072b3f75718055e03c5f19b0df3163))
+
 ## [1.10.1](https://github.com/vainapp/back-end/compare/v1.10.0...v1.10.1) (2023-08-20)
 
 
