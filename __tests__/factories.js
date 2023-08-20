@@ -4,13 +4,13 @@ import { factory } from 'factory-girl'
 import Company from '../src/modules/companies/infra/sequelize/models/Company'
 import Franchise from '../src/modules/companies/infra/sequelize/models/Franchise'
 import Address from '../src/modules/users/infra/sequelize/models/Address'
-import ForgotPasswordCode from '../src/modules/users/infra/sequelize/models/ForgotPasswordCode'
 import ProfilePhoto from '../src/modules/users/infra/sequelize/models/ProfilePhoto'
 import User from '../src/modules/users/infra/sequelize/models/User'
 import generateRandomCode from '../src/shared/helpers/generateRandomCode'
 import EmailVerificationLink from '../src/shared/infra/sequelize/models/EmailVerificationLink'
 import Employee from '../src/shared/infra/sequelize/models/Employee'
 import EmployeeRole from '../src/shared/infra/sequelize/models/EmployeeRole'
+import ForgotPasswordCode from '../src/shared/infra/sequelize/models/ForgotPasswordCode'
 import FranchiseEmployee from '../src/shared/infra/sequelize/models/FranchiseEmployee'
 import PhoneNumberVerificationCode from '../src/shared/infra/sequelize/models/PhoneNumberVerificationCode'
 
@@ -88,6 +88,7 @@ factory.define('EmployeeRole', EmployeeRole, {
 })
 
 factory.define('Franchise', Franchise, {
+  name: faker.name.findName(),
   role: faker.helpers.arrayElement(['ADMIN', 'MANAGER', 'EMPLOYEE']),
   employee_id: factory.assoc('Employee', 'id'),
   company_id: factory.assoc('Company', 'id'),

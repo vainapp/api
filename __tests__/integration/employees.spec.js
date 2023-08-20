@@ -1,10 +1,15 @@
 import querystring from 'node:querystring'
 
 import faker from '@faker-js/faker'
+import bcrypt from 'bcrypt'
 import request from 'supertest'
 
 import app from '../../src/shared/infra/http/app'
+import EmailVerificationLink from '../../src/shared/infra/sequelize/models/EmailVerificationLink'
 import Employee from '../../src/shared/infra/sequelize/models/Employee'
+import EmployeeRole from '../../src/shared/infra/sequelize/models/EmployeeRole'
+import ForgotPasswordCode from '../../src/shared/infra/sequelize/models/ForgotPasswordCode'
+import FranchiseEmployee from '../../src/shared/infra/sequelize/models/FranchiseEmployee'
 import PhoneNumberVerificationCode from '../../src/shared/infra/sequelize/models/PhoneNumberVerificationCode'
 import factory from '../factories'
 import {
@@ -22,6 +27,247 @@ beforeEach(async () => {
   await truncate()
 })
 
+describe('POST /employees', () => {
+  it('should not allow to create a employee if the employee is not an admin or a manager', async () => {
+    const employee = await factory.create('Employee')
+
+    const { body } = await request(app).post('/employees/sessions').send({
+      email: employee.email,
+      password: employee.password,
+    })
+
+    await request(app)
+      .post('/employees')
+      .set('Authorization', `Bearer ${body.access_token}`)
+      .send({
+        name: faker.name.findName(),
+        email: faker.internet.email(),
+        phone_number: faker.phone.phoneNumber(),
+        roles: [faker.helpers.arrayElement(['ADMIN', 'MANAGER'])],
+        franchises_ids: [faker.datatype.uuid()],
+      })
+      .expect(403)
+  })
+
+  it('should not allow to create a employee if the employee is an admin or a manager but not verified', async () => {
+    const employee = await factory.create('Employee', {
+      email_verified: false,
+      phone_number_verified: false,
+    })
+
+    await factory.create('EmployeeRole', {
+      employee_id: employee.id,
+      role: 'ADMIN',
+    })
+
+    const { body } = await request(app).post('/employees/sessions').send({
+      email: employee.email,
+      password: employee.password,
+    })
+
+    await request(app)
+      .post('/employees')
+      .set('Authorization', `Bearer ${body.access_token}`)
+      .send({
+        name: faker.name.findName(),
+        email: faker.internet.email(),
+        phone_number: faker.phone.phoneNumber(),
+        roles: [faker.helpers.arrayElement(['ADMIN', 'MANAGER'])],
+        franchises_ids: [faker.datatype.uuid()],
+      })
+      .expect(403)
+  })
+
+  it('should not allow to create a employee if the email is already in use', async () => {
+    const employee = await factory.create('Employee', {
+      email_verified: true,
+      phone_number_verified: true,
+    })
+
+    await factory.create('EmployeeRole', {
+      employee_id: employee.id,
+      role: 'ADMIN',
+    })
+
+    const { body } = await request(app).post('/employees/sessions').send({
+      email: employee.email,
+      password: employee.password,
+    })
+
+    await request(app)
+      .post('/employees')
+      .set('Authorization', `Bearer ${body.access_token}`)
+      .send({
+        name: faker.name.findName(),
+        email: employee.email,
+        phone_number: faker.phone.phoneNumber(),
+        roles: [faker.helpers.arrayElement(['ADMIN', 'MANAGER'])],
+        franchises_ids: [faker.datatype.uuid()],
+      })
+      .expect(403)
+  })
+
+  it('should not allow to create an employee if the admin_id does not have a company assigned to it', async () => {
+    const employee = await factory.create('Employee', {
+      email_verified: true,
+      phone_number_verified: true,
+    })
+
+    await factory.create('EmployeeRole', {
+      employee_id: employee.id,
+      role: 'ADMIN',
+    })
+
+    const { body } = await request(app).post('/employees/sessions').send({
+      email: employee.email,
+      password: employee.password,
+    })
+
+    await request(app)
+      .post('/employees')
+      .set('Authorization', `Bearer ${body.access_token}`)
+      .send({
+        name: faker.name.findName(),
+        email: faker.internet.email(),
+        phone_number: faker.phone.phoneNumber(),
+        roles: [faker.helpers.arrayElement(['ADMIN', 'MANAGER'])],
+        franchises_ids: [faker.datatype.uuid()],
+      })
+      .expect(404)
+  })
+
+  it('should not allow to create an employee if the company does not have an active subscription', async () => {
+    const employee = await factory.create('Employee', {
+      email_verified: true,
+      phone_number_verified: true,
+    })
+
+    await factory.create('EmployeeRole', {
+      employee_id: employee.id,
+      role: 'ADMIN',
+    })
+
+    const { body } = await request(app).post('/employees/sessions').send({
+      email: employee.email,
+      password: employee.password,
+    })
+
+    await factory.create('Company', {
+      admin_id: employee.id,
+      subscription_active_until: new Date().setMonth(new Date().getMonth() - 1),
+    })
+
+    await request(app)
+      .post('/employees')
+      .set('Authorization', `Bearer ${body.access_token}`)
+      .send({
+        name: faker.name.findName(),
+        email: faker.internet.email(),
+        phone_number: faker.phone.phoneNumber(),
+        roles: [faker.helpers.arrayElement(['ADMIN', 'MANAGER'])],
+        franchises_ids: [faker.datatype.uuid()],
+      })
+      .expect(403)
+  })
+
+  it('should not allow to create an employee if the franchises are not valid', async () => {
+    const employee = await factory.create('Employee', {
+      email_verified: true,
+      phone_number_verified: true,
+    })
+
+    await factory.create('EmployeeRole', {
+      employee_id: employee.id,
+      role: 'ADMIN',
+    })
+
+    await factory.create('Company', {
+      admin_id: employee.id,
+      subscription_active_until: new Date().setMonth(new Date().getMonth() + 1),
+    })
+
+    const { body } = await request(app).post('/employees/sessions').send({
+      email: employee.email,
+      password: employee.password,
+    })
+
+    await request(app)
+      .post('/employees')
+      .set('Authorization', `Bearer ${body.access_token}`)
+      .send({
+        name: faker.name.findName(),
+        email: faker.internet.email(),
+        phone_number: faker.phone.phoneNumber(),
+        roles: [faker.helpers.arrayElement(['ADMIN', 'MANAGER'])],
+        franchises_ids: [faker.datatype.uuid()],
+      })
+      .expect(404)
+  })
+
+  it('should create an employee with all the correct data', async () => {
+    const employee = await factory.create('Employee', {
+      email_verified: true,
+      phone_number_verified: true,
+    })
+
+    await factory.create('EmployeeRole', {
+      employee_id: employee.id,
+      role: 'ADMIN',
+    })
+
+    const company = await factory.create('Company', {
+      admin_id: employee.id,
+      subscription_active_until: new Date().setMonth(new Date().getMonth() + 1),
+    })
+
+    const franchise = await factory.create('Franchise', {
+      role: 'ADMIN',
+      employee_id: employee.id,
+      company_id: company.id,
+    })
+
+    const { body } = await request(app).post('/employees/sessions').send({
+      email: employee.email,
+      password: employee.password,
+    })
+
+    const response = await request(app)
+      .post('/employees')
+      .set('Authorization', `Bearer ${body.access_token}`)
+      .send({
+        name: faker.name.findName(),
+        email: faker.internet.email(),
+        phone_number: faker.phone.phoneNumber(),
+        roles: [faker.helpers.arrayElement(['ADMIN', 'MANAGER'])],
+        franchises_ids: [franchise.id],
+      })
+
+    const employeeRole = await EmployeeRole.findOne({
+      where: {
+        employee_id: response.body.employee_id,
+      },
+    })
+
+    const franchiseEmployee = await FranchiseEmployee.findOne({
+      where: {
+        employee_id: response.body.employee_id,
+        franchise_id: franchise.id,
+      },
+    })
+
+    const emailVerificationLink = await EmailVerificationLink.findOne({
+      where: {
+        employee_id: response.body.employee_id,
+      },
+    })
+
+    expect(response.body).toHaveProperty('employee_id')
+    expect(employeeRole).toBeTruthy()
+    expect(franchiseEmployee).toBeTruthy()
+    expect(emailVerificationLink).toBeTruthy()
+  })
+})
+
 describe('GET /employees/verify-email/:email_verification_link_id', () => {
   it("should return 404 if there's no existing EmailVerificationLink", async () => {
     await request(app)
@@ -29,7 +275,7 @@ describe('GET /employees/verify-email/:email_verification_link_id', () => {
       .expect(404)
   })
 
-  it('should return 404 if the EmailVerificationLink references a user instead of a employee', async () => {
+  it('should return 404 if the EmailVerificationLink references a employee instead of a employee', async () => {
     const emailVerificationLink = await factory.create(
       'EmailVerificationLink',
       {
@@ -295,7 +541,7 @@ describe('POST /employees/sessions', () => {
   })
 
   it('should not allow a verified employee to sign-in with invalid credentials', async () => {
-    const user = await factory.create('Employee', {
+    const employee = await factory.create('Employee', {
       email_verified: true,
       phone_number_verified: true,
     })
@@ -303,7 +549,7 @@ describe('POST /employees/sessions', () => {
     await request(app)
       .post('/employees/sessions')
       .send({
-        email: user.email,
+        email: employee.email,
         password: faker.internet.password(),
       })
       .expect(403)
@@ -419,7 +665,7 @@ describe('POST /employees/sessions/refresh', () => {
     expect(response.body).toHaveProperty('refresh_token')
   })
 
-  it('should not allow a user to refresh a token using an access token', async () => {
+  it('should not allow an employee to refresh a token using an access token', async () => {
     const employee = await factory.create('Employee', {
       email_verified: true,
       phone_number_verified: true,
@@ -442,86 +688,227 @@ describe('POST /employees/sessions/refresh', () => {
   })
 })
 
-/**
- * TODO: Implement more tests for this route
- */
-describe('POST /employees', () => {
-  it('should not allow to create a employee if the user is not an admin or a manager', async () => {
+describe('POST /employees/passwords/forgot-password', () => {
+  it('should not allow an unverified employee to recover password', async () => {
     const employee = await factory.create('Employee')
 
-    const { body } = await request(app).post('/employees/sessions').send({
-      email: employee.email,
-      password: employee.password,
-    })
-
     await request(app)
-      .post('/employees')
-      .set('Authorization', `Bearer ${body.access_token}`)
+      .post('/employees/passwords/forgot')
       .send({
-        name: faker.name.findName(),
-        email: faker.internet.email(),
-        phone_number: faker.phone.phoneNumber(),
-        roles: [faker.helpers.arrayElement(['ADMIN', 'MANAGER'])],
-        franchises_ids: [faker.datatype.uuid()],
+        email: employee.email,
       })
-      .expect(403)
+      .expect(404)
   })
 
-  it('should not allow to create a employee if the user is an admin or a manager but not verified', async () => {
-    const employee = await factory.create('Employee', {
-      email_verified: false,
-      phone_number_verified: false,
-    })
-
-    await factory.create('EmployeeRole', {
-      employee_id: employee.id,
-      role: 'ADMIN',
-    })
-
-    const { body } = await request(app).post('/employees/sessions').send({
-      email: employee.email,
-      password: employee.password,
-    })
-
-    await request(app)
-      .post('/employees')
-      .set('Authorization', `Bearer ${body.access_token}`)
-      .send({
-        name: faker.name.findName(),
-        email: faker.internet.email(),
-        phone_number: faker.phone.phoneNumber(),
-        roles: [faker.helpers.arrayElement(['ADMIN', 'MANAGER'])],
-        franchises_ids: [faker.datatype.uuid()],
-      })
-      .expect(403)
-  })
-
-  it('should not allow to create a employee if the email is already in use', async () => {
+  it('should generate a ForgotPasswordCode for an employee', async () => {
     const employee = await factory.create('Employee', {
       email_verified: true,
       phone_number_verified: true,
     })
 
-    await factory.create('EmployeeRole', {
-      employee_id: employee.id,
-      role: 'ADMIN',
+    await request(app).post('/employees/passwords/forgot').send({
+      email: employee.email,
     })
 
-    const { body } = await request(app).post('/employees/sessions').send({
+    const forgotPasswordCode = await ForgotPasswordCode.findOne({
+      where: {
+        employee_id: employee.id,
+      },
+    })
+
+    expect(forgotPasswordCode.active).toBeTruthy()
+  })
+
+  it('should invalidate a previous ForgotPasswordCode and generate a new active one for an employee', async () => {
+    const employee = await factory.create('Employee', {
+      email_verified: true,
+      phone_number_verified: true,
+    })
+
+    await request(app).post('/employees/passwords/forgot').send({
       email: employee.email,
-      password: employee.password,
+    })
+
+    const firstForgotPasswordCode = await ForgotPasswordCode.findOne({
+      where: {
+        employee_id: employee.id,
+      },
+    })
+
+    expect(firstForgotPasswordCode.active).toBeTruthy()
+
+    await request(app).post('/employees/passwords/forgot').send({
+      email: employee.email,
+    })
+
+    const newFirstForgotPasswordCode = await ForgotPasswordCode.findByPk(
+      firstForgotPasswordCode.id
+    )
+    const secondForgotPasswordCode = await ForgotPasswordCode.findOne({
+      where: {
+        employee_id: employee.id,
+        active: true,
+      },
+    })
+
+    expect(newFirstForgotPasswordCode.active).toBeFalsy()
+    expect(secondForgotPasswordCode.active).toBeTruthy()
+  })
+})
+
+describe('POST /employees/passwords/verify', () => {
+  it('should not allow an unverified employee to recover password', async () => {
+    const employee = await factory.create('Employee')
+
+    await request(app)
+      .post('/employees/passwords/verify')
+      .send({
+        email: employee.email,
+        code: String(faker.datatype.number({ min: 1000, max: 9999 })),
+      })
+      .expect(404)
+  })
+
+  it('should not allow to recover an account with an expired code', async () => {
+    const employee = await factory.create('Employee', {
+      email_verified: true,
+      phone_number_verified: true,
+    })
+    const code = await factory.create('ForgotPasswordCode', {
+      active: false,
+      employee_id: employee.id,
     })
 
     await request(app)
-      .post('/employees')
-      .set('Authorization', `Bearer ${body.access_token}`)
+      .post('/employees/passwords/verify')
       .send({
-        name: faker.name.findName(),
         email: employee.email,
-        phone_number: faker.phone.phoneNumber(),
-        roles: [faker.helpers.arrayElement(['ADMIN', 'MANAGER'])],
-        franchises_ids: [faker.datatype.uuid()],
+        code: code.code,
       })
-      .expect(403)
+      .expect(404)
+  })
+
+  it('should return the token if everything is as expected', async () => {
+    const employee = await factory.create('Employee', {
+      email_verified: true,
+      phone_number_verified: true,
+    })
+    const code = await factory.create('ForgotPasswordCode', {
+      employee_id: employee.id,
+    })
+
+    const response = await request(app)
+      .post('/employees/passwords/verify')
+      .send({
+        email: employee.email,
+        code: code.code,
+      })
+
+    expect(response.body).toHaveProperty('token')
+  })
+})
+
+describe('POST /employees/passwords/reset', () => {
+  it('should not allow an expired code to change password', async () => {
+    const employee = await factory.create('Employee', {
+      email_verified: true,
+      phone_number_verified: true,
+    })
+    const code = await factory.create('ForgotPasswordCode', {
+      employee_id: employee.id,
+      active: false,
+    })
+    const password = faker.internet.password()
+
+    await request(app)
+      .post('/employees/passwords/reset')
+      .send({
+        token: code.id,
+        password,
+        password_confirmation: password,
+      })
+      .expect(404)
+  })
+
+  it('should not allow to update a password when passwords do not match', async () => {
+    const employee = await factory.create('Employee', {
+      email_verified: true,
+      phone_number_verified: true,
+    })
+    const code = await factory.create('ForgotPasswordCode', {
+      employee_id: employee.id,
+    })
+
+    await request(app)
+      .post('/employees/passwords/reset')
+      .send({
+        token: code.id,
+        password: faker.internet.password(),
+        password_confirmation: faker.internet.password(),
+      })
+      .expect(400)
+  })
+
+  it('should not allow an unverified employee to update their password', async () => {
+    const employee = await factory.create('Employee')
+    const code = await factory.create('ForgotPasswordCode', {
+      employee_id: employee.id,
+    })
+    const password = faker.internet.password()
+
+    await request(app)
+      .post('/employees/passwords/reset')
+      .send({
+        token: code.id,
+        password,
+        password_confirmation: password,
+      })
+      .expect(404)
+  })
+
+  it('should not allow an employee to update their password providing different password', async () => {
+    const employee = await factory.create('Employee', {
+      email_verified: true,
+      phone_number_verified: true,
+    })
+    const code = await factory.create('ForgotPasswordCode', {
+      employee_id: employee.id,
+    })
+
+    await request(app)
+      .post('/employees/passwords/reset')
+      .send({
+        token: code.id,
+        password: faker.internet.password(),
+        password_confirmation: faker.internet.password(),
+      })
+      .expect(400)
+  })
+
+  it("should change the employee's password and invalidate a code", async () => {
+    const employee = await factory.create('Employee', {
+      email_verified: true,
+      phone_number_verified: true,
+    })
+    const code = await factory.create('ForgotPasswordCode', {
+      employee_id: employee.id,
+    })
+    const password = faker.internet.password()
+
+    await request(app).post('/employees/passwords/reset').send({
+      token: code.id,
+      password,
+      password_confirmation: password,
+    })
+
+    const forgotPasswordCode = await ForgotPasswordCode.findByPk(code.id)
+    const employeeFromDb = await Employee.findByPk(employee.id)
+    const passwordsMatch = await bcrypt.compare(
+      password,
+      employeeFromDb.password_hash
+    )
+
+    expect(forgotPasswordCode.active).toBeFalsy()
+    expect(passwordsMatch).toBeTruthy()
   })
 })

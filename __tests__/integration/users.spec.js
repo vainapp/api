@@ -5,11 +5,11 @@ import bcrypt from 'bcrypt'
 import request from 'supertest'
 import { v4 as uuidV4 } from 'uuid'
 
-import ForgotPasswordCode from '../../src/modules/users/infra/sequelize/models/ForgotPasswordCode'
 import ProfilePhoto from '../../src/modules/users/infra/sequelize/models/ProfilePhoto'
 import User from '../../src/modules/users/infra/sequelize/models/User'
 import app from '../../src/shared/infra/http/app'
 import EmailVerificationLink from '../../src/shared/infra/sequelize/models/EmailVerificationLink'
+import ForgotPasswordCode from '../../src/shared/infra/sequelize/models/ForgotPasswordCode'
 import PhoneNumberVerificationCode from '../../src/shared/infra/sequelize/models/PhoneNumberVerificationCode'
 import factory from '../factories'
 import {

@@ -1,6 +1,6 @@
 import Sequelize, { Model } from 'sequelize'
 
-import generateRandomCode from '../../../../../shared/helpers/generateRandomCode'
+import generateRandomCode from '../../../helpers/generateRandomCode'
 
 class ForgotPasswordCode extends Model {
   static init(sequelize) {
@@ -14,6 +14,7 @@ class ForgotPasswordCode extends Model {
           unique: true,
         },
         user_id: Sequelize.UUID,
+        employee_id: Sequelize.UUID,
         code: Sequelize.STRING(4),
         active: Sequelize.BOOLEAN,
       },
