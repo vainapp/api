@@ -50,7 +50,7 @@
     "multer-s3": "2.10.0",
     "pg": "8.6.0",
     "pg-hstore": "2.3.4",
-    "sequelize": "6.28.0",
+    "sequelize": "6.29.0",
     "stripe": "11.5.0",
     "swagger-ui-express": "4.6.0",
     "uuid": "8.3.2",
